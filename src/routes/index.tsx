@@ -162,6 +162,32 @@ function Hero() {
   );
 }
 
+function PartnersStrip() {
+  const partners = [
+    "RED BULL", "SAMSUNG", "L'ORÉAL", "BMW", "HEINEKEN",
+    "ORANGE", "ZARA", "TATRA BANKA", "PEPSI", "MERCEDES",
+  ];
+  return (
+    <section className="border-y border-white/5 bg-[#0d0d0d]">
+      <div className="mx-auto max-w-7xl px-6 py-10">
+        <p className="text-center text-[11px] tracking-[0.25em] uppercase text-white/30 mb-8">
+          Dôverujú nám značky ako
+        </p>
+        <div className="flex flex-wrap justify-center gap-x-10 gap-y-5">
+          {partners.map((p) => (
+            <span
+              key={p}
+              className="font-display text-sm md:text-base tracking-[0.15em] uppercase text-white/40 hover:text-gold transition-colors duration-300 cursor-default"
+            >
+              {p}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Marquee() {
   const clients = [
     "RED BULL", "SAMSUNG", "L'ORÉAL", "BMW", "HEINEKEN", "ORANGE",
