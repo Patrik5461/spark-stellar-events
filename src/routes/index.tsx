@@ -167,15 +167,22 @@ function Marquee() {
     "RED BULL", "SAMSUNG", "L'ORÉAL", "BMW", "HEINEKEN", "ORANGE",
     "ZARA", "TATRA BANKA", "PEPSI", "MERCEDES", "VOLKSWAGEN", "ESET",
   ];
-  const row = [...clients, ...clients];
+  const row = [...clients, ...clients, ...clients];
   return (
     <section className="border-y border-white/5 py-10 overflow-hidden">
       <div className="text-center text-xs tracking-[0.3em] uppercase text-white/40 mb-8">
         Dôverujú nám
       </div>
-      <div className="flex gap-16 animate-marquee whitespace-nowrap">
+      <div className="flex gap-16 animate-marquee whitespace-nowrap mb-8">
         {row.map((c, i) => (
-          <span key={i} className="font-display text-2xl md:text-3xl text-white/30 hover:text-white/70 transition-colors tracking-wider">
+          <span key={i} className="font-display text-2xl md:text-3xl text-white/30 hover:text-white/70 transition-colors tracking-wider select-none">
+            {c}
+          </span>
+        ))}
+      </div>
+      <div className="flex gap-16 animate-marquee-reverse whitespace-nowrap">
+        {[...row].reverse().map((c, i) => (
+          <span key={i} className="font-display text-2xl md:text-3xl text-white/20 hover:text-white/70 transition-colors tracking-wider select-none">
             {c}
           </span>
         ))}
