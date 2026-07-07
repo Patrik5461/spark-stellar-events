@@ -812,6 +812,100 @@ function ContactForm() {
   );
 }
 
+function BackToTop() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const fn = () => setShow(window.scrollY > 600);
+    fn();
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.35, ease: EASE }}
+          aria-label="Späť hore"
+          className="fixed bottom-6 right-6 z-40 h-12 w-12 rounded-full bg-[#383B3A] text-[#F5F1EC] grid place-items-center soft-shadow hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)] transition-shadow"
+        >
+          <ArrowUp className="h-4 w-4" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function Footer() {
+  const nav: [string, string][] = [
+    ["O nás", "#why"],
+    ["Služby", "#services"],
+    ["Galéria", "#gallery"],
+    ["Kontakt", "#contact"],
+  ];
+  const socials = [
+    [Instagram, "https://instagram.com", "Instagram"],
+    [Linkedin, "https://linkedin.com", "LinkedIn"],
+    [Facebook, "https://facebook.com", "Facebook"],
+  ] as const;
+  return (
+    <footer className="border-t border-[#D9D2CC] pt-20 pb-10 px-6 bg-[#EBE6E2]">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="mx-auto max-w-7xl"
+      >
+        <div className="grid md:grid-cols-3 gap-10 pb-14 border-b border-[#D9D2CC]">
+          <div>
+            <div className="font-display text-3xl text-[#383B3A]">NU<span className="text-[#726D6A]">·</span>U</div>
+            <p className="mt-4 text-sm text-[#726D6A] max-w-xs leading-relaxed">
+              Hostessing, promotion a produkcia eventov. Slovensko & zahraničie.
+            </p>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Navigácia</div>
+            <ul className="space-y-2 text-sm">
+              {nav.map(([l, h]) => (
+                <li key={h}><a href={h} className="text-[#383B3A] hover:text-[#726D6A] transition-colors">{l}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Kontakt</div>
+            <ul className="space-y-2 text-sm text-[#383B3A]">
+              <li><a href="mailto:info@nu-u.sk" className="hover:text-[#726D6A] transition-colors">info@nu-u.sk</a></li>
+              <li><a href="tel:+421900000000" className="hover:text-[#726D6A] transition-colors">+421 900 000 000</a></li>
+              <li className="text-[#726D6A]">Bratislava, Slovensko</li>
+            </ul>
+            <div className="mt-5 flex gap-3">
+              {socials.map(([Icon, href, label]) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="h-10 w-10 rounded-full border border-[#D9D2CC] bg-[#F5F1EC] grid place-items-center text-[#383B3A] hover:bg-[#C9BAAE]/50 hover:-translate-y-0.5 transition-all"
+                >
+                  <Icon className="h-4 w-4" strokeWidth={1.5} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-[#726D6A]">
+          <div>© {new Date().getFullYear()} NU-U Agency · www.nu-u.sk</div>
+          <div>Handcrafted in Bratislava</div>
+        </div>
+      </motion.div>
+    </footer>
+  );
+}
+
+
+
 
 function Home() {
   return (
