@@ -222,7 +222,7 @@ function Hero() {
           transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="relative mt-20 rounded-[28px] overflow-hidden soft-shadow-lg border border-[#D9D2CC]"
         >
-          <div className="aspect-[16/8] w-full overflow-hidden">
+          <div className="relative aspect-[16/8] w-full overflow-hidden">
             <motion.img
               src={hero}
               alt="Elegantná hosteska na luxusnom evente"
@@ -231,6 +231,8 @@ function Hero() {
               width={1920}
               height={1080}
             />
+            <div className="pointer-events-none absolute inset-0 bg-[#383B3A]/[0.08]" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#383B3A]/25 to-transparent" />
           </div>
         </motion.div>
 
