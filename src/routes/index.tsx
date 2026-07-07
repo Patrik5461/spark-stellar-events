@@ -252,7 +252,7 @@ function Services() {
     { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta." },
   ];
   return (
-    <section id="services" className="relative py-32 px-6">
+    <section id="services" className="relative py-40 px-6">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="flex items-end justify-between flex-wrap gap-8 mb-20">
           <div>
@@ -307,7 +307,7 @@ function WhyUs() {
     ["SK & EU", "Slovensko & zahraničie"],
   ];
   return (
-    <section id="why" className="relative py-32 px-6 bg-[#D4C7BD]/40">
+    <section id="why" className="relative py-40 px-6 bg-[#D4C7BD]/40">
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
         <motion.div {...fadeUp} className="relative">
           <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden soft-shadow-lg border border-[#D9D2CC]">
@@ -377,7 +377,7 @@ function Gallery() {
     };
   }, [open, imgs.length]);
   return (
-    <section id="gallery" className="relative py-32 px-6">
+    <section id="gallery" className="relative py-40 px-6">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="flex items-end justify-between gap-8 mb-16 flex-wrap">
           <div>
@@ -447,7 +447,7 @@ function Process() {
     ["04", "Vyhodnotenie", "Report, fotky, feedback. A plán pre ďalší event."],
   ];
   return (
-    <section id="process" className="relative py-32 px-6 bg-[#D4C7BD]/40">
+    <section id="process" className="relative py-40 px-6 bg-[#D4C7BD]/40">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="text-center mb-20">
           <div className="flex items-center justify-center gap-3 text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-6">
@@ -489,7 +489,7 @@ function Testimonials() {
     { q: "Hostesky, ktoré naozaj predávajú. Zdvojnásobili sme leady oproti minulému roku na rovnakom veľtrhu.", n: "Eva S.", r: "Event Lead, Automotive" },
   ];
   return (
-    <section className="py-32 px-6">
+    <section className="py-40 px-6">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="mb-16">
           <SectionEyebrow n="05" label="Referencie" />
@@ -530,7 +530,7 @@ function Testimonials() {
 
 function CTABanner() {
   return (
-    <section className="py-24 px-6">
+    <section className="py-32 px-6">
       <motion.div
         {...fadeUp}
         className="relative mx-auto max-w-6xl rounded-[28px] overflow-hidden bg-[#383B3A] soft-shadow-lg"
@@ -557,7 +557,7 @@ function CTABanner() {
 
 function Contact() {
   return (
-    <section id="contact" className="py-32 px-6">
+    <section id="contact" className="py-40 px-6">
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16">
         <motion.div {...fadeUp}>
           <SectionEyebrow n="06" label="Kontakt" />
