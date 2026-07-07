@@ -115,9 +115,14 @@ function Navbar() {
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] items-center gap-6">
-        <a href="#" className="font-display text-2xl tracking-tight text-[#383B3A]">
-          NU<span className="text-[#726D6A]">·</span>U
-        </a>
+        <motion.a
+          href="#"
+          whileHover={{ letterSpacing: "0.08em" }}
+          transition={{ duration: 0.5, ease: EASE }}
+          className="font-display text-2xl tracking-tight text-[#383B3A] inline-block"
+        >
+          NU<motion.span className="text-[#726D6A] inline-block" whileHover={{ rotate: 180 }} transition={{ duration: 0.6, ease: EASE }}>·</motion.span>U
+        </motion.a>
         <nav className="hidden md:flex items-center justify-center gap-2 text-sm text-[#726D6A]">
           {links.map(([l, h]) => {
             const isActive = active === h;
