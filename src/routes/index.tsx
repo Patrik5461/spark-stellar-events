@@ -202,12 +202,12 @@ function SectionEyebrow({ n, label }: { n: string; label: string }) {
 
 function Services() {
   const items = [
-    { icon: Sparkles, title: "Hostessing", desc: "Reprezentatívne hostesky na eventy, veľtrhy a VIP recepcie." },
-    { icon: Megaphone, title: "Promotéri", desc: "Aktívny tím, ktorý naozaj predáva a komunikuje vašu značku." },
-    { icon: HardHat, title: "Helperi", desc: "Spoľahlivá ruka pre stavbu, logistiku a runner služby na mieste." },
-    { icon: Users2, title: "Event Staff", desc: "Servis, registrácia, garderoba — celý prevádzkový tím v jednom." },
-    { icon: Clapperboard, title: "Produkcia eventov", desc: "Od konceptu po realizáciu. Bez kompromisov, na čas." },
-    { icon: Shirt, title: "Prenájom oblečenia", desc: "Vlastné kolekcie uniforiem v premium kvalite a strihu." },
+    { icon: Sparkles, title: "Hostessing", desc: "Profesionálne hostesky pre konferencie, výstavy, firemné akcie a spoločenské podujatia." },
+    { icon: Megaphone, title: "Promotion", desc: "Promotéri pre sampling, promo kampane a prezentáciu značiek." },
+    { icon: HardHat, title: "Helperi", desc: "Spoľahlivý personál pre montáže, logistiku a realizáciu eventov." },
+    { icon: Clapperboard, title: "Produkcia", desc: "Kompletná organizačná podpora a produkcia eventov." },
+    { icon: Shirt, title: "Prenájom oblečenia", desc: "Prenájom profesionálneho oblečenia pre hostesky a event staff." },
+    { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta." },
   ];
   return (
     <section id="services" className="relative py-32 px-6">
