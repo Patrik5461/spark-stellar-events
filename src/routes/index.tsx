@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, animate, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import {
   Sparkles, Megaphone, HardHat, Users2, Clapperboard, Shirt,
   ArrowUpRight, Quote, Mail, Phone, MapPin, ChevronDown, Check,
+  Instagram, Linkedin, Facebook, ArrowUp, X, ChevronLeft, ChevronRight,
 } from "lucide-react";
 
 import hero from "@/assets/hero.jpg";
