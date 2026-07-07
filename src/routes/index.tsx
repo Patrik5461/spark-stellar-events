@@ -319,6 +319,21 @@ function Gallery() {
     { src: g3, h: "", alt: "Promotéri na veľtrhu" },
     { src: g5, h: "row-span-2", alt: "Backstage produkcia" },
   ];
+  const [open, setOpen] = useState<number | null>(null);
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null);
+      if (e.key === "ArrowRight") setOpen((v) => (v === null ? null : (v + 1) % imgs.length));
+      if (e.key === "ArrowLeft") setOpen((v) => (v === null ? null : (v - 1 + imgs.length) % imgs.length));
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, imgs.length]);
   return (
     <section id="gallery" className="relative py-32 px-6">
       <div className="mx-auto max-w-7xl">
@@ -333,13 +348,16 @@ function Gallery() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 grid-rows-[200px] md:grid-rows-[260px] auto-rows-[200px] md:auto-rows-[260px] gap-4">
           {imgs.map((im, i) => (
-            <motion.div
+            <motion.button
+              type="button"
+              onClick={() => setOpen(i)}
               key={i}
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: i * 0.06 }}
-              className={`group relative overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow ${im.h}`}
+              className={`group relative overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow cursor-zoom-in ${im.h}`}
+              aria-label={`Otvoriť ${im.alt}`}
             >
               <img
                 src={im.src}
@@ -347,10 +365,34 @@ function Gallery() {
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
               />
-            </motion.div>
+            </motion.button>
           ))}
         </div>
       </div>
+
+      {open !== null && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[100] bg-[#383B3A]/85 backdrop-blur-sm grid place-items-center p-6 cursor-zoom-out"
+          onClick={() => setOpen(null)}
+        >
+          <motion.img
+            key={open}
+            initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+            src={imgs[open].src}
+            alt={imgs[open].alt}
+            className="max-h-[88vh] max-w-[92vw] rounded-[24px] object-contain soft-shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setOpen(null)}
+            className="absolute top-6 right-6 rounded-full bg-[#F5F1EC] text-[#383B3A] h-11 w-11 grid place-items-center hover:bg-[#C9BAAE] transition-colors"
+            aria-label="Zavrieť"
+          >
+            ✕
+          </button>
+        </motion.div>
+      )}
     </section>
   );
 }
