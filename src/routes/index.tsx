@@ -921,6 +921,7 @@ function Home() {
       <CTABanner />
       <Contact />
       <Footer />
+      <BackToTop />
     </main>
   );
 }
