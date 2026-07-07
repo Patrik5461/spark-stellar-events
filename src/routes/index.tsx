@@ -230,6 +230,10 @@ function Hero() {
               className="h-full w-full object-cover will-change-transform"
               width={1920}
               height={1080}
+              loading="eager"
+              decoding="async"
+              // @ts-expect-error valid HTML hint
+              fetchpriority="high"
             />
             <div className="pointer-events-none absolute inset-0 bg-[#383B3A]/[0.08]" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#383B3A]/25 to-transparent" />
