@@ -246,7 +246,7 @@ function Services() {
                 <h3 className="font-display text-2xl mb-3 text-[#383B3A]">{title}</h3>
                 <p className="text-sm text-[#726D6A] leading-relaxed">{desc}</p>
                 <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-widest text-[#383B3A] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500">
-                  Viac <ArrowUpRight className="h-3.5 w-3.5" />
+                  Viac informácií <ArrowUpRight className="h-3.5 w-3.5" />
                 </div>
               </div>
             </motion.div>
