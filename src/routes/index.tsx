@@ -46,10 +46,9 @@ function Navbar() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
   const links = [
-    ["Služby", "#services"],
     ["O nás", "#why"],
+    ["Služby", "#services"],
     ["Galéria", "#gallery"],
-    ["Proces", "#process"],
     ["Kontakt", "#contact"],
   ];
   return (
@@ -99,9 +98,7 @@ function Hero() {
           transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[clamp(2.75rem,8vw,7.5rem)] leading-[1.0] tracking-tight text-balance text-[#383B3A] max-w-6xl"
         >
-          Eventy, ktoré majú <em className="italic text-[#726D6A]">drive.</em>
-          <br />
-          Ľudia, ktorí majú <em className="italic text-[#726D6A]">iskru.</em>
+          Ľudia, ktorí robia <em className="italic text-[#726D6A]">rozdiel</em> na každom evente.
         </motion.h1>
 
         <div className="mt-12 grid md:grid-cols-2 gap-10 items-end">
@@ -110,9 +107,10 @@ function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="max-w-xl text-lg text-[#726D6A] leading-relaxed"
           >
-            Nerobíme len komparz. Tvoríme tímy, ktoré predávajú,
-            reprezentujú a riešia — s pokojom a precíznosťou.
+            Profesionálny hostessing, promotéri, helperi a kompletné
+            personálne zabezpečenie eventov na Slovensku aj v zahraničí.
           </motion.p>
+
 
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -123,7 +121,7 @@ function Hero() {
               href="#contact"
               className="group inline-flex items-center gap-3 rounded-full bg-[#383B3A] px-7 py-4 text-sm font-medium text-[#F5F1EC] hover:bg-[#4a4d4c] hover:scale-[1.02] transition-all"
             >
-              Nezáväzná ponuka
+              Kontaktujte nás
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
             <a
@@ -204,12 +202,12 @@ function SectionEyebrow({ n, label }: { n: string; label: string }) {
 
 function Services() {
   const items = [
-    { icon: Sparkles, title: "Hostessing", desc: "Reprezentatívne hostesky na eventy, veľtrhy a VIP recepcie." },
-    { icon: Megaphone, title: "Promotéri", desc: "Aktívny tím, ktorý naozaj predáva a komunikuje vašu značku." },
-    { icon: HardHat, title: "Helperi", desc: "Spoľahlivá ruka pre stavbu, logistiku a runner služby na mieste." },
-    { icon: Users2, title: "Event Staff", desc: "Servis, registrácia, garderoba — celý prevádzkový tím v jednom." },
-    { icon: Clapperboard, title: "Produkcia eventov", desc: "Od konceptu po realizáciu. Bez kompromisov, na čas." },
-    { icon: Shirt, title: "Prenájom oblečenia", desc: "Vlastné kolekcie uniforiem v premium kvalite a strihu." },
+    { icon: Sparkles, title: "Hostessing", desc: "Profesionálne hostesky pre konferencie, výstavy, firemné akcie a spoločenské podujatia." },
+    { icon: Megaphone, title: "Promotion", desc: "Promotéri pre sampling, promo kampane a prezentáciu značiek." },
+    { icon: HardHat, title: "Helperi", desc: "Spoľahlivý personál pre montáže, logistiku a realizáciu eventov." },
+    { icon: Clapperboard, title: "Produkcia", desc: "Kompletná organizačná podpora a produkcia eventov." },
+    { icon: Shirt, title: "Prenájom oblečenia", desc: "Prenájom profesionálneho oblečenia pre hostesky a event staff." },
+    { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta." },
   ];
   return (
     <section id="services" className="relative py-32 px-6">
@@ -248,7 +246,7 @@ function Services() {
                 <h3 className="font-display text-2xl mb-3 text-[#383B3A]">{title}</h3>
                 <p className="text-sm text-[#726D6A] leading-relaxed">{desc}</p>
                 <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-widest text-[#383B3A] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500">
-                  Viac <ArrowUpRight className="h-3.5 w-3.5" />
+                  Viac informácií <ArrowUpRight className="h-3.5 w-3.5" />
                 </div>
               </div>
             </motion.div>
@@ -321,6 +319,21 @@ function Gallery() {
     { src: g3, h: "", alt: "Promotéri na veľtrhu" },
     { src: g5, h: "row-span-2", alt: "Backstage produkcia" },
   ];
+  const [open, setOpen] = useState<number | null>(null);
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null);
+      if (e.key === "ArrowRight") setOpen((v) => (v === null ? null : (v + 1) % imgs.length));
+      if (e.key === "ArrowLeft") setOpen((v) => (v === null ? null : (v - 1 + imgs.length) % imgs.length));
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, imgs.length]);
   return (
     <section id="gallery" className="relative py-32 px-6">
       <div className="mx-auto max-w-7xl">
@@ -335,13 +348,16 @@ function Gallery() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 grid-rows-[200px] md:grid-rows-[260px] auto-rows-[200px] md:auto-rows-[260px] gap-4">
           {imgs.map((im, i) => (
-            <motion.div
+            <motion.button
+              type="button"
+              onClick={() => setOpen(i)}
               key={i}
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: i * 0.06 }}
-              className={`group relative overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow ${im.h}`}
+              className={`group relative overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow cursor-zoom-in ${im.h}`}
+              aria-label={`Otvoriť ${im.alt}`}
             >
               <img
                 src={im.src}
@@ -349,10 +365,34 @@ function Gallery() {
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
               />
-            </motion.div>
+            </motion.button>
           ))}
         </div>
       </div>
+
+      {open !== null && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[100] bg-[#383B3A]/85 backdrop-blur-sm grid place-items-center p-6 cursor-zoom-out"
+          onClick={() => setOpen(null)}
+        >
+          <motion.img
+            key={open}
+            initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+            src={imgs[open].src}
+            alt={imgs[open].alt}
+            className="max-h-[88vh] max-w-[92vw] rounded-[24px] object-contain soft-shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setOpen(null)}
+            className="absolute top-6 right-6 rounded-full bg-[#F5F1EC] text-[#383B3A] h-11 w-11 grid place-items-center hover:bg-[#C9BAAE] transition-colors"
+            aria-label="Zavrieť"
+          >
+            ✕
+          </button>
+        </motion.div>
+      )}
     </section>
   );
 }
