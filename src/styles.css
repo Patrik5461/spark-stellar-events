@@ -78,6 +78,13 @@
     font-feature-settings: "ss01", "cv11";
   }
   h1, h2, h3, h4 { letter-spacing: -0.02em; }
+  section[id] { scroll-margin-top: 96px; }
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid #383B3A;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
   ::selection { background: #C9BAAE; color: #383B3A; }
 }
 
