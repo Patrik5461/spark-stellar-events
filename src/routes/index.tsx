@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, animate, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, animate, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import {
   Sparkles, Megaphone, HardHat, Users2, Clapperboard, Shirt,
