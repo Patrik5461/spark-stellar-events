@@ -46,10 +46,9 @@ function Navbar() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
   const links = [
-    ["Služby", "#services"],
     ["O nás", "#why"],
+    ["Služby", "#services"],
     ["Galéria", "#gallery"],
-    ["Proces", "#process"],
     ["Kontakt", "#contact"],
   ];
   return (
