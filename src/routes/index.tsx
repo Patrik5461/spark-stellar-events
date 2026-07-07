@@ -713,21 +713,105 @@ function Contact() {
   );
 }
 
-function Footer() {
+function FloatingField({
+  label, type = "text", as = "input", name,
+}: { label: string; type?: string; as?: "input" | "textarea"; name: string }) {
+  const [val, setVal] = useState("");
+  const [focus, setFocus] = useState(false);
+  const active = focus || val.length > 0;
+  const common = "peer w-full bg-transparent px-5 pt-7 pb-3 text-[#383B3A] outline-none placeholder-transparent";
   return (
-    <footer className="border-t border-[#D9D2CC] py-12 px-6 bg-[#EBE6E2]">
-      <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-6">
-        <div className="font-display text-2xl text-[#383B3A]">NU<span className="text-[#726D6A]">·</span>U</div>
-        <div className="text-xs text-[#726D6A]">© {new Date().getFullYear()} NU-U Agency · info@nu-u.sk · www.nu-u.sk</div>
-        <div className="flex gap-6 text-xs text-[#726D6A]">
-          <a href="#" className="hover:text-[#383B3A]">Instagram</a>
-          <a href="#" className="hover:text-[#383B3A]">LinkedIn</a>
-          <a href="#" className="hover:text-[#383B3A]">Facebook</a>
-        </div>
-      </div>
-    </footer>
+    <label className="relative block rounded-2xl border border-[#D9D2CC] bg-[#F5F1EC]/60 transition-all duration-300 focus-within:border-[#383B3A] focus-within:bg-[#F5F1EC] focus-within:shadow-[0_10px_30px_-15px_rgba(56,59,58,0.25)]">
+      {as === "textarea" ? (
+        <textarea
+          name={name} rows={4} placeholder={label}
+          value={val} onChange={(e) => setVal(e.target.value)}
+          onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
+          className={common + " resize-none"}
+        />
+      ) : (
+        <input
+          type={type} name={name} placeholder={label}
+          value={val} onChange={(e) => setVal(e.target.value)}
+          onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
+          className={common}
+        />
+      )}
+      <span
+        className={`pointer-events-none absolute left-5 transition-all duration-300 ${
+          active ? "top-2 text-[10px] tracking-[0.25em] uppercase text-[#726D6A]" : "top-5 text-base text-[#726D6A]/70"
+        }`}
+      >
+        {label}
+      </span>
+    </label>
   );
 }
+
+function ContactForm() {
+  const [sent, setSent] = useState(false);
+  return (
+    <motion.form
+      {...fadeUp}
+      onSubmit={(e) => { e.preventDefault(); setSent(true); }}
+      className="relative card-surface rounded-[28px] p-8 md:p-10 h-fit overflow-hidden"
+    >
+      <AnimatePresence mode="wait">
+        {sent ? (
+          <motion.div
+            key="sent"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="py-16 text-center"
+          >
+            <motion.div
+              initial={{ scale: 0 }} animate={{ scale: 1 }}
+              transition={{ delay: 0.15, type: "spring", stiffness: 220, damping: 16 }}
+              className="mx-auto h-16 w-16 rounded-full bg-[#383B3A] grid place-items-center"
+            >
+              <Check className="h-7 w-7 text-[#F5F1EC]" strokeWidth={1.75} />
+            </motion.div>
+            <h3 className="mt-6 font-display text-3xl text-[#383B3A]">Ďakujeme.</h3>
+            <p className="mt-3 text-[#726D6A] max-w-sm mx-auto">
+              Vaša správa je u nás. Odpíše vám konkrétny človek do 24 hodín.
+            </p>
+            <button
+              type="button"
+              onClick={() => setSent(false)}
+              className="mt-8 text-xs uppercase tracking-[0.25em] text-[#726D6A] hover:text-[#383B3A] transition-colors"
+            >
+              Nová správa
+            </button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="form"
+            initial={{ opacity: 1 }} exit={{ opacity: 0, y: -10 }}
+            className="space-y-4"
+          >
+            <FloatingField label="Meno" name="name" />
+            <FloatingField label="Email" name="email" type="email" />
+            <FloatingField label="Telefón" name="phone" type="tel" />
+            <FloatingField label="Správa" name="message" as="textarea" />
+            <motion.button
+              type="submit"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="group w-full inline-flex items-center justify-center gap-3 rounded-full bg-[#383B3A] px-8 py-4 text-sm font-medium text-[#F5F1EC] transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)]"
+            >
+              Odoslať dopyt
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </motion.button>
+            <p className="text-xs text-[#726D6A] text-center">
+              Odoslaním súhlasíte so spracovaním osobných údajov.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.form>
+  );
+}
+
 
 function Home() {
   return (
