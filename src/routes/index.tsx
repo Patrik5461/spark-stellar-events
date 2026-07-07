@@ -401,7 +401,9 @@ function WhyUs() {
           <div className="mt-12 grid grid-cols-2 gap-4">
             {stats.map(([n, l]) => (
               <div key={l} className="card-surface rounded-2xl p-6 md:p-8">
-                <div className="font-display text-4xl md:text-5xl text-[#383B3A]">{n}</div>
+                <div className="font-display text-4xl md:text-5xl text-[#383B3A]">
+                  {/^\d+/.test(n) ? <AnimatedNumber value={n} /> : n}
+                </div>
                 <div className="text-xs text-[#726D6A] mt-2 uppercase tracking-wider">{l}</div>
               </div>
             ))}
