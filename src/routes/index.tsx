@@ -39,43 +39,76 @@ const IVORY = "#F5F1EC";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 30);
-    fn();
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-  const links = [
+  const [active, setActive] = useState<string>("");
+  const links: [string, string][] = [
     ["O nás", "#why"],
     ["Služby", "#services"],
     ["Galéria", "#gallery"],
     ["Kontakt", "#contact"],
   ];
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 30);
+    fn();
+    window.addEventListener("scroll", fn);
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive("#" + e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    links.forEach(([, h]) => {
+      const el = document.querySelector(h);
+      if (el) io.observe(el);
+    });
+    return () => {
+      window.removeEventListener("scroll", fn);
+      io.disconnect();
+    };
+  }, []);
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? "py-3 bg-[#EBE6E2]/85 backdrop-blur-xl border-b border-[#D9D2CC]" : "py-6"
+        scrolled ? "py-3 bg-[#EBE6E2]/75 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-6 bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] items-center gap-6">
         <a href="#" className="font-display text-2xl tracking-tight text-[#383B3A]">
           NU<span className="text-[#726D6A]">·</span>U
         </a>
-        <nav className="hidden md:flex items-center justify-center gap-10 text-sm text-[#726D6A]">
-          {links.map(([l, h]) => (
-            <a key={h} href={h} className="hover:text-[#383B3A] transition-colors">{l}</a>
-          ))}
+        <nav className="hidden md:flex items-center justify-center gap-2 text-sm text-[#726D6A]">
+          {links.map(([l, h]) => {
+            const isActive = active === h;
+            return (
+              <a
+                key={h}
+                href={h}
+                className="relative px-4 py-2 transition-colors hover:text-[#383B3A]"
+              >
+                <span className={isActive ? "text-[#383B3A]" : ""}>{l}</span>
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-0 -z-10 rounded-full bg-[#D4C7BD]/60"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+              </a>
+            );
+          })}
         </nav>
         <a
           href="#contact"
-          className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-5 py-2.5 text-sm hover:bg-[#4a4d4c] transition-all"
+          className="group hidden sm:inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-5 py-2.5 text-sm transition-all hover:shadow-[0_10px_30px_-10px_rgba(56,59,58,0.5)] hover:-translate-y-0.5"
         >
-          Nezáväzná ponuka <ArrowUpRight className="h-4 w-4" />
+          Kontakt <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
       </div>
     </header>
   );
 }
+
 
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
