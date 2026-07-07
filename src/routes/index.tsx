@@ -706,46 +706,8 @@ function Contact() {
           </div>
         </motion.div>
 
-        <motion.form
-          {...fadeUp}
-          onSubmit={(e) => { e.preventDefault(); alert("Ďakujeme! Ozveme sa do 24h."); }}
-          className="card-surface rounded-[28px] p-8 md:p-10 h-fit"
-        >
-          <div className="space-y-6">
-            {[
-              { l: "Meno", t: "text", p: "Jana Nováková" },
-              { l: "Email", t: "email", p: "jana@firma.sk" },
-              { l: "Telefón", t: "tel", p: "+421 900 000 000" },
-            ].map((f) => (
-              <div key={f.l}>
-                <label className="block text-xs uppercase tracking-widest text-[#726D6A] mb-2">{f.l}</label>
-                <input
-                  type={f.t}
-                  placeholder={f.p}
-                  className="w-full bg-transparent border-b border-[#D9D2CC] pb-3 text-[#383B3A] placeholder:text-[#726D6A]/50 focus:border-[#383B3A] outline-none transition-colors"
-                />
-              </div>
-            ))}
-            <div>
-              <label className="block text-xs uppercase tracking-widest text-[#726D6A] mb-2">Správa</label>
-              <textarea
-                rows={4}
-                placeholder="Termín, lokácia, počet ľudí, typ eventu..."
-                className="w-full bg-transparent border-b border-[#D9D2CC] pb-3 text-[#383B3A] placeholder:text-[#726D6A]/50 focus:border-[#383B3A] outline-none transition-colors resize-none"
-              />
-            </div>
-            <button
-              type="submit"
-              className="group w-full inline-flex items-center justify-center gap-3 rounded-full bg-[#383B3A] px-8 py-4 text-sm font-medium text-[#F5F1EC] hover:bg-[#4a4d4c] transition-all"
-            >
-              Odoslať dopyt
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </button>
-            <p className="text-xs text-[#726D6A] text-center">
-              Odoslaním súhlasíte so spracovaním osobných údajov.
-            </p>
-          </div>
-        </motion.form>
+        <ContactForm />
+
       </div>
     </section>
   );
