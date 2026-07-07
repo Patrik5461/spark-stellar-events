@@ -121,7 +121,7 @@ function Hero() {
               href="#contact"
               className="group inline-flex items-center gap-3 rounded-full bg-[#383B3A] px-7 py-4 text-sm font-medium text-[#F5F1EC] hover:bg-[#4a4d4c] hover:scale-[1.02] transition-all"
             >
-              Nezáväzná ponuka
+              Kontaktujte nás
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
             <a
