@@ -28,15 +28,55 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const },
+  transition: { duration: 0.8, ease: EASE },
 };
 
-const INK = "#383B3A";
-const IVORY = "#F5F1EC";
+function AnimatedNumber({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [display, setDisplay] = useState<string>(value);
+  useEffect(() => {
+    const match = value.match(/^(\d+)(.*)$/);
+    if (!match) { setDisplay(value); return; }
+    if (!inView) { setDisplay("0" + match[2]); return; }
+    const target = parseInt(match[1], 10);
+    const suffix = match[2];
+    const controls = animate(0, target, {
+      duration: 1.6,
+      ease: EASE,
+      onUpdate: (v) => setDisplay(Math.round(v) + suffix),
+    });
+    return () => controls.stop();
+  }, [inView, value]);
+  return <span ref={ref}>{display}</span>;
+}
+
+function AnimatedHeadline({ text, className }: { text: string; className?: string }) {
+  const words = text.split(" ");
+  return (
+    <h1 className={className} aria-label={text}>
+      {words.map((w, wi) => (
+        <span key={wi} className="inline-block overflow-hidden align-baseline mr-[0.25em] last:mr-0">
+          <motion.span
+            className="inline-block"
+            initial={{ y: "110%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1.05, delay: 0.25 + wi * 0.06, ease: EASE }}
+          >
+            {w}
+          </motion.span>
+        </span>
+      ))}
+    </h1>
+  );
+}
+
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
