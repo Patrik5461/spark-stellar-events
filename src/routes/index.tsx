@@ -290,12 +290,12 @@ function SectionEyebrow({ n, label }: { n: string; label: string }) {
 
 function Services() {
   const items = [
-    { icon: Sparkles, title: "Hostessing", desc: "Profesionálne hostesky pre konferencie, výstavy, firemné akcie a spoločenské podujatia." },
-    { icon: Megaphone, title: "Promotion", desc: "Promotéri pre sampling, promo kampane a prezentáciu značiek." },
-    { icon: HardHat, title: "Helperi", desc: "Spoľahlivý personál pre montáže, logistiku a realizáciu eventov." },
-    { icon: Clapperboard, title: "Produkcia", desc: "Kompletná organizačná podpora a produkcia eventov." },
-    { icon: Shirt, title: "Prenájom oblečenia", desc: "Prenájom profesionálneho oblečenia pre hostesky a event staff." },
-    { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta." },
+    { icon: Sparkles, title: "Hostessing", desc: "Profesionálne hostesky pre konferencie, výstavy, firemné akcie a spoločenské podujatia.", img: g1, span: "md:col-span-2 lg:row-span-2 min-h-[360px] lg:min-h-[520px]" },
+    { icon: Megaphone, title: "Promotion", desc: "Promotéri pre sampling, promo kampane a prezentáciu značiek.", img: g3, span: "min-h-[280px] lg:min-h-[250px]" },
+    { icon: HardHat, title: "Helperi", desc: "Spoľahlivý personál pre montáže, logistiku a realizáciu eventov.", img: g5, span: "min-h-[280px] lg:min-h-[250px]" },
+    { icon: Clapperboard, title: "Produkcia", desc: "Kompletná organizačná podpora a produkcia eventov.", img: g2, span: "min-h-[280px] lg:min-h-[250px] lg:col-span-1" },
+    { icon: Shirt, title: "Prenájom oblečenia", desc: "Prenájom profesionálneho oblečenia pre hostesky a event staff.", img: g6, span: "min-h-[280px] lg:min-h-[250px]" },
+    { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta.", img: g4, span: "min-h-[280px] lg:min-h-[250px]" },
   ];
   return (
     <section id="services" className="relative py-40 px-6">
@@ -313,31 +313,44 @@ function Services() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map(({ icon: Icon, title, desc }, i) => (
-            <motion.div
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
+          {items.map(({ icon: Icon, title, desc, img, span }, i) => (
+            <motion.a
+              href="#contact"
               key={title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.06 }}
-              whileHover={{ y: -6, scale: 1.01 }}
-              className="group relative card-surface rounded-[24px] p-10 min-h-[280px] flex flex-col justify-between transition-shadow hover:shadow-[0_30px_60px_-20px_rgba(56,59,58,0.18)]"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.7, delay: i * 0.06, ease: EASE }}
+              whileHover={{ y: -6 }}
+              className={`group relative card-surface rounded-[24px] p-10 flex flex-col justify-between overflow-hidden transition-shadow duration-500 hover:shadow-[0_30px_60px_-20px_rgba(56,59,58,0.22)] ${span}`}
             >
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[900ms] ease-out"
+                style={{
+                  backgroundImage: `linear-gradient(180deg, rgba(245,241,236,0.86) 0%, rgba(245,241,236,0.72) 60%, rgba(245,241,236,0.9) 100%), url(${img})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
               <div className="relative flex items-start justify-between">
-                <div className="h-12 w-12 rounded-2xl border border-[#D9D2CC] bg-[#EBE6E2] grid place-items-center group-hover:bg-[#C9BAAE]/50 transition-colors">
-                  <Icon className="h-5 w-5 text-[#383B3A]" strokeWidth={1.5} />
+                <div className="h-12 w-12 rounded-2xl border border-[#D9D2CC] bg-[#EBE6E2]/70 grid place-items-center group-hover:bg-[#F5F1EC] group-hover:border-[#C9BAAE] transition-colors duration-500">
+                  <Icon className="h-5 w-5 text-[#383B3A]" strokeWidth={1.25} />
                 </div>
-                <span className="text-xs text-[#726D6A]/60">0{i + 1}</span>
+                <span className="font-display text-sm text-[#726D6A]/70 tracking-widest">0{i + 1}</span>
               </div>
               <div className="relative mt-10">
-                <h3 className="font-display text-2xl mb-3 text-[#383B3A]">{title}</h3>
-                <p className="text-sm text-[#726D6A] leading-relaxed">{desc}</p>
-                <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-widest text-[#383B3A] opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500">
-                  Viac informácií <ArrowUpRight className="h-3.5 w-3.5" />
+                <h3 className="font-display text-2xl md:text-3xl mb-3 text-[#383B3A]">{title}</h3>
+                <p className="text-sm md:text-base text-[#726D6A] leading-relaxed max-w-[46ch]">{desc}</p>
+                <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#383B3A]">
+                  <span className="opacity-70 group-hover:opacity-100 transition-opacity">Viac informácií</span>
+                  <span className="inline-block transition-transform duration-500 ease-out group-hover:translate-x-1">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </div>
