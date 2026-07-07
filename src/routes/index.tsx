@@ -98,9 +98,7 @@ function Hero() {
           transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[clamp(2.75rem,8vw,7.5rem)] leading-[1.0] tracking-tight text-balance text-[#383B3A] max-w-6xl"
         >
-          Eventy, ktoré majú <em className="italic text-[#726D6A]">drive.</em>
-          <br />
-          Ľudia, ktorí majú <em className="italic text-[#726D6A]">iskru.</em>
+          Ľudia, ktorí robia <em className="italic text-[#726D6A]">rozdiel</em> na každom evente.
         </motion.h1>
 
         <div className="mt-12 grid md:grid-cols-2 gap-10 items-end">
@@ -109,9 +107,10 @@ function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="max-w-xl text-lg text-[#726D6A] leading-relaxed"
           >
-            Nerobíme len komparz. Tvoríme tímy, ktoré predávajú,
-            reprezentujú a riešia — s pokojom a precíznosťou.
+            Profesionálny hostessing, promotéri, helperi a kompletné
+            personálne zabezpečenie eventov na Slovensku aj v zahraničí.
           </motion.p>
+
 
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
