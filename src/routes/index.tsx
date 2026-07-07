@@ -39,55 +39,91 @@ const IVORY = "#F5F1EC";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 30);
-    fn();
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-  const links = [
+  const [active, setActive] = useState<string>("");
+  const links: [string, string][] = [
     ["O nás", "#why"],
     ["Služby", "#services"],
     ["Galéria", "#gallery"],
     ["Kontakt", "#contact"],
   ];
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 30);
+    fn();
+    window.addEventListener("scroll", fn);
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive("#" + e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    links.forEach(([, h]) => {
+      const el = document.querySelector(h);
+      if (el) io.observe(el);
+    });
+    return () => {
+      window.removeEventListener("scroll", fn);
+      io.disconnect();
+    };
+  }, []);
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? "py-3 bg-[#EBE6E2]/85 backdrop-blur-xl border-b border-[#D9D2CC]" : "py-6"
+        scrolled ? "py-3 bg-[#EBE6E2]/75 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-6 bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] items-center gap-6">
         <a href="#" className="font-display text-2xl tracking-tight text-[#383B3A]">
           NU<span className="text-[#726D6A]">·</span>U
         </a>
-        <nav className="hidden md:flex items-center justify-center gap-10 text-sm text-[#726D6A]">
-          {links.map(([l, h]) => (
-            <a key={h} href={h} className="hover:text-[#383B3A] transition-colors">{l}</a>
-          ))}
+        <nav className="hidden md:flex items-center justify-center gap-2 text-sm text-[#726D6A]">
+          {links.map(([l, h]) => {
+            const isActive = active === h;
+            return (
+              <a
+                key={h}
+                href={h}
+                className="relative px-4 py-2 transition-colors hover:text-[#383B3A]"
+              >
+                <span className={isActive ? "text-[#383B3A]" : ""}>{l}</span>
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-0 -z-10 rounded-full bg-[#D4C7BD]/60"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+              </a>
+            );
+          })}
         </nav>
         <a
           href="#contact"
-          className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-5 py-2.5 text-sm hover:bg-[#4a4d4c] transition-all"
+          className="group hidden sm:inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-5 py-2.5 text-sm transition-all hover:shadow-[0_10px_30px_-10px_rgba(56,59,58,0.5)] hover:-translate-y-0.5"
         >
-          Nezáväzná ponuka <ArrowUpRight className="h-4 w-4" />
+          Kontakt <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
       </div>
     </header>
   );
 }
 
+
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   return (
-    <section ref={ref} className="relative pt-32 md:pt-40 pb-20 px-6">
-      <div className="mx-auto max-w-7xl">
+    <section ref={ref} className="relative min-h-[96vh] flex flex-col pt-36 md:pt-44 pb-16 px-6">
+      <div className="mx-auto max-w-7xl w-full flex-1 flex flex-col">
         <motion.div
+          style={{ y: textY }}
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex items-center gap-3 text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-10"
+          className="flex items-center gap-3 text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-12"
         >
           <span className="h-px w-10 bg-[#726D6A]" />
           Hostessing · Promo · Produkcia
@@ -95,58 +131,63 @@ function Hero() {
 
         <motion.h1
           initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-[clamp(2.75rem,8vw,7.5rem)] leading-[1.0] tracking-tight text-balance text-[#383B3A] max-w-6xl"
+          transition={{ duration: 1.1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          style={{ y: textY }}
+          className="font-display font-semibold text-[clamp(3rem,9vw,8.5rem)] leading-[0.98] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
         >
-          Ľudia, ktorí robia <em className="italic text-[#726D6A]">rozdiel</em> na každom evente.
+          Ľudia, ktorí robia <em className="italic font-normal text-[#726D6A]">rozdiel</em> na každom evente.
         </motion.h1>
 
-        <div className="mt-12 grid md:grid-cols-2 gap-10 items-end">
+        <div className="mt-16 grid md:grid-cols-2 gap-10 items-end">
           <motion.p
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="max-w-xl text-lg text-[#726D6A] leading-relaxed"
+            className="max-w-[52ch] text-lg md:text-xl text-[#726D6A] leading-[1.7]"
           >
             Profesionálny hostessing, promotéri, helperi a kompletné
             personálne zabezpečenie eventov na Slovensku aj v zahraničí.
           </motion.p>
-
 
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-wrap gap-4 md:justify-end"
           >
-            <a
+            <motion.a
               href="#contact"
-              className="group inline-flex items-center gap-3 rounded-full bg-[#383B3A] px-7 py-4 text-sm font-medium text-[#F5F1EC] hover:bg-[#4a4d4c] hover:scale-[1.02] transition-all"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="group inline-flex items-center gap-3 rounded-full bg-[#383B3A] px-8 py-4 text-sm font-medium text-[#F5F1EC] transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)]"
             >
               Kontaktujte nás
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href="#services"
-              className="inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-7 py-4 text-sm text-[#383B3A] hover:bg-[#C9BAAE]/40 transition-all"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-8 py-4 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
             >
               Naše služby
-            </a>
+            </motion.a>
           </motion.div>
         </div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, delay: 0.5 }}
+          initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="relative mt-20 rounded-[28px] overflow-hidden soft-shadow-lg border border-[#D9D2CC]"
         >
-          <motion.div style={{ y }} className="aspect-[16/8] w-full">
-            <img
+          <div className="aspect-[16/8] w-full overflow-hidden">
+            <motion.img
               src={hero}
               alt="Elegantná hosteska na luxusnom evente"
-              className="h-full w-full object-cover"
+              style={{ y: imgY, scale: imgScale }}
+              className="h-full w-full object-cover will-change-transform"
               width={1920}
               height={1080}
             />
-          </motion.div>
+          </div>
         </motion.div>
 
         <div className="mt-10 flex items-end justify-between gap-6">
@@ -162,6 +203,7 @@ function Hero() {
     </section>
   );
 }
+
 
 function Marquee() {
   const clients = [
@@ -210,7 +252,7 @@ function Services() {
     { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta." },
   ];
   return (
-    <section id="services" className="relative py-32 px-6">
+    <section id="services" className="relative py-40 px-6">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="flex items-end justify-between flex-wrap gap-8 mb-20">
           <div>
@@ -265,7 +307,7 @@ function WhyUs() {
     ["SK & EU", "Slovensko & zahraničie"],
   ];
   return (
-    <section id="why" className="relative py-32 px-6 bg-[#D4C7BD]/40">
+    <section id="why" className="relative py-40 px-6 bg-[#D4C7BD]/40">
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
         <motion.div {...fadeUp} className="relative">
           <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden soft-shadow-lg border border-[#D9D2CC]">
@@ -335,7 +377,7 @@ function Gallery() {
     };
   }, [open, imgs.length]);
   return (
-    <section id="gallery" className="relative py-32 px-6">
+    <section id="gallery" className="relative py-40 px-6">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="flex items-end justify-between gap-8 mb-16 flex-wrap">
           <div>
@@ -405,7 +447,7 @@ function Process() {
     ["04", "Vyhodnotenie", "Report, fotky, feedback. A plán pre ďalší event."],
   ];
   return (
-    <section id="process" className="relative py-32 px-6 bg-[#D4C7BD]/40">
+    <section id="process" className="relative py-40 px-6 bg-[#D4C7BD]/40">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="text-center mb-20">
           <div className="flex items-center justify-center gap-3 text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-6">
@@ -447,7 +489,7 @@ function Testimonials() {
     { q: "Hostesky, ktoré naozaj predávajú. Zdvojnásobili sme leady oproti minulému roku na rovnakom veľtrhu.", n: "Eva S.", r: "Event Lead, Automotive" },
   ];
   return (
-    <section className="py-32 px-6">
+    <section className="py-40 px-6">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="mb-16">
           <SectionEyebrow n="05" label="Referencie" />
@@ -488,7 +530,7 @@ function Testimonials() {
 
 function CTABanner() {
   return (
-    <section className="py-24 px-6">
+    <section className="py-32 px-6">
       <motion.div
         {...fadeUp}
         className="relative mx-auto max-w-6xl rounded-[28px] overflow-hidden bg-[#383B3A] soft-shadow-lg"
@@ -515,7 +557,7 @@ function CTABanner() {
 
 function Contact() {
   return (
-    <section id="contact" className="py-32 px-6">
+    <section id="contact" className="py-40 px-6">
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16">
         <motion.div {...fadeUp}>
           <SectionEyebrow n="06" label="Kontakt" />

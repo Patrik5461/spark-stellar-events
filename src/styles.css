@@ -72,9 +72,12 @@
     background-color: #EBE6E2;
     color: #383B3A;
     font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     font-feature-settings: "ss01", "cv11";
   }
+  h1, h2, h3, h4 { letter-spacing: -0.02em; }
   ::selection { background: #C9BAAE; color: #383B3A; }
 }
 
