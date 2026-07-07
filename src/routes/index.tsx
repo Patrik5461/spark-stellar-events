@@ -175,14 +175,12 @@ function Hero() {
           Hostessing · Promo · Produkcia
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          style={{ y: textY }}
-          className="font-display font-semibold text-[clamp(3rem,9vw,8.5rem)] leading-[0.98] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
-        >
-          Ľudia, ktorí robia <em className="italic font-normal text-[#726D6A]">rozdiel</em> na každom evente.
-        </motion.h1>
+        <motion.div style={{ y: textY }}>
+          <AnimatedHeadline
+            text="Ľudia, ktorí robia rozdiel na každom evente."
+            className="font-display font-semibold text-[clamp(3rem,9vw,8.5rem)] leading-[0.98] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
+          />
+        </motion.div>
 
         <div className="mt-16 grid md:grid-cols-2 gap-10 items-end">
           <motion.p
