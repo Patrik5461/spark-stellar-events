@@ -14,19 +14,19 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#EBE6E2] px-6">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <h1 className="font-display text-8xl md:text-9xl text-[#383B3A]">404</h1>
+        <h2 className="mt-4 font-display text-2xl text-[#383B3A]">Stránka sa nenašla</h2>
+        <p className="mt-3 text-sm text-[#726D6A]">
+          Stránka, ktorú hľadáte, neexistuje alebo bola presunutá.
         </p>
-        <div className="mt-6">
+        <div className="mt-8">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center gap-2 rounded-full bg-[#383B3A] px-6 py-3 text-sm text-[#F5F1EC] hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)] transition-shadow"
           >
-            Go home
+            Späť na domov
           </Link>
         </div>
       </div>
