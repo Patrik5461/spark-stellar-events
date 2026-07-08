@@ -684,8 +684,8 @@ function Contact() {
           <div className="mt-12 space-y-5">
             {[
               [Mail, "info@nu-u.sk", "mailto:info@nu-u.sk"],
-              [Phone, "+421 900 000 000", "tel:+421900000000"],
-              [MapPin, "Bratislava, Slovensko", "#"],
+              [Phone, "+421 905 454 498", "tel:+421905454498"],
+              [MapPin, "nua s.r.o. · Gazdovská 1901/7b, 900 41 Rovinka", "#"],
             ].map(([Icon, label, href], i) => {
               const I = Icon as typeof Mail;
               return (
@@ -699,10 +699,23 @@ function Contact() {
             })}
           </div>
 
-          <div className="mt-10 aspect-[2/1] rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow">
+          <div className="mt-10 rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow">
+            <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
+            <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
+              <p className="font-medium">nua s.r.o.</p>
+              <p>Gazdovská 1901/7b</p>
+              <p>900 41 Rovinka</p>
+              <p>IČO: 550428872</p>
+              <p>DIČ: 2121851754</p>
+              <p>IČ DPH: SK2121851754</p>
+              <p>IBAN: SK39 8330 0000 0020 0248 9216</p>
+            </div>
+          </div>
+
+          <div className="mt-6 aspect-[2/1] rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow">
             <iframe
               title="Mapa"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=17.05%2C48.13%2C17.18%2C48.18&layer=mapnik"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=17.15%2C48.15%2C17.22%2C48.18&layer=mapnik"
               className="w-full h-full"
               style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
               loading="lazy"
@@ -881,10 +894,14 @@ function Footer() {
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Kontakt</div>
             <ul className="space-y-2 text-sm text-[#383B3A]">
+              <li className="font-medium">Jana Henčeková</li>
               <li><a href="mailto:info@nu-u.sk" className="hover:text-[#726D6A] transition-colors">info@nu-u.sk</a></li>
-              <li><a href="tel:+421900000000" className="hover:text-[#726D6A] transition-colors">+421 900 000 000</a></li>
-              <li className="text-[#726D6A]">Bratislava, Slovensko</li>
+              <li><a href="tel:+421905454498" className="hover:text-[#726D6A] transition-colors">+421 905 454 498</a></li>
+              <li className="text-[#726D6A]">Gazdovská 1901/7b, 900 41 Rovinka</li>
             </ul>
+            <div className="mt-5 text-xs text-[#726D6A] leading-relaxed">
+              <span className="text-[#383B3A] font-medium">nua s.r.o.</span> · IČO 550428872 · DIČ 2121851754 · IČ DPH SK2121851754 · IBAN SK39 8330 0000 0020 0248 9216
+            </div>
             <div className="mt-5 flex gap-3">
               {socials.map(([Icon, href, label]) => (
                 <a
@@ -900,8 +917,8 @@ function Footer() {
           </div>
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-[#726D6A]">
-          <div>© {new Date().getFullYear()} NU-U Agency · www.nu-u.sk</div>
-          <div>Handcrafted in Bratislava</div>
+          <div>© {new Date().getFullYear()} nua s.r.o. · nu-u.sk · IČO 550428872</div>
+          <div>Handcrafted in Rovinka</div>
         </div>
       </motion.div>
     </footer>
