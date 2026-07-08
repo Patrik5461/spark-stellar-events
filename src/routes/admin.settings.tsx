@@ -1,0 +1,137 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+import { Save, KeyRound } from "lucide-react";
+
+type Row = Database["public"]["Tables"]["site_settings"]["Row"];
+
+export const Route = createFileRoute("/admin/settings")({
+  component: SettingsAdmin,
+});
+
+const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean }[] = [
+  { key: "contact_person", label: "Kontaktná osoba", group: "Kontakt" },
+  { key: "phone", label: "Telefón", group: "Kontakt" },
+  { key: "email", label: "Email", group: "Kontakt" },
+  { key: "address", label: "Adresa", group: "Kontakt" },
+  { key: "instagram_url", label: "Instagram", group: "Sociálne siete" },
+  { key: "linkedin_url", label: "LinkedIn", group: "Sociálne siete" },
+  { key: "facebook_url", label: "Facebook", group: "Sociálne siete" },
+  { key: "billing_name", label: "Názov spoločnosti", group: "Fakturačné údaje" },
+  { key: "billing_address", label: "Fakturačná adresa", group: "Fakturačné údaje" },
+  { key: "billing_ico", label: "IČO", group: "Fakturačné údaje" },
+  { key: "billing_dic", label: "DIČ", group: "Fakturačné údaje" },
+  { key: "billing_ic_dph", label: "IČ DPH", group: "Fakturačné údaje" },
+  { key: "billing_iban", label: "IBAN", group: "Fakturačné údaje" },
+  { key: "hero_headline", label: "Hero nadpis", group: "Texty webu", textarea: true },
+  { key: "hero_subtitle", label: "Hero podnadpis", group: "Texty webu", textarea: true },
+  { key: "cta_primary", label: "CTA tlačidlo (hlavné)", group: "Texty webu" },
+  { key: "cta_secondary", label: "CTA tlačidlo (vedľajšie)", group: "Texty webu" },
+  { key: "about_text", label: "O nás", group: "Texty webu", textarea: true },
+  { key: "gallery_intro", label: "Úvod galérie", group: "Texty webu", textarea: true },
+  { key: "contact_text", label: "Kontakt – text", group: "Texty webu", textarea: true },
+  { key: "footer_text", label: "Footer text", group: "Texty webu", textarea: true },
+];
+
+function SettingsAdmin() {
+  const [row, setRow] = useState<Row | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [pwd, setPwd] = useState("");
+  const [pwdBusy, setPwdBusy] = useState(false);
+  const [pwdMsg, setPwdMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.from("site_settings").select("*").eq("id", 1).maybeSingle().then(({ data }) => setRow(data));
+  }, []);
+
+  const save = async () => {
+    if (!row) return;
+    setBusy(true);
+    setMsg(null);
+    const { error } = await supabase.from("site_settings").update(row).eq("id", 1);
+    setBusy(false);
+    setMsg(error ? error.message : "Uložené ✓");
+  };
+
+  const changePwd = async () => {
+    if (pwd.length < 8) { setPwdMsg("Heslo musí mať aspoň 8 znakov."); return; }
+    setPwdBusy(true);
+    setPwdMsg(null);
+    const { error } = await supabase.auth.updateUser({
+      password: pwd,
+      data: { must_change_password: false },
+    });
+    // Also update app_metadata flag isn't directly writable client-side; user_metadata flag suffices for the banner logic if needed.
+    setPwdBusy(false);
+    setPwd("");
+    setPwdMsg(error ? error.message : "Heslo bolo úspešne zmenené ✓");
+  };
+
+  if (!row) return <div>Načítavam…</div>;
+
+  const groups = Array.from(new Set(FIELDS.map((f) => f.group)));
+
+  return (
+    <section>
+      <header className="mb-8 flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A]">Nastavenia</div>
+          <h1 className="font-display text-4xl">Obsah webu</h1>
+        </div>
+        <button onClick={save} disabled={busy} className="inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-5 py-3 text-sm disabled:opacity-60">
+          <Save className="h-4 w-4" /> {busy ? "Ukladám…" : "Uložiť zmeny"}
+        </button>
+      </header>
+
+      {msg && <div className="mb-4 rounded-lg bg-emerald-100 text-emerald-800 px-4 py-3 text-sm">{msg}</div>}
+
+      <div className="space-y-8">
+        {groups.map((g) => (
+          <div key={g} className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-6">
+            <h2 className="font-display text-2xl mb-4">{g}</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {FIELDS.filter((f) => f.group === g).map((f) => (
+                <label key={String(f.key)} className={f.textarea ? "block md:col-span-2" : "block"}>
+                  <span className="text-xs uppercase tracking-[0.2em] text-[#726D6A]">{f.label}</span>
+                  {f.textarea ? (
+                    <textarea
+                      rows={3}
+                      className="mt-2 w-full rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
+                      value={(row[f.key] as string) ?? ""}
+                      onChange={(e) => setRow({ ...row, [f.key]: e.target.value })}
+                    />
+                  ) : (
+                    <input
+                      className="mt-2 w-full rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
+                      value={(row[f.key] as string) ?? ""}
+                      onChange={(e) => setRow({ ...row, [f.key]: e.target.value })}
+                    />
+                  )}
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-6">
+          <h2 className="font-display text-2xl mb-4 flex items-center gap-2"><KeyRound className="h-5 w-5" /> Zmena hesla</h2>
+          <div className="flex flex-col md:flex-row gap-3 max-w-xl">
+            <input
+              type="password"
+              placeholder="Nové heslo (min. 8 znakov)"
+              value={pwd}
+              onChange={(e) => setPwd(e.target.value)}
+              className="flex-1 rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2"
+            />
+            <button onClick={changePwd} disabled={pwdBusy} className="rounded-full bg-[#383B3A] text-[#F5F1EC] px-5 py-2.5 text-sm disabled:opacity-60">
+              {pwdBusy ? "Ukladám…" : "Zmeniť heslo"}
+            </button>
+          </div>
+          {pwdMsg && <div className="mt-3 text-sm">{pwdMsg}</div>}
+        </div>
+      </div>
+    </section>
+  );
+}
