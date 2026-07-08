@@ -3,18 +3,11 @@ import { motion, useScroll, useTransform, useInView, animate, AnimatePresence } 
 import { useEffect, useRef, useState } from "react";
 import {
   Sparkles, Megaphone, HardHat, Users2, Clapperboard, Shirt,
-  ArrowUpRight, Quote, Mail, Phone, MapPin, ChevronDown, Check,
+  ArrowUpRight, Quote, Mail, Phone, MapPin, ChevronDown, Check, ImageIcon,
 } from "lucide-react";
 
 import hero from "@/assets/hero.jpg";
-import g1 from "@/assets/g1.jpg";
-import g2 from "@/assets/g2.jpg";
-import g3 from "@/assets/g3.jpg";
-import g4 from "@/assets/g4.jpg";
-import g5 from "@/assets/g5.jpg";
-import g6 from "@/assets/g6.jpg";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
-import { GALLERY_ITEMS } from "@/lib/gallery-data";
 import { useGalleryImages } from "@/lib/use-gallery";
 
 export const Route = createFileRoute("/")({
