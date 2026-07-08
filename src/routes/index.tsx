@@ -541,7 +541,7 @@ function CTABanner() {
         className="relative mx-auto max-w-6xl rounded-[28px] overflow-hidden bg-[#383B3A] soft-shadow-lg"
       >
         <div className="relative px-8 py-20 md:py-28 md:px-16 text-center">
-          <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-4xl mx-auto text-balance text-[#F5F1EC]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-4xl mx-auto text-balance text-[#F5F1EC]">
             Váš úspech je <em className="italic text-[#C9BAAE]">naša vizitka.</em>
           </h2>
           <p className="mt-6 text-[#F5F1EC]/70 max-w-xl mx-auto">
