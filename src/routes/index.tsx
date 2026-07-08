@@ -360,7 +360,7 @@ function GalleryPreview() {
         <motion.div {...fadeUp} className="flex items-end justify-between gap-8 mb-16 flex-wrap">
           <div>
             <SectionEyebrow n="03" label="Galéria" />
-            <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A]">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A]">
               Galéria
             </h2>
             <p className="mt-6 max-w-md text-[#726D6A] leading-relaxed">
