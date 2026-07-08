@@ -189,7 +189,7 @@ function Marquee() {
   return (
     <section className="border-y border-[#D9D2CC] py-12 overflow-hidden bg-[#EBE6E2]">
       <div className="text-center text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-8">
-        Dôverujú nám
+        NÁŠ TÍM TVORIA AJ NAŠI DODÁVATELIA
       </div>
       <div className="flex gap-16 animate-marquee whitespace-nowrap mb-6">
         {row.map((c, i) => (
