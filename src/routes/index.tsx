@@ -7,6 +7,12 @@ import {
 } from "lucide-react";
 
 import hero from "@/assets/hero.jpg";
+import g1 from "@/assets/g1.jpg";
+import g2 from "@/assets/g2.jpg";
+import g3 from "@/assets/g3.jpg";
+import g4 from "@/assets/g4.jpg";
+import g5 from "@/assets/g5.jpg";
+import g6 from "@/assets/g6.jpg";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
 import { useGalleryImages } from "@/lib/use-gallery";
 
