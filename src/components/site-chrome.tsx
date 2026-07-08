@@ -171,7 +171,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-[#726D6A]">
-          <div>© {new Date().getFullYear()} nua s.r.o. · nu-u.sk · IČO 550428872</div>
+          <div>© {new Date().getFullYear()} nuu s.r.o. · nu-u.sk · IČO 550428872</div>
           <div className="flex items-center gap-3">
             <span>Handcrafted in Rovinka</span>
             <Link
