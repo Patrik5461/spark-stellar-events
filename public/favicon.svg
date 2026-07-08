@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <g stroke="#726D6A" stroke-width="6" stroke-linecap="round">
+    <line x1="400" y1="90" x2="400" y2="250"/>
+    <line x1="400" y1="550" x2="400" y2="710"/>
+  </g>
+  <text x="400" y="455" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="200" font-weight="500" fill="#383B3A" letter-spacing="6">nu-u</text>
+</svg>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { ArrowLeft } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -55,8 +56,8 @@ function LoginPage() {
         onSubmit={submit}
         className="w-full max-w-md rounded-3xl bg-[#F5F1EC] border border-[#D9D2CC] p-10 soft-shadow-lg"
       >
-        <Link to="/" className="inline-block font-display text-2xl text-[#383B3A] hover:text-[#726D6A] transition-colors">
-          NU<span className="text-[#726D6A]">·</span>U
+        <Link to="/" aria-label="NU-U — domov" className="inline-flex text-[#383B3A] hover:opacity-80 transition-opacity">
+          <Logo className="h-12 w-12" />
         </Link>
 
         <div className="mt-6 text-xs uppercase tracking-[0.3em] text-[#726D6A]">Admin</div>
