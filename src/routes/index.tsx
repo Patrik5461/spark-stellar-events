@@ -232,7 +232,7 @@ function Services() {
         <motion.div {...fadeUp} className="flex items-end justify-between flex-wrap gap-8 mb-20">
           <div>
             <SectionEyebrow n="01" label="Služby" />
-            <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-3xl text-[#383B3A]">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-3xl text-[#383B3A] text-balance">
               Všetko, čo váš event <em className="italic text-[#726D6A]">potrebuje.</em>
             </h2>
           </div>
