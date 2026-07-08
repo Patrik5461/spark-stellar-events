@@ -566,7 +566,7 @@ function Contact() {
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16">
         <motion.div {...fadeUp}>
           <SectionEyebrow n="06" label="Kontakt" />
-          <h2 className="font-display text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A] text-balance">
             Povedzte nám o vašom <em className="italic text-[#726D6A]">evente.</em>
           </h2>
           <p className="mt-6 text-[#726D6A] max-w-md">
