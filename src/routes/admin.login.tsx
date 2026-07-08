@@ -57,7 +57,7 @@ function LoginPage() {
         className="w-full max-w-md rounded-3xl bg-[#F5F1EC] border border-[#D9D2CC] p-10 soft-shadow-lg"
       >
         <Link to="/" aria-label="NU-U — domov" className="inline-flex text-[#383B3A] hover:opacity-80 transition-opacity">
-          <Logo className="h-12 w-12" />
+          <Logo className="h-[67px] w-[67px]" />
         </Link>
 
         <div className="mt-6 text-xs uppercase tracking-[0.3em] text-[#726D6A]">Admin</div>
