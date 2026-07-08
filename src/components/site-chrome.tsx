@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, ArrowUp, Instagram, Linkedin, Facebook, Lock } from "lucide-react";
+import { ArrowUp, Instagram, Linkedin, Facebook, Lock } from "lucide-react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -56,7 +56,7 @@ export function Navbar() {
         scrolled ? "py-3 bg-[#EBE6E2]/75 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-6 bg-transparent"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] items-center gap-6">
+      <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr] items-center gap-6">
         <Link
           to="/"
           className="font-display text-2xl tracking-tight text-[#383B3A] inline-block"
@@ -93,12 +93,6 @@ export function Navbar() {
             );
           })}
         </nav>
-        <a
-          href={isHome ? "#contact" : "/#contact"}
-          className="group hidden sm:inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-5 py-2.5 text-sm transition-all hover:shadow-[0_10px_30px_-10px_rgba(56,59,58,0.5)] hover:-translate-y-0.5"
-        >
-          Kontakt <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </a>
       </div>
     </header>
   );
