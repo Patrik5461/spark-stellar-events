@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
 import { GalleryGrid } from "@/components/gallery-grid";
 import { GALLERY_ITEMS, GALLERY_CATEGORIES } from "@/lib/gallery-data";
+import { useGalleryImages } from "@/lib/use-gallery";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
