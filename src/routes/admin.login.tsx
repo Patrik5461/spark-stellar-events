@@ -1,7 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/lib/admin-auth";
+import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -41,12 +42,24 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#EBE6E2] flex items-center justify-center px-6">
+    <div className="relative min-h-screen bg-[#EBE6E2] flex items-center justify-center px-6 py-24">
+      <Link
+        to="/"
+        className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm text-[#726D6A] hover:bg-[#E0DAD5] hover:text-[#383B3A] hover:-translate-y-0.5 transition-all duration-200"
+      >
+        <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
+        Späť na web
+      </Link>
+
       <form
         onSubmit={submit}
         className="w-full max-w-md rounded-3xl bg-[#F5F1EC] border border-[#D9D2CC] p-10 soft-shadow-lg"
       >
-        <div className="text-xs uppercase tracking-[0.3em] text-[#726D6A]">Admin</div>
+        <Link to="/" className="inline-block font-display text-2xl text-[#383B3A] hover:text-[#726D6A] transition-colors">
+          NU<span className="text-[#726D6A]">·</span>U
+        </Link>
+
+        <div className="mt-6 text-xs uppercase tracking-[0.3em] text-[#726D6A]">Admin</div>
         <h1 className="mt-2 font-display text-4xl text-[#383B3A]">Prihlásenie</h1>
         <p className="mt-2 text-sm text-[#726D6A]">Prístup len pre administrátorov.</p>
 
