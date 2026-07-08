@@ -63,7 +63,7 @@ function AnimatedHeadline({ text, className }: { text: string; className?: strin
   return (
     <h1 className={className} aria-label={text}>
       {words.map((w, wi) => (
-        <span key={wi} className="inline-block overflow-hidden align-baseline mr-[0.25em] last:mr-0">
+        <span key={wi} className="inline-block overflow-hidden align-baseline mr-[0.25em] last:mr-0 pb-[0.15em]">
           <motion.span
             className="inline-block"
             initial={{ y: "110%" }}
