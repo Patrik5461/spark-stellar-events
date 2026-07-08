@@ -16,6 +16,7 @@ const NAV_LINKS: { label: string; href: string; kind: "hash" | "route" }[] = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
+  const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const isHome = pathname === "/";
 
@@ -46,6 +47,14 @@ export function Navbar() {
     };
   }, [isHome, pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  // close on route change
+  useEffect(() => { setOpen(false); }, [pathname]);
+
   const resolveHref = (link: (typeof NAV_LINKS)[number]) => {
     if (link.kind === "route") return link.href;
     return isHome ? link.href : `/${link.href}`;
@@ -54,16 +63,16 @@ export function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? "py-3 bg-[#EBE6E2]/75 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-6 bg-transparent"
+        scrolled || open ? "py-3 bg-[#EBE6E2]/85 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-4 md:py-6 bg-transparent"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr] items-center gap-6">
+      <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr] items-center gap-4 md:gap-6">
         <Link
           to="/"
           aria-label="NU-U — domov"
           className="inline-flex items-center text-[#383B3A] hover:-translate-y-0.5 hover:opacity-80 transition-all duration-300"
         >
-          <Logo className="h-[88px] w-[88px] md:h-[94px] md:w-[94px]" />
+          <Logo className="h-16 w-16 sm:h-20 sm:w-20 md:h-[94px] md:w-[94px]" />
         </Link>
         <nav className="hidden md:flex items-center justify-center gap-2 text-sm text-[#726D6A]">
           {NAV_LINKS.map((link) => {
@@ -95,7 +104,54 @@ export function Navbar() {
             );
           })}
         </nav>
+        <button
+          type="button"
+          aria-label={open ? "Zavrieť menu" : "Otvoriť menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="md:hidden h-11 w-11 -mr-2 grid place-items-center rounded-full text-[#383B3A] hover:bg-[#D4C7BD]/40 transition-colors"
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
       </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            key="mobile-nav"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="md:hidden mx-6 mt-3 rounded-2xl border border-[#D9D2CC] bg-[#F5F1EC]/95 backdrop-blur-xl soft-shadow overflow-hidden"
+          >
+            <ul className="flex flex-col py-2">
+              {NAV_LINKS.map((link) => {
+                const isActive =
+                  link.kind === "route"
+                    ? pathname === link.href
+                    : isHome && active === link.href;
+                const cls = `block px-6 py-3 text-base transition-colors ${
+                  isActive ? "text-[#383B3A] font-medium" : "text-[#726D6A] hover:text-[#383B3A]"
+                }`;
+                return (
+                  <li key={link.href}>
+                    {link.kind === "route" ? (
+                      <Link to={link.href} className={cls} onClick={() => setOpen(false)}>
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a href={resolveHref(link)} className={cls} onClick={() => setOpen(false)}>
+                        {link.label}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
