@@ -14,16 +14,270 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      gallery_images: {
+        Row: {
+          alt: string
+          caption: string
+          category: string
+          created_at: string
+          featured_on_homepage: boolean
+          id: string
+          is_active: boolean
+          sort_order: number
+          storage_path: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          alt?: string
+          caption?: string
+          category?: string
+          created_at?: string
+          featured_on_homepage?: boolean
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          storage_path?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          alt?: string
+          caption?: string
+          category?: string
+          created_at?: string
+          featured_on_homepage?: boolean
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          storage_path?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      health_logs: {
+        Row: {
+          created_at: string
+          details: Json | null
+          event: string
+          id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          event: string
+          id?: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          event?: string
+          id?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          is_active: boolean
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          about_text: string | null
+          address: string
+          billing_address: string | null
+          billing_dic: string | null
+          billing_iban: string | null
+          billing_ic_dph: string | null
+          billing_ico: string | null
+          billing_name: string | null
+          contact_person: string
+          contact_text: string | null
+          cta_primary: string | null
+          cta_secondary: string | null
+          email: string
+          facebook_url: string | null
+          footer_text: string | null
+          gallery_intro: string | null
+          hero_headline: string | null
+          hero_subtitle: string | null
+          id: number
+          instagram_url: string | null
+          linkedin_url: string | null
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          about_text?: string | null
+          address?: string
+          billing_address?: string | null
+          billing_dic?: string | null
+          billing_iban?: string | null
+          billing_ic_dph?: string | null
+          billing_ico?: string | null
+          billing_name?: string | null
+          contact_person?: string
+          contact_text?: string | null
+          cta_primary?: string | null
+          cta_secondary?: string | null
+          email?: string
+          facebook_url?: string | null
+          footer_text?: string | null
+          gallery_intro?: string | null
+          hero_headline?: string | null
+          hero_subtitle?: string | null
+          id?: number
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          phone?: string
+          updated_at?: string
+        }
+        Update: {
+          about_text?: string | null
+          address?: string
+          billing_address?: string | null
+          billing_dic?: string | null
+          billing_iban?: string | null
+          billing_ic_dph?: string | null
+          billing_ico?: string | null
+          billing_name?: string | null
+          contact_person?: string
+          contact_text?: string | null
+          cta_primary?: string | null
+          cta_secondary?: string | null
+          email?: string
+          facebook_url?: string | null
+          footer_text?: string | null
+          gallery_intro?: string | null
+          hero_headline?: string | null
+          hero_subtitle?: string | null
+          id?: number
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "editor" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +404,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "editor", "user"],
+    },
   },
 } as const
