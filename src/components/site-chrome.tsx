@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, ArrowUp, Instagram, Linkedin, Facebook } from "lucide-react";
+import { ArrowUpRight, ArrowUp, Instagram, Linkedin, Facebook, Lock } from "lucide-react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -176,7 +176,19 @@ export function Footer() {
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-[#726D6A]">
           <div>© {new Date().getFullYear()} nua s.r.o. · nu-u.sk · IČO 550428872</div>
-          <div>Handcrafted in Rovinka</div>
+          <div className="flex items-center gap-3">
+            <span>Handcrafted in Rovinka</span>
+            <Link
+              to="/admin/login"
+              className="group relative inline-flex opacity-60 hover:opacity-100 hover:-translate-y-0.5 transition-all duration-200 text-[#726D6A]"
+              aria-label="Administrácia"
+            >
+              <Lock className="h-[18px] w-[18px]" strokeWidth={1.5} />
+              <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#383B3A] px-2 py-1 text-[10px] text-[#F5F1EC] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                Administrácia
+              </span>
+            </Link>
+          </div>
         </div>
       </motion.div>
     </footer>
