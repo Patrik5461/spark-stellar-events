@@ -102,7 +102,7 @@ function HealthPage() {
   useEffect(() => {
     if (!ranAt) return;
     supabase.from("health_logs").select("event,status,created_at").order("created_at", { ascending: false }).limit(10)
-      .then(({ data }) => setLogs(data ?? []));
+      .then(({ data }: { data: { event: string; status: string; created_at: string }[] | null }) => setLogs(data ?? []));
   }, [ranAt]);
 
   const StatusIcon = ({ s }: { s: Status }) => {

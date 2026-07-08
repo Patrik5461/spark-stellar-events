@@ -43,7 +43,7 @@ function SettingsAdmin() {
   const [pwdMsg, setPwdMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.from("site_settings").select("*").eq("id", 1).maybeSingle().then(({ data }) => setRow(data));
+    supabase.from("site_settings").select("*").eq("id", 1).maybeSingle().then(({ data }: { data: Row | null }) => setRow(data));
   }, []);
 
   const save = async () => {

@@ -27,12 +27,12 @@ export function useGalleryImages(opts: { featuredOnly?: boolean } = {}): {
         if (error) throw error;
         if (data && data.length > 0) {
           setItems(
-            data.map((r) => ({
-              src: r.url,
-              alt: r.alt || "",
-              cap: r.caption || "",
+            data.map((r: Record<string, unknown>) => ({
+              src: r.url as string,
+              alt: (r.alt as string) || "",
+              cap: (r.caption as string) || "",
               category: (r.category as GalleryCategory) ?? "Ostatné",
-              featured: r.featured_on_homepage ?? false,
+              featured: (r.featured_on_homepage as boolean) ?? false,
             })),
           );
         }
