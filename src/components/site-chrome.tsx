@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, ArrowUp, Instagram, Linkedin, Facebook, Lock } from "lucide-react";
+import { ArrowUp, Instagram, Linkedin, Facebook, Lock } from "lucide-react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
