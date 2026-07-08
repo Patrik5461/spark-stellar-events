@@ -1,7 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/lib/admin-auth";
+import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
