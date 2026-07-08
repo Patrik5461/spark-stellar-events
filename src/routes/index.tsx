@@ -350,8 +350,10 @@ function WhyUs() {
 }
 
 function GalleryPreview() {
-  const { items } = useGalleryImages({ featuredOnly: true });
-  const featured = (items.length ? items : GALLERY_ITEMS.filter((g) => g.featured)).slice(0, 6);
+  const { items, loading } = useGalleryImages({ featuredOnly: true });
+  const featured = items.slice(0, 6);
+  const isEmpty = !loading && featured.length === 0;
+
   return (
     <section id="gallery" className="relative py-40 px-6">
       <div className="mx-auto max-w-7xl">
@@ -365,48 +367,76 @@ function GalleryPreview() {
               Pozrite si výber z našich realizácií.
             </p>
           </div>
-          <Link
-            to="/galeria"
-            className="group hidden md:inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-6 py-3 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
-          >
-            Zobraziť celú galériu
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
+          {!isEmpty && (
+            <Link
+              to="/galeria"
+              className="group hidden md:inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-6 py-3 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
+            >
+              Zobraziť celú galériu
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          )}
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {featured.map((im, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.8, delay: (i % 3) * 0.08, ease: EASE }}
-              className="relative overflow-hidden rounded-[20px] border border-[#D9D2CC] soft-shadow aspect-[4/5]"
-            >
-              <Link to="/galeria" aria-label={im.alt} className="block h-full w-full group">
-                <img
-                  src={im.src}
-                  alt={im.alt}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#383B3A]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-12 flex md:hidden justify-center">
-          <Link
-            to="/galeria"
-            className="group inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-6 py-3 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
+        {isEmpty ? (
+          <motion.div
+            {...fadeUp}
+            className="mx-auto max-w-xl text-center py-10 md:py-14"
           >
-            Zobraziť celú galériu
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
-        </div>
+            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-[#D9D2CC] bg-[#F5F1EC] text-[#726D6A]">
+              <ImageIcon className="h-7 w-7" strokeWidth={1.25} />
+            </div>
+            <h3 className="font-display text-3xl md:text-4xl text-[#383B3A]">
+              Galéria sa pripravuje
+            </h3>
+            <p className="mt-5 text-[#726D6A] leading-[1.7]">
+              Momentálne ešte nemáme zverejnené fotografie. Čoskoro tu nájdete ukážky našich realizácií.
+            </p>
+            <Link
+              to="/galeria"
+              className="mt-10 inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-7 py-3.5 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
+            >
+              Zobraziť galériu
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+              {featured.map((im, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.8, delay: (i % 3) * 0.08, ease: EASE }}
+                  className="relative overflow-hidden rounded-[20px] border border-[#D9D2CC] soft-shadow aspect-[4/5]"
+                >
+                  <Link to="/galeria" aria-label={im.alt} className="block h-full w-full group">
+                    <img
+                      src={im.src}
+                      alt={im.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#383B3A]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-12 flex md:hidden justify-center">
+              <Link
+                to="/galeria"
+                className="group inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-6 py-3 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
+              >
+                Zobraziť celú galériu
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
