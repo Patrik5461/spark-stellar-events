@@ -351,7 +351,8 @@ function WhyUs() {
 }
 
 function GalleryPreview() {
-  const featured = GALLERY_ITEMS.filter((g) => g.featured).slice(0, 6);
+  const { items } = useGalleryImages({ featuredOnly: true });
+  const featured = (items.length ? items : GALLERY_ITEMS.filter((g) => g.featured)).slice(0, 6);
   return (
     <section id="gallery" className="relative py-40 px-6">
       <div className="mx-auto max-w-7xl">
