@@ -16,14 +16,16 @@ export const Route = createFileRoute("/admin")({
 function AdminLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
   const isLogin = pathname === "/admin/login";
   const { loading, user, isAdmin, mustChangePassword } = useAdminAuth();
 
   useEffect(() => {
+    if (!isAdminRoute) return;
     if (isLogin) return;
     if (loading) return;
     if (!user || !isAdmin) navigate({ to: "/admin/login" });
-  }, [loading, user, isAdmin, isLogin, navigate]);
+  }, [loading, user, isAdmin, isLogin, isAdminRoute, navigate]);
 
   if (isLogin) {
     return <Outlet />;
