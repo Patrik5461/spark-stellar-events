@@ -628,10 +628,41 @@ function FloatingField({
 
 function ContactForm() {
   const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErr(null);
+    setBusy(true);
+    const fd = new FormData(e.currentTarget);
+    const payload = {
+      name: String(fd.get("name") ?? "").trim(),
+      email: String(fd.get("email") ?? "").trim(),
+      phone: String(fd.get("phone") ?? "").trim() || null,
+      message: String(fd.get("message") ?? "").trim(),
+    };
+    if (!payload.name || !payload.email || !payload.message) {
+      setBusy(false);
+      setErr("Vyplňte prosím meno, email a správu.");
+      return;
+    }
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from("contact_messages").insert(payload);
+      if (error) throw error;
+      setSent(true);
+    } catch (e2) {
+      setErr((e2 as Error).message || "Odoslanie zlyhalo. Skúste to prosím znova.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <motion.form
       {...fadeUp}
-      onSubmit={(e) => { e.preventDefault(); setSent(true); }}
+      onSubmit={onSubmit}
       className="relative card-surface rounded-[28px] p-8 md:p-10 h-fit overflow-hidden"
     >
       <AnimatePresence mode="wait">
@@ -671,13 +702,15 @@ function ContactForm() {
             <FloatingField label="Email" name="email" type="email" />
             <FloatingField label="Telefón" name="phone" type="tel" />
             <FloatingField label="Správa" name="message" as="textarea" />
+            {err && <p className="text-sm text-red-700">{err}</p>}
             <motion.button
               type="submit"
+              disabled={busy}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="group w-full inline-flex items-center justify-center gap-3 rounded-full bg-[#383B3A] px-8 py-4 text-sm font-medium text-[#F5F1EC] transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)]"
+              className="group w-full inline-flex items-center justify-center gap-3 rounded-full bg-[#383B3A] px-8 py-4 text-sm font-medium text-[#F5F1EC] transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)] disabled:opacity-70"
             >
-              Odoslať dopyt
+              {busy ? "Odosielam…" : "Odoslať dopyt"}
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </motion.button>
             <p className="text-xs text-[#726D6A] text-center">
@@ -689,6 +722,7 @@ function ContactForm() {
     </motion.form>
   );
 }
+
 
 function Home() {
   return (
