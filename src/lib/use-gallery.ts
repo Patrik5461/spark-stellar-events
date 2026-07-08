@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GALLERY_ITEMS, type GalleryItem, type GalleryCategory } from "@/lib/gallery-data";
+import type { GalleryItem, GalleryCategory } from "@/lib/gallery-data";
 
 export function useGalleryImages(opts: { featuredOnly?: boolean } = {}): {
   items: GalleryItem[];
   loading: boolean;
 } {
-  const [items, setItems] = useState<GalleryItem[]>(() =>
-    opts.featuredOnly ? GALLERY_ITEMS.filter((g) => g.featured) : GALLERY_ITEMS,
-  );
+  const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,17 +23,15 @@ export function useGalleryImages(opts: { featuredOnly?: boolean } = {}): {
         const { data, error } = await q;
         if (cancelled) return;
         if (error) throw error;
-        if (data && data.length > 0) {
-          setItems(
-            data.map((r: Record<string, unknown>) => ({
-              src: r.url as string,
-              alt: (r.alt as string) || "",
-              cap: (r.caption as string) || "",
-              category: (r.category as GalleryCategory) ?? "Ostatné",
-              featured: (r.featured_on_homepage as boolean) ?? false,
-            })),
-          );
-        }
+        setItems(
+          (data ?? []).map((r: Record<string, unknown>) => ({
+            src: r.url as string,
+            alt: (r.alt as string) || "",
+            cap: (r.caption as string) || "",
+            category: (r.category as GalleryCategory) ?? "Ostatné",
+            featured: (r.featured_on_homepage as boolean) ?? false,
+          })),
+        );
       } catch {
         /* keep fallback */
       } finally {

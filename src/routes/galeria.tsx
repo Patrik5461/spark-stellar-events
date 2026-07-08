@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ImageIcon, Upload } from "lucide-react";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
 import { GalleryGrid } from "@/components/gallery-grid";
-import { GALLERY_ITEMS, GALLERY_CATEGORIES } from "@/lib/gallery-data";
+import { GALLERY_CATEGORIES } from "@/lib/gallery-data";
 import { useGalleryImages } from "@/lib/use-gallery";
+import { useAdminAuth } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
@@ -24,12 +25,14 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 function GaleriaPage() {
   const [filter, setFilter] = useState<(typeof GALLERY_CATEGORIES)[number]>("Všetko");
-  const { items: allItems } = useGalleryImages();
-  const source = allItems.length ? allItems : GALLERY_ITEMS;
+  const { items: allItems, loading } = useGalleryImages();
+  const { isAdmin } = useAdminAuth();
   const items = useMemo(
-    () => (filter === "Všetko" ? source : source.filter((g) => g.category === filter)),
-    [filter, source],
+    () => (filter === "Všetko" ? allItems : allItems.filter((g) => g.category === filter)),
+    [filter, allItems],
   );
+
+  const isEmpty = !loading && allItems.length === 0;
 
   return (
     <motion.main
@@ -62,38 +65,44 @@ function GaleriaPage() {
 
       <section className="px-6 pb-40">
         <div className="mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
-            className="flex flex-wrap gap-2 mb-12"
-          >
-            {GALLERY_CATEGORIES.map((c) => {
-              const active = filter === c;
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setFilter(c)}
-                  className={`rounded-full px-5 py-2.5 text-sm transition-all border ${
-                    active
-                      ? "bg-[#383B3A] text-[#F5F1EC] border-[#383B3A]"
-                      : "bg-transparent text-[#383B3A] border-[#D9D2CC] hover:bg-[#D4C7BD]/50"
-                  }`}
-                  aria-pressed={active}
-                >
-                  {c}
-                </button>
-              );
-            })}
-          </motion.div>
+          {isEmpty ? (
+            <GalleryEmptyState isAdmin={isAdmin} />
+          ) : (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
+                className="flex flex-wrap gap-2 mb-12"
+              >
+                {GALLERY_CATEGORIES.map((c) => {
+                  const active = filter === c;
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setFilter(c)}
+                      className={`rounded-full px-5 py-2.5 text-sm transition-all border ${
+                        active
+                          ? "bg-[#383B3A] text-[#F5F1EC] border-[#383B3A]"
+                          : "bg-transparent text-[#383B3A] border-[#D9D2CC] hover:bg-[#D4C7BD]/50"
+                      }`}
+                      aria-pressed={active}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </motion.div>
 
-          <GalleryGrid items={items} />
+              <GalleryGrid items={items} />
 
-          {items.length === 0 && (
-            <p className="text-center text-[#726D6A] py-20">
-              V tejto kategórii zatiaľ nemáme zverejnené žiadne fotografie.
-            </p>
+              {items.length === 0 && (
+                <p className="text-center text-[#726D6A] py-20">
+                  V tejto kategórii zatiaľ nemáme zverejnené žiadne fotografie.
+                </p>
+              )}
+            </>
           )}
 
           <div className="mt-20 text-center">
@@ -111,5 +120,35 @@ function GaleriaPage() {
       <Footer />
       <BackToTop />
     </motion.main>
+  );
+}
+
+function GalleryEmptyState({ isAdmin }: { isAdmin: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
+      className="mx-auto max-w-xl text-center py-16 md:py-24"
+    >
+      <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-[#D9D2CC] bg-[#F5F1EC] text-[#726D6A]">
+        <ImageIcon className="h-7 w-7" strokeWidth={1.25} />
+      </div>
+      <h2 className="font-display text-3xl md:text-4xl text-[#383B3A]">
+        Galéria sa pripravuje
+      </h2>
+      <p className="mt-5 text-[#726D6A] leading-[1.7]">
+        Momentálne ešte nemáme zverejnené fotografie. Čoskoro tu nájdete ukážky našich realizácií.
+      </p>
+      {isAdmin && (
+        <Link
+          to="/admin/gallery"
+          className="mt-10 inline-flex items-center gap-3 rounded-full bg-[#383B3A] px-7 py-3.5 text-sm text-[#F5F1EC] transition-shadow hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)]"
+        >
+          <Upload className="h-4 w-4" strokeWidth={1.75} />
+          Nahrať prvú fotografiu
+        </Link>
+      )}
+    </motion.div>
   );
 }
