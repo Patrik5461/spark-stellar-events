@@ -315,7 +315,7 @@ function WhyUs() {
 
         <motion.div {...fadeUp}>
           <SectionEyebrow n="02" label="Prečo NU-U" />
-          <h2 className="font-display text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A] text-balance">
             Nie agentúra. <em className="italic text-[#726D6A]">Partner</em> pre vašu značku.
           </h2>
           <p className="mt-8 text-[#726D6A] leading-relaxed max-w-lg">
