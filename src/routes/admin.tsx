@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle } from "lucide-react";
+import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle, ArrowLeft } from "lucide-react";
 import { useAdminAuth, signOut } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin")({
