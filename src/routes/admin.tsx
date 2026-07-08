@@ -66,6 +66,12 @@ function AdminLayout() {
           ))}
         </nav>
         <div className="p-4 border-t border-[#D9D2CC] space-y-2">
+          <Link
+            to="/"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#726D6A] hover:bg-[#EBE6E2] transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" /> Späť na web
+          </Link>
           <div className="text-xs text-[#726D6A] truncate">{user.email}</div>
           <button
             onClick={async () => {
