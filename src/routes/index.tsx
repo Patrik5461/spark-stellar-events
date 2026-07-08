@@ -88,7 +88,7 @@ function Hero() {
   const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   return (
-    <section ref={ref} className="relative min-h-[96vh] flex flex-col pt-36 md:pt-44 pb-16 px-6">
+    <section ref={ref} className="relative min-h-[96vh] flex flex-col pt-32 md:pt-44 pb-16 px-6">
       <div className="mx-auto max-w-7xl w-full flex-1 flex flex-col">
         <motion.div
           style={{ y: textY }}
