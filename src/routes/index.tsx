@@ -63,7 +63,7 @@ function AnimatedHeadline({ text, className }: { text: string; className?: strin
   return (
     <h1 className={className} aria-label={text}>
       {words.map((w, wi) => (
-        <span key={wi} className="inline-block overflow-hidden align-baseline mr-[0.25em] last:mr-0">
+        <span key={wi} className="inline-block overflow-hidden align-baseline mr-[0.25em] last:mr-0 pb-[0.15em]">
           <motion.span
             className="inline-block"
             initial={{ y: "110%" }}
@@ -88,7 +88,7 @@ function Hero() {
   const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   return (
-    <section ref={ref} className="relative min-h-[96vh] flex flex-col pt-36 md:pt-44 pb-16 px-6">
+    <section ref={ref} className="relative min-h-[96vh] flex flex-col pt-32 md:pt-44 pb-16 px-6">
       <div className="mx-auto max-w-7xl w-full flex-1 flex flex-col">
         <motion.div
           style={{ y: textY }}
@@ -103,7 +103,7 @@ function Hero() {
         <motion.div style={{ y: textY }}>
           <AnimatedHeadline
             text="Ľudia, ktorí robia rozdiel na každom evente."
-            className="font-display font-semibold text-[clamp(3rem,9vw,8.5rem)] leading-[0.98] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
+            className="font-display font-semibold text-[clamp(2.5rem,9vw,8.5rem)] leading-[1.02] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
           />
         </motion.div>
 
@@ -232,7 +232,7 @@ function Services() {
         <motion.div {...fadeUp} className="flex items-end justify-between flex-wrap gap-8 mb-20">
           <div>
             <SectionEyebrow n="01" label="Služby" />
-            <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-3xl text-[#383B3A]">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-3xl text-[#383B3A] text-balance">
               Všetko, čo váš event <em className="italic text-[#726D6A]">potrebuje.</em>
             </h2>
           </div>
@@ -315,7 +315,7 @@ function WhyUs() {
 
         <motion.div {...fadeUp}>
           <SectionEyebrow n="02" label="Prečo NU-U" />
-          <h2 className="font-display text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A] text-balance">
             Nie agentúra. <em className="italic text-[#726D6A]">Partner</em> pre vašu značku.
           </h2>
           <p className="mt-8 text-[#726D6A] leading-relaxed max-w-lg">
@@ -360,7 +360,7 @@ function GalleryPreview() {
         <motion.div {...fadeUp} className="flex items-end justify-between gap-8 mb-16 flex-wrap">
           <div>
             <SectionEyebrow n="03" label="Galéria" />
-            <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A]">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A]">
               Galéria
             </h2>
             <p className="mt-6 max-w-md text-[#726D6A] leading-relaxed">
@@ -458,7 +458,7 @@ function Process() {
           <div className="flex items-center justify-center gap-3 text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-6">
             <span className="h-px w-10 bg-[#726D6A]" /> 04 — Proces
           </div>
-          <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A] text-balance">
             Štyri kroky, <em className="italic text-[#726D6A]">nula stresu.</em>
           </h2>
         </motion.div>
@@ -498,7 +498,7 @@ function Testimonials() {
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="mb-16">
           <SectionEyebrow n="05" label="Referencie" />
-          <h2 className="font-display text-5xl md:text-6xl leading-[1.05] tracking-tight max-w-3xl text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight max-w-3xl text-[#383B3A]">
             Hovoria <em className="italic text-[#726D6A]">za nás.</em>
           </h2>
         </motion.div>
@@ -541,7 +541,7 @@ function CTABanner() {
         className="relative mx-auto max-w-6xl rounded-[28px] overflow-hidden bg-[#383B3A] soft-shadow-lg"
       >
         <div className="relative px-8 py-20 md:py-28 md:px-16 text-center">
-          <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-4xl mx-auto text-balance text-[#F5F1EC]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-4xl mx-auto text-balance text-[#F5F1EC]">
             Váš úspech je <em className="italic text-[#C9BAAE]">naša vizitka.</em>
           </h2>
           <p className="mt-6 text-[#F5F1EC]/70 max-w-xl mx-auto">
@@ -566,7 +566,7 @@ function Contact() {
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16">
         <motion.div {...fadeUp}>
           <SectionEyebrow n="06" label="Kontakt" />
-          <h2 className="font-display text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A] text-balance">
             Povedzte nám o vašom <em className="italic text-[#726D6A]">evente.</em>
           </h2>
           <p className="mt-6 text-[#726D6A] max-w-md">
