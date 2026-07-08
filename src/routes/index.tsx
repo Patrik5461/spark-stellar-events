@@ -458,7 +458,7 @@ function Process() {
           <div className="flex items-center justify-center gap-3 text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-6">
             <span className="h-px w-10 bg-[#726D6A]" /> 04 — Proces
           </div>
-          <h2 className="font-display text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A] text-balance">
             Štyri kroky, <em className="italic text-[#726D6A]">nula stresu.</em>
           </h2>
         </motion.div>
