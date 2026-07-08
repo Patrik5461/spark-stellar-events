@@ -876,7 +876,7 @@ function Footer() {
         transition={{ duration: 0.8, ease: EASE }}
         className="mx-auto max-w-7xl"
       >
-        <div className="grid md:grid-cols-4 gap-10 pb-14 border-b border-[#D9D2CC]">
+        <div className="grid md:grid-cols-3 gap-10 pb-14 border-b border-[#D9D2CC]">
           <div>
             <div className="font-display text-3xl text-[#383B3A]">NU<span className="text-[#726D6A]">·</span>U</div>
             <p className="mt-4 text-sm text-[#726D6A] max-w-xs leading-relaxed">
@@ -894,22 +894,14 @@ function Footer() {
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Kontakt</div>
             <ul className="space-y-2 text-sm text-[#383B3A]">
-              <li>Jana Henčeková</li>
+              <li className="font-medium">Jana Henčeková</li>
               <li><a href="mailto:info@nu-u.sk" className="hover:text-[#726D6A] transition-colors">info@nu-u.sk</a></li>
               <li><a href="tel:+421905454498" className="hover:text-[#726D6A] transition-colors">+421 905 454 498</a></li>
               <li className="text-[#726D6A]">Gazdovská 1901/7b, 900 41 Rovinka</li>
             </ul>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
-            <ul className="space-y-1 text-sm text-[#726D6A]">
-              <li className="text-[#383B3A] font-medium">nua s.r.o.</li>
-              <li>Gazdovská 1901/7b, 900 41 Rovinka</li>
-              <li>IČO: 550428872</li>
-              <li>DIČ: 2121851754</li>
-              <li>IČ DPH: SK2121851754</li>
-              <li>IBAN: SK39 8330 0000 0020 0248 9216</li>
-            </ul>
+            <div className="mt-5 text-xs text-[#726D6A] leading-relaxed">
+              <span className="text-[#383B3A] font-medium">nua s.r.o.</span> · IČO 550428872 · DIČ 2121851754 · IČ DPH SK2121851754 · IBAN SK39 8330 0000 0020 0248 9216
+            </div>
             <div className="mt-5 flex gap-3">
               {socials.map(([Icon, href, label]) => (
                 <a
