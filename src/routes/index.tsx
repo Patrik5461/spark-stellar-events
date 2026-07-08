@@ -498,7 +498,7 @@ function Testimonials() {
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="mb-16">
           <SectionEyebrow n="05" label="Referencie" />
-          <h2 className="font-display text-5xl md:text-6xl leading-[1.05] tracking-tight max-w-3xl text-[#383B3A]">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight max-w-3xl text-[#383B3A]">
             Hovoria <em className="italic text-[#726D6A]">za nás.</em>
           </h2>
         </motion.div>
