@@ -1,6 +1,7 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle } from "lucide-react";
+import { Logo } from "@/components/logo";
 import { useAdminAuth, signOut } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin")({
@@ -51,7 +52,7 @@ function AdminLayout() {
     <div className="min-h-screen bg-[#EBE6E2] text-[#383B3A]">
       <aside className="fixed left-0 top-0 bottom-0 w-64 bg-[#F5F1EC] border-r border-[#D9D2CC] flex flex-col">
         <div className="px-6 py-6 border-b border-[#D9D2CC]">
-          <Link to="/" className="font-display text-2xl">NU<span className="text-[#726D6A]">·</span>U</Link>
+          <Link to="/" aria-label="NU-U — domov" className="inline-flex text-[#383B3A] hover:opacity-80 transition-opacity"><Logo className="h-10 w-10" /></Link>
           <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mt-1">Admin</div>
         </div>
         <nav className="flex-1 p-4 space-y-1">

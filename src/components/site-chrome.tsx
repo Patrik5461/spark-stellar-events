@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowUp, Instagram, Linkedin, Facebook, Lock } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -59,9 +60,10 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr] items-center gap-6">
         <Link
           to="/"
-          className="font-display text-2xl tracking-tight text-[#383B3A] inline-block"
+          aria-label="NU-U — domov"
+          className="inline-flex items-center text-[#383B3A] hover:-translate-y-0.5 hover:opacity-80 transition-all duration-300"
         >
-          NU<span className="text-[#726D6A] inline-block">·</span>U
+          <Logo className="h-11 w-11 md:h-12 md:w-12" />
         </Link>
         <nav className="hidden md:flex items-center justify-center gap-2 text-sm text-[#726D6A]">
           {NAV_LINKS.map((link) => {
@@ -124,7 +126,7 @@ export function Footer() {
       >
         <div className="grid md:grid-cols-3 gap-10 pb-14 border-b border-[#D9D2CC]">
           <div>
-            <div className="font-display text-3xl text-[#383B3A]">NU<span className="text-[#726D6A]">·</span>U</div>
+            <Link to="/" aria-label="NU-U — domov" className="inline-flex text-[#383B3A] hover:opacity-80 transition-opacity"><Logo className="h-9 w-9" /></Link>
             <p className="mt-4 text-sm text-[#726D6A] max-w-xs leading-relaxed">
               Hostessing, promotion a produkcia eventov. Slovensko & zahraničie.
             </p>
