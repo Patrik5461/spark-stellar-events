@@ -577,7 +577,7 @@ function Contact() {
             {[
               [Mail, "info@nu-u.sk", "mailto:info@nu-u.sk"],
               [Phone, "+421 905 454 498", "tel:+421905454498"],
-              [MapPin, "nua s.r.o. · Gazdovská 1901/7b, 900 41 Rovinka", "#"],
+              [MapPin, "nuu s.r.o. · Gazdovská 1901/7b, 900 41 Rovinka", "#"],
             ].map(([Icon, label, href], i) => {
               const I = Icon as typeof Mail;
               return (
@@ -594,7 +594,7 @@ function Contact() {
           <div className="mt-10 rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow">
             <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
             <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
-              <p className="font-medium">nua s.r.o.</p>
+              <p className="font-medium">nuu s.r.o.</p>
               <p>Gazdovská 1901/7b</p>
               <p>900 41 Rovinka</p>
               <p>IČO: 550428872</p>
