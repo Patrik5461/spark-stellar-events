@@ -24,9 +24,11 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 function GaleriaPage() {
   const [filter, setFilter] = useState<(typeof GALLERY_CATEGORIES)[number]>("Všetko");
+  const { items: allItems } = useGalleryImages();
+  const source = allItems.length ? allItems : GALLERY_ITEMS;
   const items = useMemo(
-    () => (filter === "Všetko" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((g) => g.category === filter)),
-    [filter],
+    () => (filter === "Všetko" ? source : source.filter((g) => g.category === filter)),
+    [filter, source],
   );
 
   return (
