@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle } from "lucide-react";
+import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle, ArrowLeft } from "lucide-react";
 import { useAdminAuth, signOut } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin")({
@@ -66,6 +66,12 @@ function AdminLayout() {
           ))}
         </nav>
         <div className="p-4 border-t border-[#D9D2CC] space-y-2">
+          <Link
+            to="/"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#726D6A] hover:bg-[#EBE6E2] transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" /> Späť na web
+          </Link>
           <div className="text-xs text-[#726D6A] truncate">{user.email}</div>
           <button
             onClick={async () => {
