@@ -63,7 +63,7 @@ export function Navbar() {
           aria-label="NU-U — domov"
           className="inline-flex items-center text-[#383B3A] hover:-translate-y-0.5 hover:opacity-80 transition-all duration-300"
         >
-          <Logo className="h-[62px] w-[62px] md:h-[67px] md:w-[67px]" />
+          <Logo className="h-[88px] w-[88px] md:h-[94px] md:w-[94px]" />
         </Link>
         <nav className="hidden md:flex items-center justify-center gap-2 text-sm text-[#726D6A]">
           {NAV_LINKS.map((link) => {
@@ -126,7 +126,7 @@ export function Footer() {
       >
         <div className="grid md:grid-cols-3 gap-10 pb-14 border-b border-[#D9D2CC]">
           <div>
-            <Link to="/" aria-label="NU-U — domov" className="inline-flex text-[#383B3A] hover:opacity-80 transition-opacity"><Logo className="h-[50px] w-[50px]" /></Link>
+            <Link to="/" aria-label="NU-U — domov" className="inline-flex text-[#383B3A] hover:opacity-80 transition-opacity"><Logo className="h-[72px] w-[72px]" /></Link>
             <p className="mt-4 text-sm text-[#726D6A] max-w-xs leading-relaxed">
               Hostessing, promotion a produkcia eventov. Slovensko & zahraničie.
             </p>
