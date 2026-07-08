@@ -103,7 +103,7 @@ function Hero() {
         <motion.div style={{ y: textY }}>
           <AnimatedHeadline
             text="Ľudia, ktorí robia rozdiel na každom evente."
-            className="font-display font-semibold text-[clamp(3rem,9vw,8.5rem)] leading-[0.98] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
+            className="font-display font-semibold text-[clamp(2.5rem,9vw,8.5rem)] leading-[1.02] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
           />
         </motion.div>
 
