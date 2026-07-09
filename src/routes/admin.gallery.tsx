@@ -158,9 +158,21 @@ function GalleryAdmin() {
                     <input type="checkbox" checked={row.is_active} onChange={(e) => updateRow(row.id, { is_active: e.target.checked })} />
                     Aktívna
                   </label>
-                  <label className="inline-flex items-center gap-2">
-                    <input type="checkbox" checked={row.featured_on_homepage} onChange={(e) => updateRow(row.id, { featured_on_homepage: e.target.checked })} />
-                    Na homepage
+                  <label
+                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium cursor-pointer transition-colors ${
+                      row.featured_on_homepage
+                        ? "bg-[#383B3A] text-[#F5F1EC] border-[#383B3A]"
+                        : "bg-white text-[#383B3A] border-[#D9D2CC] hover:bg-[#EBE6E2]"
+                    }`}
+                    title="Zobraziť túto fotku v náhľade galérie na hlavnej stránke"
+                  >
+                    <input
+                      type="checkbox"
+                      className="accent-[#383B3A]"
+                      checked={row.featured_on_homepage}
+                      onChange={(e) => updateRow(row.id, { featured_on_homepage: e.target.checked })}
+                    />
+                    Zobraziť na hlavnej stránke
                   </label>
                   <button
                     onClick={() => deleteRow(row)}
