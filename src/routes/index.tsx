@@ -350,7 +350,7 @@ function WhyUs() {
 }
 
 function GalleryPreview() {
-  const { items, loading } = useGalleryImages({ featuredOnly: true });
+  const { items, loading } = useGalleryImages({ featuredOnly: true, limit: 6 });
   const featured = items.slice(0, 6);
   const isEmpty = !loading && featured.length === 0;
 
