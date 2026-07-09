@@ -104,6 +104,10 @@ function GalleryAdmin() {
         </label>
       </header>
 
+      <div className="mb-6 rounded-xl bg-[#F5F1EC] border border-[#D9D2CC] px-4 py-3 text-sm text-[#726D6A]">
+        Ak nie je vybraná žiadna fotka, hlavná stránka automaticky zobrazí najnovšie aktívne fotky.
+      </div>
+
       {err && <div className="mb-4 rounded-lg bg-red-100 text-red-800 px-4 py-3 text-sm">{err}</div>}
 
       {loading ? (
