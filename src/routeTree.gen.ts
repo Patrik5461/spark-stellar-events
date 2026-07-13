@@ -22,6 +22,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
+import { Route as AdminHostessesInvitationsRouteImport } from './routes/admin.hostesses.invitations'
 
 const PrenajomObleceniaRoute = PrenajomObleceniaRouteImport.update({
   id: '/prenajom-oblecenia',
@@ -88,6 +89,12 @@ const AdminClothingRoute = AdminClothingRouteImport.update({
   path: '/clothing',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHostessesInvitationsRoute =
+  AdminHostessesInvitationsRouteImport.update({
+    id: '/hostesses/invitations',
+    path: '/hostesses/invitations',
+    getParentRoute: () => AdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/hostess-form/$token'
     | '/admin/'
+    | '/admin/hostesses/invitations'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/hostess-form/$token'
     | '/admin'
+    | '/admin/hostesses/invitations'
   id:
     | '__root__'
     | '/'
@@ -179,6 +191,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/hostess-form/$token'
     | '/admin/'
+    | '/admin/hostesses/invitations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -282,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminClothingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/hostesses/invitations': {
+      id: '/admin/hostesses/invitations'
+      path: '/hostesses/invitations'
+      fullPath: '/admin/hostesses/invitations'
+      preLoaderRoute: typeof AdminHostessesInvitationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
@@ -294,6 +314,7 @@ interface AdminRouteChildren {
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminHostessesInvitationsRoute: typeof AdminHostessesInvitationsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -305,6 +326,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminHostessesInvitationsRoute: AdminHostessesInvitationsRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
