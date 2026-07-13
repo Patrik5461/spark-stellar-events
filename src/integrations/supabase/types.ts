@@ -113,6 +113,48 @@ export type Database = {
         }
         Relationships: []
       }
+      contract_templates: {
+        Row: {
+          contract_type: Database["public"]["Enums"]["hostess_contract_type"]
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          mime_type: string | null
+          name: string
+          original_filename: string | null
+          placeholder_mapping: Json
+          storage_path: string
+          updated_at: string
+        }
+        Insert: {
+          contract_type: Database["public"]["Enums"]["hostess_contract_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          mime_type?: string | null
+          name: string
+          original_filename?: string | null
+          placeholder_mapping?: Json
+          storage_path: string
+          updated_at?: string
+        }
+        Update: {
+          contract_type?: Database["public"]["Enums"]["hostess_contract_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          mime_type?: string | null
+          name?: string
+          original_filename?: string | null
+          placeholder_mapping?: Json
+          storage_path?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gallery_images: {
         Row: {
           alt: string
@@ -178,6 +220,261 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      hostess_admin_log: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string
+          id: string
+          meta: Json | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
+      hostess_consents: {
+        Row: {
+          accepted: boolean
+          accepted_at: string | null
+          consent_type: Database["public"]["Enums"]["hostess_consent_type"]
+          consent_version: string
+          created_at: string
+          hostess_profile_id: string
+          id: string
+          ip_address: string | null
+        }
+        Insert: {
+          accepted?: boolean
+          accepted_at?: string | null
+          consent_type: Database["public"]["Enums"]["hostess_consent_type"]
+          consent_version?: string
+          created_at?: string
+          hostess_profile_id: string
+          id?: string
+          ip_address?: string | null
+        }
+        Update: {
+          accepted?: boolean
+          accepted_at?: string | null
+          consent_type?: Database["public"]["Enums"]["hostess_consent_type"]
+          consent_version?: string
+          created_at?: string
+          hostess_profile_id?: string
+          id?: string
+          ip_address?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hostess_consents_hostess_profile_id_fkey"
+            columns: ["hostess_profile_id"]
+            isOneToOne: false
+            referencedRelation: "hostess_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hostess_invites: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          internal_note: string | null
+          is_active: boolean
+          label: string | null
+          max_submissions: number
+          submission_count: number
+          token_hash: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          internal_note?: string | null
+          is_active?: boolean
+          label?: string | null
+          max_submissions?: number
+          submission_count?: number
+          token_hash: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          internal_note?: string | null
+          is_active?: boolean
+          label?: string | null
+          max_submissions?: number
+          submission_count?: number
+          token_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hostess_photos: {
+        Row: {
+          created_at: string
+          file_size: number | null
+          hostess_profile_id: string
+          id: string
+          mime_type: string | null
+          original_filename: string | null
+          photo_type: Database["public"]["Enums"]["hostess_photo_type"]
+          storage_path: string
+        }
+        Insert: {
+          created_at?: string
+          file_size?: number | null
+          hostess_profile_id: string
+          id?: string
+          mime_type?: string | null
+          original_filename?: string | null
+          photo_type: Database["public"]["Enums"]["hostess_photo_type"]
+          storage_path: string
+        }
+        Update: {
+          created_at?: string
+          file_size?: number | null
+          hostess_profile_id?: string
+          id?: string
+          mime_type?: string | null
+          original_filename?: string | null
+          photo_type?: Database["public"]["Enums"]["hostess_photo_type"]
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hostess_photos_hostess_profile_id_fkey"
+            columns: ["hostess_profile_id"]
+            isOneToOne: false
+            referencedRelation: "hostess_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hostess_profiles: {
+        Row: {
+          address: string | null
+          application_code: string
+          availability: string | null
+          birth_date: string | null
+          city: string | null
+          clothing_size: string | null
+          contract_type: Database["public"]["Enums"]["hostess_contract_type"]
+          created_at: string
+          email: string | null
+          experience: string | null
+          first_name: string
+          hair_color: string | null
+          height: string | null
+          iban: string | null
+          id: string
+          identity_card_number: string | null
+          internal_note: string | null
+          invite_id: string | null
+          languages: string | null
+          last_name: string
+          national_id: string | null
+          nationality: string | null
+          note: string | null
+          phone: string | null
+          postal_code: string | null
+          shoe_size: string | null
+          status: Database["public"]["Enums"]["hostess_status"]
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          application_code?: string
+          availability?: string | null
+          birth_date?: string | null
+          city?: string | null
+          clothing_size?: string | null
+          contract_type?: Database["public"]["Enums"]["hostess_contract_type"]
+          created_at?: string
+          email?: string | null
+          experience?: string | null
+          first_name: string
+          hair_color?: string | null
+          height?: string | null
+          iban?: string | null
+          id?: string
+          identity_card_number?: string | null
+          internal_note?: string | null
+          invite_id?: string | null
+          languages?: string | null
+          last_name: string
+          national_id?: string | null
+          nationality?: string | null
+          note?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          shoe_size?: string | null
+          status?: Database["public"]["Enums"]["hostess_status"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          application_code?: string
+          availability?: string | null
+          birth_date?: string | null
+          city?: string | null
+          clothing_size?: string | null
+          contract_type?: Database["public"]["Enums"]["hostess_contract_type"]
+          created_at?: string
+          email?: string | null
+          experience?: string | null
+          first_name?: string
+          hair_color?: string | null
+          height?: string | null
+          iban?: string | null
+          id?: string
+          identity_card_number?: string | null
+          internal_note?: string | null
+          invite_id?: string | null
+          languages?: string | null
+          last_name?: string
+          national_id?: string | null
+          nationality?: string | null
+          note?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          shoe_size?: string | null
+          status?: Database["public"]["Enums"]["hostess_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hostess_profiles_invite_id_fkey"
+            columns: ["invite_id"]
+            isOneToOne: false
+            referencedRelation: "hostess_invites"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -347,6 +644,23 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "editor" | "user"
+      hostess_consent_type:
+        | "osobne_udaje"
+        | "pravdivost"
+        | "fotografie"
+        | "elektronicke_dokumenty"
+      hostess_contract_type:
+        | "prikazna_zmluva"
+        | "dohoda_o_vykonani_prace"
+        | "bez_zmluvy"
+      hostess_photo_type: "portret" | "cela_postava" | "profil" | "dalsia"
+      hostess_status:
+        | "nova"
+        | "skontrolovana"
+        | "schvalena"
+        | "zamietnuta"
+        | "zmluva_pripravena"
+        | "zmluva_podpisana"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -475,6 +789,26 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "user"],
+      hostess_consent_type: [
+        "osobne_udaje",
+        "pravdivost",
+        "fotografie",
+        "elektronicke_dokumenty",
+      ],
+      hostess_contract_type: [
+        "prikazna_zmluva",
+        "dohoda_o_vykonani_prace",
+        "bez_zmluvy",
+      ],
+      hostess_photo_type: ["portret", "cela_postava", "profil", "dalsia"],
+      hostess_status: [
+        "nova",
+        "skontrolovana",
+        "schvalena",
+        "zamietnuta",
+        "zmluva_pripravena",
+        "zmluva_podpisana",
+      ],
     },
   },
 } as const
