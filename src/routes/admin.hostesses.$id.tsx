@@ -120,12 +120,19 @@ function HostessDetail() {
         {/* Form */}
         <div className="lg:col-span-2 space-y-6">
           <div className="rounded-xl border border-[#D9D2CC] bg-[#F5F1EC] p-5">
-            <h2 className="text-sm uppercase tracking-wider text-[#726D6A] mb-4">Stav a zmluva</h2>
+            <h2 className="text-sm uppercase tracking-wider text-[#726D6A] mb-4">Stav</h2>
             <div className="grid sm:grid-cols-2 gap-3">
               <Sel label="Stav" value={form.status} options={HOSTESS_STATUSES} onChange={(v) => setForm({ ...form, status: v as HostessStatus })} />
-              <Sel label="Typ zmluvy" value={form.contract_type} options={CONTRACT_TYPES} onChange={(v) => setForm({ ...form, contract_type: v as ContractType })} />
               <Txt label="Interná poznámka" full value={form.internal_note || ""} onChange={(v) => setForm({ ...form, internal_note: v })} textarea />
             </div>
+          </div>
+
+          <div className="rounded-xl border border-[#D9D2CC] bg-[#F5F1EC] p-5">
+            <h2 className="text-sm uppercase tracking-wider text-[#726D6A] mb-4">Zmluva</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <Sel label="Typ zmluvy" value={form.contract_type} options={CONTRACT_TYPES} onChange={(v) => setForm({ ...form, contract_type: v as ContractType })} />
+            </div>
+            <p className="mt-3 text-xs text-[#726D6A]">Zvolený typ zmluvy sa použije pri generovaní zmluvného dokumentu.</p>
           </div>
 
           <Fieldset title="Osobné údaje" form={form} setForm={setForm} fields={[
