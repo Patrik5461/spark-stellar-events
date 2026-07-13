@@ -12,7 +12,7 @@ export function useClothingImages(): { items: ClothingItem[]; loading: boolean }
       const { data, error } = await supabase
         .from("clothing_images")
         .select(
-          "id,url,title,description,category,price,currency,price_on_request,size,color,availability,featured_on_homepage,sort_order,created_at",
+          "id,url,title,description,category,price,currency,price_on_request,size,color,material,availability,featured_on_homepage,sort_order,created_at",
         )
         .eq("is_active", true)
         .order("sort_order", { ascending: true })
@@ -31,6 +31,7 @@ export function useClothingImages(): { items: ClothingItem[]; loading: boolean }
             priceOnRequest: (r.price_on_request as boolean) ?? false,
             size: (r.size as string) || "",
             color: (r.color as string) || "",
+            material: (r.material as string) || "",
             availability: ((r.availability as string) || "available") as Availability,
             featuredOnHomepage: (r.featured_on_homepage as boolean) ?? false,
           })),

@@ -25,19 +25,36 @@ export const CLOTHING_CATEGORY_LABEL: Record<ClothingCategory, string> =
     return acc;
   }, {} as Record<ClothingCategory, string>);
 
-export type Availability = "available" | "reserved" | "unavailable";
-
-export const AVAILABILITY_OPTIONS: { value: Availability; label: string }[] = [
-  { value: "available", label: "Dostupné" },
-  { value: "reserved", label: "Rezervované" },
-  { value: "unavailable", label: "Nedostupné" },
-];
+export type Availability = "available" | "low-stock" | "reserved" | "unavailable";
 
 export const AVAILABILITY_LABEL: Record<Availability, string> = {
   available: "Dostupné",
+  "low-stock": "Posledné kusy",
   reserved: "Rezervované",
   unavailable: "Nedostupné",
 };
+
+export function availabilityFromQuantity(qty: number): Availability {
+  if (qty <= 0) return "unavailable";
+  if (qty <= 2) return "low-stock";
+  return "available";
+}
+
+export const MATERIAL_OPTIONS: string[] = [
+  "Elastický",
+  "Pevný",
+  "Satén",
+  "Bavlna",
+  "Polyester",
+  "Elastan",
+  "Čipka",
+  "Flitre",
+  "Tyl",
+  "Hodváb",
+  "Zamat",
+  "Koža",
+  "Mix materiálov",
+];
 
 export type ClothingItem = {
   id: string;
@@ -50,6 +67,7 @@ export type ClothingItem = {
   priceOnRequest: boolean;
   size: string;
   color: string;
+  material: string;
   availability: Availability;
   featuredOnHomepage: boolean;
 };

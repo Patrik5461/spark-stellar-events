@@ -26,8 +26,10 @@ export type Database = {
           id: string
           internal_note: string
           is_active: boolean
+          material: string
           price: number | null
           price_on_request: boolean
+          quantity: number
           size: string
           sort_order: number
           storage_path: string | null
@@ -46,8 +48,10 @@ export type Database = {
           id?: string
           internal_note?: string
           is_active?: boolean
+          material?: string
           price?: number | null
           price_on_request?: boolean
+          quantity?: number
           size?: string
           sort_order?: number
           storage_path?: string | null
@@ -66,8 +70,10 @@ export type Database = {
           id?: string
           internal_note?: string
           is_active?: boolean
+          material?: string
           price?: number | null
           price_on_request?: boolean
+          quantity?: number
           size?: string
           sort_order?: number
           storage_path?: string | null

@@ -6,9 +6,10 @@ import { Trash2, Plus, Pencil, Copy, X, Check } from "lucide-react";
 import { toast } from "sonner";
 import {
   AVAILABILITY_LABEL,
-  AVAILABILITY_OPTIONS,
   CLOTHING_CATEGORIES,
   CLOTHING_CATEGORY_LABEL,
+  MATERIAL_OPTIONS,
+  availabilityFromQuantity,
   type Availability,
 } from "@/lib/clothing-data";
 
@@ -41,7 +42,8 @@ type FormState = {
   priceOnRequest: boolean;
   size: string;
   color: string;
-  availability: Availability;
+  material: string;
+  quantity: string;
   internalNote: string;
   sortOrder: string;
   isActive: boolean;
@@ -62,7 +64,8 @@ function emptyForm(): FormState {
     priceOnRequest: false,
     size: "",
     color: "",
-    availability: "available",
+    material: "",
+    quantity: "0",
     internalNote: "",
     sortOrder: "0",
     isActive: true,
@@ -84,7 +87,8 @@ function rowToForm(r: Row): FormState {
     priceOnRequest: r.price_on_request ?? false,
     size: r.size ?? "",
     color: r.color ?? "",
-    availability: (r.availability as Availability) ?? "available",
+    material: (r as unknown as { material?: string }).material ?? "",
+    quantity: String((r as unknown as { quantity?: number }).quantity ?? 0),
     internalNote: r.internal_note ?? "",
     sortOrder: String(r.sort_order ?? 0),
     isActive: r.is_active ?? true,
@@ -177,6 +181,7 @@ function ClothingAdmin() {
                 <th className="p-3">Názov</th>
                 <th className="p-3">Kategória</th>
                 <th className="p-3">Cena</th>
+                <th className="p-3">Kusy</th>
                 <th className="p-3">Dostupnosť</th>
                 <th className="p-3">Stav</th>
                 <th className="p-3 text-right">Akcie</th>
@@ -208,6 +213,7 @@ function ClothingAdmin() {
                         ? `${r.price} ${r.currency || "EUR"}`
                         : "—"}
                   </td>
+                  <td className="p-3 text-[#726D6A]">{(r as unknown as { quantity?: number }).quantity ?? 0}</td>
                   <td className="p-3 text-[#726D6A]">{AVAILABILITY_LABEL[(r.availability as Availability) || "available"]}</td>
                   <td className="p-3">
                     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${r.is_active ? "bg-emerald-100 text-emerald-800" : "bg-neutral-200 text-neutral-700"}`}>
@@ -326,7 +332,9 @@ function ItemModal({
         price_on_request: form.priceOnRequest,
         size: form.size.trim(),
         color: form.color.trim(),
-        availability: form.availability,
+        material: form.material.trim(),
+        quantity: Number(form.quantity) || 0,
+        availability: availabilityFromQuantity(Number(form.quantity) || 0),
         internal_note: form.internalNote.trim(),
         sort_order: Number(form.sortOrder) || 0,
         is_active: form.isActive,
@@ -486,16 +494,31 @@ function ItemModal({
               />
             </Field>
 
-            <Field label="Dostupnosť">
+            <Field label="Materiál">
               <select
                 className="w-full rounded-lg border border-[#D9D2CC] bg-white/70 px-3 py-2"
-                value={form.availability}
-                onChange={(e) => set("availability", e.target.value as Availability)}
+                value={form.material}
+                onChange={(e) => set("material", e.target.value)}
               >
-                {AVAILABILITY_OPTIONS.map((a) => (
-                  <option key={a.value} value={a.value}>{a.label}</option>
+                <option value="">— nezadané —</option>
+                {MATERIAL_OPTIONS.map((m) => (
+                  <option key={m} value={m}>{m}</option>
                 ))}
               </select>
+            </Field>
+
+            <Field label="Počet kusov">
+              <input
+                type="number"
+                min="0"
+                step="1"
+                className="w-full rounded-lg border border-[#D9D2CC] bg-white/70 px-3 py-2"
+                value={form.quantity}
+                onChange={(e) => set("quantity", e.target.value)}
+              />
+              <div className="mt-1 text-xs text-[#726D6A]">
+                Dostupnosť: {AVAILABILITY_LABEL[availabilityFromQuantity(Number(form.quantity) || 0)]}
+              </div>
             </Field>
 
             <Field label="Interná poznámka (nezobrazuje sa verejne)">
