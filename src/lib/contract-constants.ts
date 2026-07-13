@@ -1,0 +1,51 @@
+// Read-only company details used by the DOCX generator.
+export const COMPANY = {
+  nazov: "nuu s.r.o.",
+  sidlo: "Gazdovská 1901/7B, 900 41 Rovinka",
+  ico: "55042872",
+  dic: "2121851754",
+  ic_dph: "SK2121851754",
+  iban: "SK39 8330 0000 0020 0248 9216",
+  banka: "Fio banka, a.s., pobočka zahraničnej banky",
+  telefon: "+421 905 454 498",
+  email: "info@nu-u.sk",
+  register:
+    "Obchodný register Mestského súdu Bratislava III, oddiel Sro, vložka 165107/B",
+  zastupena: "Jana Henčeková, konateľ",
+} as const;
+
+// List of every placeholder token available inside a DOCX template.
+// Used by the admin page as a quick reference.
+export const TEMPLATE_PLACEHOLDERS: { key: string; description: string }[] = [
+  { key: "meno", description: "Meno hostesky" },
+  { key: "priezvisko", description: "Priezvisko hostesky" },
+  { key: "cele_meno", description: "Meno a priezvisko" },
+  { key: "datum_narodenia", description: "Dátum narodenia (formát sk-SK)" },
+  { key: "rodne_cislo", description: "Rodné číslo" },
+  { key: "adresa", description: "Adresa (ulica, PSČ, mesto)" },
+  { key: "cislo_op", description: "Číslo občianskeho preukazu" },
+  { key: "iban", description: "IBAN hostesky" },
+  { key: "telefon", description: "Telefón" },
+  { key: "email", description: "Email" },
+  { key: "statna_prislusnost", description: "Štátna príslušnosť" },
+  { key: "dnes", description: "Dnešný dátum (formát sk-SK)" },
+  { key: "spolocnost_nazov", description: "Obchodné meno agentúry" },
+  { key: "spolocnost_sidlo", description: "Sídlo agentúry" },
+  { key: "spolocnost_ico", description: "IČO agentúry" },
+  { key: "spolocnost_dic", description: "DIČ agentúry" },
+  { key: "spolocnost_ic_dph", description: "IČ DPH agentúry" },
+  { key: "spolocnost_iban", description: "IBAN agentúry" },
+  { key: "spolocnost_banka", description: "Banka agentúry" },
+  { key: "spolocnost_telefon", description: "Telefón agentúry" },
+  { key: "spolocnost_email", description: "Email agentúry" },
+  { key: "spolocnost_register", description: "Údaj o zápise v OR" },
+  { key: "spolocnost_zastupena", description: "Osoba zastupujúca agentúru" },
+  { key: "miesto_vykonu", description: "Miesto výkonu (event)" },
+  { key: "datum_od", description: "Dátum od (event)" },
+  { key: "datum_do", description: "Dátum do (event)" },
+  { key: "hodinova_sadzba", description: "Hodinová sadzba" },
+  { key: "jednorazova_odmena", description: "Jednorázová odmena" },
+  { key: "rozsah_prace", description: "Rozsah práce" },
+  { key: "nazov_klienta", description: "Názov klienta" },
+  { key: "poznamka", description: "Poznámka" },
+];

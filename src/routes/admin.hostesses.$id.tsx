@@ -4,11 +4,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { ArrowLeft, Download, Save, Trash2 } from "lucide-react";
 import { getHostess, updateHostess, deleteHostess } from "@/lib/hostess.functions";
+import { ContractsSection } from "@/components/admin/ContractsSection";
 import {
   HOSTESS_STATUSES,
   CONTRACT_TYPES,
   photoLabel,
-  contractLabel,
   type HostessStatus,
   type ContractType,
 } from "@/lib/hostess-data";
@@ -134,6 +134,8 @@ function HostessDetail() {
             </div>
             <p className="mt-3 text-xs text-[#726D6A]">Zvolený typ zmluvy sa použije pri generovaní zmluvného dokumentu.</p>
           </div>
+
+          <ContractsSection hostessId={id} />
 
           <Fieldset title="Osobné údaje" form={form} setForm={setForm} fields={[
             ["first_name","Meno"],["last_name","Priezvisko"],

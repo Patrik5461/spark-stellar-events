@@ -2,10 +2,22 @@ export const CONTRACT_TYPES = [
   { value: "nepriradene", label: "Zatiaľ nepriradené" },
   { value: "prikazna_zmluva", label: "Príkazná zmluva" },
   { value: "dohoda_o_vykonani_prace", label: "Dohoda o vykonaní práce" },
+  { value: "dohoda_o_brigadnickej_praci_studentov", label: "Dohoda o brigádnickej práci študentov" },
   { value: "brigada_bez_zmluvy", label: "Brigáda bez zmluvy" },
 ] as const;
 export type ContractType = (typeof CONTRACT_TYPES)[number]["value"];
 export const DEFAULT_CONTRACT_TYPE: ContractType = "nepriradene";
+
+// Contract kinds that can be generated from an uploaded DOCX template.
+export const CONTRACT_KINDS = [
+  { value: "prikazna_zmluva", label: "Príkazná zmluva" },
+  { value: "dohoda_o_vykonani_prace", label: "Dohoda o vykonaní práce" },
+  { value: "dohoda_o_brigadnickej_praci_studentov", label: "Dohoda o brigádnickej práci študentov" },
+] as const;
+export type ContractKind = (typeof CONTRACT_KINDS)[number]["value"];
+export function contractKindLabel(v: string) {
+  return CONTRACT_KINDS.find((k) => k.value === v)?.label ?? v;
+}
 
 export const HOSTESS_STATUSES = [
   { value: "nova", label: "Nová registrácia" },
