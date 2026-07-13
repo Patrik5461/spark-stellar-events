@@ -605,6 +605,7 @@ export type Database = {
         | "bez_zmluvy"
         | "nepriradene"
         | "brigada_bez_zmluvy"
+        | "dohoda_o_brigadnickej_praci_studentov"
       hostess_photo_type: "portret" | "cela_postava" | "profil" | "dalsia"
       hostess_status:
         | "nova"
@@ -753,6 +754,7 @@ export const Constants = {
         "bez_zmluvy",
         "nepriradene",
         "brigada_bez_zmluvy",
+        "dohoda_o_brigadnickej_praci_studentov",
       ],
       hostess_photo_type: ["portret", "cela_postava", "profil", "dalsia"],
       hostess_status: [

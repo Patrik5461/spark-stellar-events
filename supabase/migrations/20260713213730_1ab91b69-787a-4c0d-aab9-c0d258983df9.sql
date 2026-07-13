@@ -1,0 +1,1 @@
+ALTER TYPE public.hostess_contract_type ADD VALUE IF NOT EXISTS 'dohoda_o_brigadnickej_praci_studentov';
