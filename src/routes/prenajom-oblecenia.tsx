@@ -3,7 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, X, ChevronLeft, ChevronRight, Shirt } from "lucide-react";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
-import { CLOTHING_CATEGORIES, type ClothingItem } from "@/lib/clothing-data";
+import {
+  AVAILABILITY_LABEL,
+  CLOTHING_CATEGORIES,
+  CLOTHING_CATEGORY_LABEL,
+  formatPrice,
+  type ClothingItem,
+} from "@/lib/clothing-data";
 import { useClothingImages } from "@/lib/use-clothing";
 
 export const Route = createFileRoute("/prenajom-oblecenia")({
