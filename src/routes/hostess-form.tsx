@@ -65,7 +65,7 @@ const EMPTY_FORM = {
   experience: "",
   availability: "",
   note: "",
-  contract_type: "bez_zmluvy" as ContractType,
+  contract_type: DEFAULT_CONTRACT_TYPE as ContractType,
 };
 const EMPTY_CONSENTS: Record<ConsentType, boolean> = {
   osobne_udaje: false,
