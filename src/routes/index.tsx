@@ -82,12 +82,16 @@ function AnimatedHeadline({ text, className }: { text: string; className?: strin
 
 
 
-function Hero() {
+function Hero({ settings }: { settings: SiteSettings | null }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const headline = pick(settings, "hero_headline", "Ľudia, ktorí robia rozdiel na každom evente.");
+  const subtitle = pick(settings, "hero_subtitle", "Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku aj v zahraničí.");
+  const ctaPrimary = pick(settings, "cta_primary", "Kontaktujte nás");
+  const ctaSecondary = pick(settings, "cta_secondary", "Naše služby");
   return (
     <section ref={ref} className="relative min-h-[96vh] flex flex-col pt-32 md:pt-44 pb-16 px-6">
       <div className="mx-auto max-w-7xl w-full flex-1 flex flex-col">
@@ -103,7 +107,7 @@ function Hero() {
 
         <motion.div style={{ y: textY }}>
           <AnimatedHeadline
-            text="Ľudia, ktorí robia rozdiel na každom evente."
+            text={headline}
             className="font-display font-semibold text-[clamp(2.5rem,9vw,8.5rem)] leading-[1.02] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
           />
         </motion.div>
@@ -114,8 +118,7 @@ function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="max-w-[52ch] text-lg md:text-xl text-[#726D6A] leading-[1.7]"
           >
-            Profesionálny hostessing, promotéri, helperi a kompletné
-            personálne zabezpečenie eventov na Slovensku aj v zahraničí.
+            {subtitle}
           </motion.p>
 
           <motion.div
@@ -129,7 +132,7 @@ function Hero() {
               whileTap={{ scale: 0.98 }}
               className="group inline-flex items-center gap-3 rounded-full bg-[#383B3A] px-8 py-4 text-sm font-medium text-[#F5F1EC] transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)]"
             >
-              Kontaktujte nás
+              {ctaPrimary}
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </motion.a>
             <motion.a
@@ -138,7 +141,7 @@ function Hero() {
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-8 py-4 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
             >
-              Naše služby
+              {ctaSecondary}
             </motion.a>
           </motion.div>
         </div>
