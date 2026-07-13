@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrenajomObleceniaRouteImport } from './routes/prenajom-oblecenia'
+import { Route as HostessFormRouteImport } from './routes/hostess-form'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,6 +29,11 @@ import { Route as AdminHostessesIdRouteImport } from './routes/admin.hostesses.$
 const PrenajomObleceniaRoute = PrenajomObleceniaRouteImport.update({
   id: '/prenajom-oblecenia',
   path: '/prenajom-oblecenia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostessFormRoute = HostessFormRouteImport.update({
+  id: '/hostess-form',
+  path: '/hostess-form',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GaleriaRoute = GaleriaRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
+  '/hostess-form': typeof HostessFormRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/galeria': typeof GaleriaRoute
+  '/hostess-form': typeof HostessFormRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
+  '/hostess-form': typeof HostessFormRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/galeria'
+    | '/hostess-form'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/galeria'
+    | '/hostess-form'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/galeria'
+    | '/hostess-form'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   GaleriaRoute: typeof GaleriaRoute
+  HostessFormRoute: typeof HostessFormRoute
   PrenajomObleceniaRoute: typeof PrenajomObleceniaRoute
 }
 
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/prenajom-oblecenia'
       fullPath: '/prenajom-oblecenia'
       preLoaderRoute: typeof PrenajomObleceniaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hostess-form': {
+      id: '/hostess-form'
+      path: '/hostess-form'
+      fullPath: '/hostess-form'
+      preLoaderRoute: typeof HostessFormRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galeria': {
@@ -356,6 +376,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   GaleriaRoute: GaleriaRoute,
+  HostessFormRoute: HostessFormRoute,
   PrenajomObleceniaRoute: PrenajomObleceniaRoute,
 }
 export const routeTree = rootRouteImport
