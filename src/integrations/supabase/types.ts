@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      clothing_images: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          sort_order: number
+          storage_path: string | null
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          storage_path?: string | null
+          title?: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          storage_path?: string | null
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
