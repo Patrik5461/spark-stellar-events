@@ -769,18 +769,19 @@ function ContactForm() {
 
 
 function Home() {
+  const settings = useSiteSettings();
   return (
     <main className="bg-[#EBE6E2] text-[#383B3A] overflow-x-hidden">
       <Navbar />
-      <Hero />
+      <Hero settings={settings} />
       <Marquee />
       <Services />
-      <WhyUs />
-      <GalleryPreview />
+      <WhyUs settings={settings} />
+      <GalleryPreview settings={settings} />
       <Process />
       <Testimonials />
       <CTABanner />
-      <Contact />
+      <Contact settings={settings} />
       <Footer />
       <BackToTop />
     </main>
