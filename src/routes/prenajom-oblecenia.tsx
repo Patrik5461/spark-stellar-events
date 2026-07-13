@@ -320,6 +320,7 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
               const meta: string[] = [];
               if (it.size) meta.push(`Veľkosť: ${it.size}`);
               if (it.color) meta.push(`Farba: ${it.color}`);
+              if (it.material) meta.push(`Materiál: ${it.material}`);
               if (it.availability) meta.push(AVAILABILITY_LABEL[it.availability]);
               const price = formatPrice(it);
               return (
