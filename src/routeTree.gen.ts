@@ -21,6 +21,7 @@ import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminContractsRouteImport } from './routes/admin.contracts'
 import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
 import { Route as AdminHostessesIndexRouteImport } from './routes/admin.hostesses.index'
 import { Route as AdminHostessesInvitationsRouteImport } from './routes/admin.hostesses.invitations'
@@ -86,6 +87,11 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminContractsRoute = AdminContractsRouteImport.update({
+  id: '/contracts',
+  path: '/contracts',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminClothingRoute = AdminClothingRouteImport.update({
   id: '/clothing',
   path: '/clothing',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
+  '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
+  '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
+  '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
+    | '/admin/contracts'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
+    | '/admin/contracts'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
+    | '/admin/contracts'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -312,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGalleryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/contracts': {
+      id: '/admin/contracts'
+      path: '/contracts'
+      fullPath: '/admin/contracts'
+      preLoaderRoute: typeof AdminContractsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/clothing': {
       id: '/admin/clothing'
       path: '/clothing'
@@ -345,6 +364,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminClothingRoute: typeof AdminClothingRoute
+  AdminContractsRoute: typeof AdminContractsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminHealthRoute: typeof AdminHealthRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -359,6 +379,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminClothingRoute: AdminClothingRoute,
+  AdminContractsRoute: AdminContractsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminHealthRoute: AdminHealthRoute,
   AdminLoginRoute: AdminLoginRoute,
