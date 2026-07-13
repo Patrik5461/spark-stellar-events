@@ -315,16 +315,27 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
             >
               <X className="h-4 w-4" />
             </button>
-            {(items[open].title || items[open].description) && (
-              <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 max-w-[92vw] text-center text-[#F5F1EC]/85 text-xs md:text-sm px-4">
-                {items[open].title && (
-                  <div className="tracking-[0.2em] uppercase">{items[open].title}</div>
-                )}
-                {items[open].description && (
-                  <div className="mt-1 text-[#F5F1EC]/70">{items[open].description}</div>
-                )}
-              </div>
-            )}
+            {(() => {
+              const it = items[open];
+              const meta: string[] = [];
+              if (it.size) meta.push(`Veľkosť: ${it.size}`);
+              if (it.color) meta.push(`Farba: ${it.color}`);
+              if (it.availability) meta.push(AVAILABILITY_LABEL[it.availability]);
+              const price = formatPrice(it);
+              return (
+                <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 max-w-[92vw] text-center text-[#F5F1EC]/90 text-xs md:text-sm px-4 space-y-1">
+                  <div className="text-[10px] tracking-[0.25em] uppercase text-[#F5F1EC]/60">
+                    {CLOTHING_CATEGORY_LABEL[it.category] ?? it.category}
+                  </div>
+                  {it.title && <div className="font-display text-base md:text-lg">{it.title}</div>}
+                  {price && <div className="text-[#F5F1EC]/85">{price}</div>}
+                  {it.description && <div className="text-[#F5F1EC]/70 max-w-[60ch] mx-auto">{it.description}</div>}
+                  {meta.length > 0 && (
+                    <div className="text-[#F5F1EC]/60 text-[11px] tracking-wide">{meta.join(" · ")}</div>
+                  )}
+                </div>
+              );
+            })()}
           </motion.div>
         )}
       </AnimatePresence>
