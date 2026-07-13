@@ -181,6 +181,7 @@ function ClothingAdmin() {
                 <th className="p-3">Názov</th>
                 <th className="p-3">Kategória</th>
                 <th className="p-3">Cena</th>
+                <th className="p-3">Kusy</th>
                 <th className="p-3">Dostupnosť</th>
                 <th className="p-3">Stav</th>
                 <th className="p-3 text-right">Akcie</th>
