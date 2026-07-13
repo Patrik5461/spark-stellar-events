@@ -223,12 +223,12 @@ function SectionEyebrow({ n, label }: { n: string; label: string }) {
 
 function Services() {
   const items = [
-    { icon: Sparkles, title: "Hostessing", desc: "Profesionálne hostesky pre konferencie, výstavy, firemné akcie a spoločenské podujatia.", img: g1, span: "md:col-span-2 lg:row-span-2 min-h-[360px] lg:min-h-[520px]" },
-    { icon: Megaphone, title: "Promotion", desc: "Promotéri pre sampling, promo kampane a prezentáciu značiek.", img: g3, span: "min-h-[280px] lg:min-h-[250px]" },
-    { icon: HardHat, title: "Helperi", desc: "Spoľahlivý personál pre montáže, logistiku a realizáciu eventov.", img: g5, span: "min-h-[280px] lg:min-h-[250px]" },
-    { icon: Clapperboard, title: "Produkcia", desc: "Kompletná organizačná podpora a produkcia eventov.", img: g2, span: "min-h-[280px] lg:min-h-[250px] lg:col-span-1" },
-    { icon: Shirt, title: "Prenájom oblečenia", desc: "Prenájom profesionálneho oblečenia pre hostesky a event staff.", img: g6, span: "min-h-[280px] lg:min-h-[250px]" },
-    { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta.", img: g4, span: "min-h-[280px] lg:min-h-[250px]" },
+    { icon: Sparkles, title: "Hostessing", desc: "Profesionálne hostesky pre konferencie, výstavy, firemné akcie a spoločenské podujatia.", img: g1, span: "md:col-span-2 lg:row-span-2 min-h-[360px] lg:min-h-[520px]", href: "#contact" },
+    { icon: Megaphone, title: "Promotion", desc: "Promotéri pre sampling, promo kampane a prezentáciu značiek.", img: g3, span: "min-h-[280px] lg:min-h-[250px]", href: "#contact" },
+    { icon: HardHat, title: "Helperi", desc: "Spoľahlivý personál pre montáže, logistiku a realizáciu eventov.", img: g5, span: "min-h-[280px] lg:min-h-[250px]", href: "#contact" },
+    { icon: Clapperboard, title: "Produkcia", desc: "Kompletná organizačná podpora a produkcia eventov.", img: g2, span: "min-h-[280px] lg:min-h-[250px] lg:col-span-1", href: "#contact" },
+    { icon: Shirt, title: "Prenájom oblečenia", desc: "Prenájom profesionálneho oblečenia pre hostesky a event staff.", img: g6, span: "min-h-[280px] lg:min-h-[250px]", href: "/prenajom-oblecenia" },
+    { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta.", img: g4, span: "min-h-[280px] lg:min-h-[250px]", href: "#contact" },
   ];
   return (
     <section id="services" className="relative py-40 px-6">
@@ -247,9 +247,9 @@ function Services() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
-          {items.map(({ icon: Icon, title, desc, img, span }, i) => (
+          {items.map(({ icon: Icon, title, desc, img, span, href }, i) => (
             <motion.a
-              href="#contact"
+              href={href}
               key={title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
