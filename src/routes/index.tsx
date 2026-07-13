@@ -323,10 +323,9 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
             Nie agentúra. <em className="italic text-[#726D6A]">Partner</em> pre vašu značku.
           </h2>
           <p className="mt-8 text-[#726D6A] leading-relaxed max-w-lg">
-            Vyberáme ľudí, ktorých by sme s pokojom poslali aj na vlastnú
-            svadbu. Trénujeme ich, oblečieme a postavíme za nimi celý
-            backoffice — vy len dostanete výsledok.
+            {pick(settings, "about_text", "Vyberáme ľudí, ktorých by sme s pokojom poslali aj na vlastnú svadbu. Trénujeme ich, oblečieme a postavíme za nimi celý backoffice — vy len dostanete výsledok.")}
           </p>
+
 
           <ul className="mt-8 space-y-3">
             {["Osobný projektový manažér 24/7", "Vlastné premium uniformy", "Záložný tím pre každý event", "Reporting a foto z miesta"].map((t) => (
