@@ -6,9 +6,10 @@ import { Trash2, Plus, Pencil, Copy, X, Check } from "lucide-react";
 import { toast } from "sonner";
 import {
   AVAILABILITY_LABEL,
-  AVAILABILITY_OPTIONS,
   CLOTHING_CATEGORIES,
   CLOTHING_CATEGORY_LABEL,
+  MATERIAL_OPTIONS,
+  availabilityFromQuantity,
   type Availability,
 } from "@/lib/clothing-data";
 
