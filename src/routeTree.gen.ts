@@ -20,6 +20,7 @@ import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
 
 const PrenajomObleceniaRoute = PrenajomObleceniaRouteImport.update({
   id: '/prenajom-oblecenia',
@@ -76,12 +77,18 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminClothingRoute = AdminClothingRouteImport.update({
+  id: '/clothing',
+  path: '/clothing',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
+  '/admin/clothing': typeof AdminClothingRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
+  '/admin/clothing': typeof AdminClothingRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
+  '/admin/clothing': typeof AdminClothingRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/galeria'
     | '/prenajom-oblecenia'
+    | '/admin/clothing'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/'
     | '/galeria'
     | '/prenajom-oblecenia'
+    | '/admin/clothing'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/galeria'
     | '/prenajom-oblecenia'
+    | '/admin/clothing'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -243,10 +255,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGalleryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/clothing': {
+      id: '/admin/clothing'
+      path: '/clothing'
+      fullPath: '/admin/clothing'
+      preLoaderRoute: typeof AdminClothingRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminClothingRoute: typeof AdminClothingRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminHealthRoute: typeof AdminHealthRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -257,6 +277,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminClothingRoute: AdminClothingRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminHealthRoute: AdminHealthRoute,
   AdminLoginRoute: AdminLoginRoute,
