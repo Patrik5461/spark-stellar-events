@@ -213,6 +213,7 @@ function ClothingAdmin() {
                         ? `${r.price} ${r.currency || "EUR"}`
                         : "—"}
                   </td>
+                  <td className="p-3 text-[#726D6A]">{(r as unknown as { quantity?: number }).quantity ?? 0}</td>
                   <td className="p-3 text-[#726D6A]">{AVAILABILITY_LABEL[(r.availability as Availability) || "available"]}</td>
                   <td className="p-3">
                     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${r.is_active ? "bg-emerald-100 text-emerald-800" : "bg-neutral-200 text-neutral-700"}`}>
