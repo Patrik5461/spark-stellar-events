@@ -4,11 +4,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { ArrowLeft, Download, Save, Trash2 } from "lucide-react";
 import { getHostess, updateHostess, deleteHostess } from "@/lib/hostess.functions";
+import { ContractsSection } from "@/components/admin/ContractsSection";
 import {
   HOSTESS_STATUSES,
   CONTRACT_TYPES,
   photoLabel,
-  contractLabel,
   type HostessStatus,
   type ContractType,
 } from "@/lib/hostess-data";
