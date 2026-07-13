@@ -3,12 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { FileText, Upload, Trash2, Download, Check } from "lucide-react";
-import {
-  listContractTemplates,
-  uploadContractTemplate,
-  deleteContractTemplate,
-  getTemplateDownloadUrl,
-} from "@/lib/hostess.functions";
+import { listContractTemplates } from "@/lib/hostess.functions";
 import {
   uploadContractTemplate as uploadTpl,
   deleteContractTemplate as delTpl,
@@ -16,13 +11,6 @@ import {
 } from "@/lib/contracts.functions";
 import { CONTRACT_KINDS, type ContractKind } from "@/lib/hostess-data";
 import { TEMPLATE_PLACEHOLDERS } from "@/lib/contract-constants";
-
-// Re-export bindings so unused import warnings don't fire — server fns are also
-// declared in contracts.functions.ts; keep only those below.
-void listContractTemplates;
-void uploadContractTemplate;
-void deleteContractTemplate;
-void getTemplateDownloadUrl;
 
 export const Route = createFileRoute("/admin/contracts")({
   head: () => ({
