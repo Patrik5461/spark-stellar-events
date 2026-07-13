@@ -197,6 +197,66 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_contracts: {
+        Row: {
+          contract_type: string
+          created_at: string
+          docx_path: string
+          event_data: Json
+          generated_by: string | null
+          generated_by_email: string | null
+          hostess_id: string
+          hostess_snapshot: Json
+          id: string
+          template_id: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          contract_type: string
+          created_at?: string
+          docx_path: string
+          event_data?: Json
+          generated_by?: string | null
+          generated_by_email?: string | null
+          hostess_id: string
+          hostess_snapshot?: Json
+          id?: string
+          template_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          contract_type?: string
+          created_at?: string
+          docx_path?: string
+          event_data?: Json
+          generated_by?: string | null
+          generated_by_email?: string | null
+          hostess_id?: string
+          hostess_snapshot?: Json
+          id?: string
+          template_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_contracts_hostess_id_fkey"
+            columns: ["hostess_id"]
+            isOneToOne: false
+            referencedRelation: "hostess_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_contracts_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "contract_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       health_logs: {
         Row: {
           created_at: string
