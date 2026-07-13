@@ -79,7 +79,7 @@ function ClothingPage() {
           {/* Filter row */}
           <div className="-mx-6 md:mx-0 mb-10">
             <div
-              className="flex gap-2 overflow-x-auto no-scrollbar px-6 md:px-0 md:flex-wrap snap-x snap-mandatory"
+              className="flex gap-2 overflow-x-auto px-6 md:px-0 md:flex-wrap snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               role="tablist"
               aria-label="Kategórie oblečenia"
             >
