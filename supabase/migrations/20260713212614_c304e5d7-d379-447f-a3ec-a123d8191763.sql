@@ -1,0 +1,1 @@
+ALTER TABLE public.hostess_profiles ALTER COLUMN contract_type SET DEFAULT 'nepriradene'::public.hostess_contract_type;

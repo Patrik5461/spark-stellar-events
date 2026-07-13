@@ -8,7 +8,7 @@ export type ContractType = (typeof CONTRACT_TYPES)[number]["value"];
 export const DEFAULT_CONTRACT_TYPE: ContractType = "nepriradene";
 
 export const HOSTESS_STATUSES = [
-  { value: "nova", label: "Nová" },
+  { value: "nova", label: "Nová registrácia" },
   { value: "skontrolovana", label: "Skontrolovaná" },
   { value: "schvalena", label: "Schválená" },
   { value: "zamietnuta", label: "Zamietnutá" },

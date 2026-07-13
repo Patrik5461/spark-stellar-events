@@ -5,12 +5,12 @@ import { toast } from "sonner";
 import { CheckCircle2, Loader2, Upload, X } from "lucide-react";
 import { submitHostessApplication } from "@/lib/hostess.functions";
 import {
-  CONTRACT_TYPES,
   CONSENTS,
   PHOTO_TYPES,
   ACCEPT_EXT,
   ACCEPT_MIME,
   MAX_PHOTO_BYTES,
+  DEFAULT_CONTRACT_TYPE,
   type ContractType,
   type PhotoType,
   type ConsentType,
@@ -65,7 +65,7 @@ const EMPTY_FORM = {
   experience: "",
   availability: "",
   note: "",
-  contract_type: "bez_zmluvy" as ContractType,
+  contract_type: DEFAULT_CONTRACT_TYPE as ContractType,
 };
 const EMPTY_CONSENTS: Record<ConsentType, boolean> = {
   osobne_udaje: false,
@@ -337,22 +337,6 @@ function HostessFormPage() {
             </div>
           </Section>
 
-          <Section title="Typ zmluvy">
-            <div className="space-y-2">
-              {CONTRACT_TYPES.map((c) => (
-                <label key={c.value} className="flex items-center gap-3 rounded-lg border border-[#D9D2CC] bg-[#F5F1EC] px-4 py-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="contract_type"
-                    value={c.value}
-                    checked={form.contract_type === c.value}
-                    onChange={() => set("contract_type", c.value)}
-                  />
-                  <span className="text-sm">{c.label}</span>
-                </label>
-              ))}
-            </div>
-          </Section>
 
           <Section title="Súhlasy">
             <div className="space-y-3">
