@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PrenajomObleceniaRouteImport } from './routes/prenajom-oblecenia'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,6 +21,11 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 
+const PrenajomObleceniaRoute = PrenajomObleceniaRouteImport.update({
+  id: '/prenajom-oblecenia',
+  path: '/prenajom-oblecenia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GaleriaRoute = GaleriaRouteImport.update({
   id: '/galeria',
   path: '/galeria',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
+  '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/galeria': typeof GaleriaRoute
+  '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
+  '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/galeria'
+    | '/prenajom-oblecenia'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/galeria'
+    | '/prenajom-oblecenia'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/galeria'
+    | '/prenajom-oblecenia'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
@@ -149,10 +161,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   GaleriaRoute: typeof GaleriaRoute
+  PrenajomObleceniaRoute: typeof PrenajomObleceniaRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/prenajom-oblecenia': {
+      id: '/prenajom-oblecenia'
+      path: '/prenajom-oblecenia'
+      fullPath: '/prenajom-oblecenia'
+      preLoaderRoute: typeof PrenajomObleceniaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/galeria': {
       id: '/galeria'
       path: '/galeria'
@@ -252,6 +272,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   GaleriaRoute: GaleriaRoute,
+  PrenajomObleceniaRoute: PrenajomObleceniaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
