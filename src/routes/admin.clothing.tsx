@@ -492,16 +492,31 @@ function ItemModal({
               />
             </Field>
 
-            <Field label="Dostupnosť">
+            <Field label="Materiál">
               <select
                 className="w-full rounded-lg border border-[#D9D2CC] bg-white/70 px-3 py-2"
-                value={form.availability}
-                onChange={(e) => set("availability", e.target.value as Availability)}
+                value={form.material}
+                onChange={(e) => set("material", e.target.value)}
               >
-                {AVAILABILITY_OPTIONS.map((a) => (
-                  <option key={a.value} value={a.value}>{a.label}</option>
+                <option value="">— nezadané —</option>
+                {MATERIAL_OPTIONS.map((m) => (
+                  <option key={m} value={m}>{m}</option>
                 ))}
               </select>
+            </Field>
+
+            <Field label="Počet kusov">
+              <input
+                type="number"
+                min="0"
+                step="1"
+                className="w-full rounded-lg border border-[#D9D2CC] bg-white/70 px-3 py-2"
+                value={form.quantity}
+                onChange={(e) => set("quantity", e.target.value)}
+              />
+              <div className="mt-1 text-xs text-[#726D6A]">
+                Dostupnosť: {AVAILABILITY_LABEL[availabilityFromQuantity(Number(form.quantity) || 0)]}
+              </div>
             </Field>
 
             <Field label="Interná poznámka (nezobrazuje sa verejne)">
