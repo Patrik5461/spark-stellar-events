@@ -16,11 +16,19 @@ export type Database = {
     Tables: {
       clothing_images: {
         Row: {
+          availability: string
           category: string
+          color: string
           created_at: string
+          currency: string
           description: string
+          featured_on_homepage: boolean
           id: string
+          internal_note: string
           is_active: boolean
+          price: number | null
+          price_on_request: boolean
+          size: string
           sort_order: number
           storage_path: string | null
           title: string
@@ -28,11 +36,19 @@ export type Database = {
           url: string
         }
         Insert: {
+          availability?: string
           category?: string
+          color?: string
           created_at?: string
+          currency?: string
           description?: string
+          featured_on_homepage?: boolean
           id?: string
+          internal_note?: string
           is_active?: boolean
+          price?: number | null
+          price_on_request?: boolean
+          size?: string
           sort_order?: number
           storage_path?: string | null
           title?: string
@@ -40,11 +56,19 @@ export type Database = {
           url: string
         }
         Update: {
+          availability?: string
           category?: string
+          color?: string
           created_at?: string
+          currency?: string
           description?: string
+          featured_on_homepage?: boolean
           id?: string
+          internal_note?: string
           is_active?: boolean
+          price?: number | null
+          price_on_request?: boolean
+          size?: string
           sort_order?: number
           storage_path?: string | null
           title?: string

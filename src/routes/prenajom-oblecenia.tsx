@@ -3,7 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, X, ChevronLeft, ChevronRight, Shirt } from "lucide-react";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
-import { CLOTHING_CATEGORIES, type ClothingItem } from "@/lib/clothing-data";
+import {
+  AVAILABILITY_LABEL,
+  CLOTHING_CATEGORIES,
+  CLOTHING_CATEGORY_LABEL,
+  formatPrice,
+  type ClothingItem,
+} from "@/lib/clothing-data";
 import { useClothingImages } from "@/lib/use-clothing";
 
 export const Route = createFileRoute("/prenajom-oblecenia")({
@@ -227,13 +233,22 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
                 decoding="async"
                 className="h-auto w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#383B3A]/45 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              {(im.title || im.description) && (
-                <div className="pointer-events-none absolute left-5 bottom-5 right-5 flex items-center justify-between text-[#F5F1EC] text-xs tracking-[0.2em] uppercase translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                  <span className="truncate">{im.title || im.description}</span>
-                  <ArrowUpRight className="h-4 w-4 shrink-0" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#383B3A]/85 via-[#383B3A]/40 to-transparent p-5 pt-16 text-[#F5F1EC]">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-[10px] tracking-[0.25em] uppercase text-[#F5F1EC]/70">
+                      {CLOTHING_CATEGORY_LABEL[im.category] ?? im.category}
+                    </div>
+                    {im.title && (
+                      <div className="font-display text-lg leading-tight truncate">{im.title}</div>
+                    )}
+                    <div className="mt-1 text-xs text-[#F5F1EC]/85">
+                      {formatPrice(im)}
+                    </div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
                 </div>
-              )}
+              </div>
             </button>
           ))}
         </motion.div>
@@ -300,16 +315,27 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
             >
               <X className="h-4 w-4" />
             </button>
-            {(items[open].title || items[open].description) && (
-              <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 max-w-[92vw] text-center text-[#F5F1EC]/85 text-xs md:text-sm px-4">
-                {items[open].title && (
-                  <div className="tracking-[0.2em] uppercase">{items[open].title}</div>
-                )}
-                {items[open].description && (
-                  <div className="mt-1 text-[#F5F1EC]/70">{items[open].description}</div>
-                )}
-              </div>
-            )}
+            {(() => {
+              const it = items[open];
+              const meta: string[] = [];
+              if (it.size) meta.push(`Veľkosť: ${it.size}`);
+              if (it.color) meta.push(`Farba: ${it.color}`);
+              if (it.availability) meta.push(AVAILABILITY_LABEL[it.availability]);
+              const price = formatPrice(it);
+              return (
+                <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 max-w-[92vw] text-center text-[#F5F1EC]/90 text-xs md:text-sm px-4 space-y-1">
+                  <div className="text-[10px] tracking-[0.25em] uppercase text-[#F5F1EC]/60">
+                    {CLOTHING_CATEGORY_LABEL[it.category] ?? it.category}
+                  </div>
+                  {it.title && <div className="font-display text-base md:text-lg">{it.title}</div>}
+                  {price && <div className="text-[#F5F1EC]/85">{price}</div>}
+                  {it.description && <div className="text-[#F5F1EC]/70 max-w-[60ch] mx-auto">{it.description}</div>}
+                  {meta.length > 0 && (
+                    <div className="text-[#F5F1EC]/60 text-[11px] tracking-wide">{meta.join(" · ")}</div>
+                  )}
+                </div>
+              );
+            })()}
           </motion.div>
         )}
       </AnimatePresence>
