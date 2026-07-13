@@ -11,6 +11,7 @@ const NAV_LINKS: { label: string; href: string; kind: "hash" | "route" }[] = [
   { label: "O nás", href: "#why", kind: "hash" },
   { label: "Služby", href: "#services", kind: "hash" },
   { label: "Galéria", href: "/galeria", kind: "route" },
+  { label: "Prenájom oblečenia", href: "/prenajom-oblecenia", kind: "route" },
   { label: "Kontakt", href: "#contact", kind: "hash" },
 ];
 
@@ -40,7 +41,7 @@ export function Navbar() {
         if (el) io!.observe(el);
       });
     } else {
-      setActive("/galeria" === pathname ? "/galeria" : "");
+      setActive(pathname);
     }
     return () => {
       window.removeEventListener("scroll", fn);
@@ -166,6 +167,7 @@ export function Footer() {
     ["O nás", prefix("#why")],
     ["Služby", prefix("#services")],
     ["Galéria", "/galeria"],
+    ["Prenájom oblečenia", "/prenajom-oblecenia"],
     ["Kontakt", prefix("#contact")],
   ];
   const footerText = pick(settings, "footer_text", "Hostessing, promotion a produkcia eventov. Slovensko & zahraničie.");
