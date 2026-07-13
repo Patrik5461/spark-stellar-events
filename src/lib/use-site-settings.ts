@@ -12,19 +12,20 @@ const listeners = new Set<(s: SiteSettings | null) => void>();
 
 async function fetchSettings(): Promise<SiteSettings | null> {
   if (inflight) return inflight;
-  inflight = supabase
-    .from("site_settings")
-    .select("*")
-    .eq("id", 1)
-    .maybeSingle()
-    .then(({ data }) => {
+  inflight = (async () => {
+    try {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("*")
+        .eq("id", 1)
+        .maybeSingle();
       cached = (data as SiteSettings | null) ?? null;
       listeners.forEach((l) => l(cached));
       return cached;
-    })
-    .finally(() => {
+    } finally {
       inflight = null;
-    }) as Promise<SiteSettings | null>;
+    }
+  })();
   return inflight;
 }
 
