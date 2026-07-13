@@ -24,12 +24,20 @@ export default defineConfig({
       "process.env.TSS_DEV_SSR_STYLES_BASEPATH": JSON.stringify("/"),
       "process.env.TSS_INLINE_CSS_ENABLED": JSON.stringify("false"),
     },
-    optimizeDeps: {
-      exclude: [
-        "@tanstack/start-client-core",
-        "@tanstack/react-start",
-      ],
+    environments: {
+      client: {
+        define: {
+          "process.env.TSS_SERVER_FN_BASE": JSON.stringify("/_serverFn"),
+          "process.env.TSS_ROUTER_BASEPATH": JSON.stringify("/"),
+          "process.env.TSS_SHELL": JSON.stringify("false"),
+          "process.env.TSS_DEV_SERVER": JSON.stringify("true"),
+          "process.env.TSS_DEV_SSR_STYLES_ENABLED": JSON.stringify("false"),
+          "process.env.TSS_DEV_SSR_STYLES_BASEPATH": JSON.stringify("/"),
+          "process.env.TSS_INLINE_CSS_ENABLED": JSON.stringify("false"),
+        },
+      },
     },
   },
 });
+
 
