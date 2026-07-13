@@ -292,48 +292,6 @@ export type Database = {
           },
         ]
       }
-      hostess_invites: {
-        Row: {
-          created_at: string
-          created_by: string | null
-          expires_at: string | null
-          id: string
-          internal_note: string | null
-          is_active: boolean
-          label: string | null
-          max_submissions: number
-          submission_count: number
-          token_hash: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string | null
-          expires_at?: string | null
-          id?: string
-          internal_note?: string | null
-          is_active?: boolean
-          label?: string | null
-          max_submissions?: number
-          submission_count?: number
-          token_hash: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          created_by?: string | null
-          expires_at?: string | null
-          id?: string
-          internal_note?: string | null
-          is_active?: boolean
-          label?: string | null
-          max_submissions?: number
-          submission_count?: number
-          token_hash?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       hostess_photos: {
         Row: {
           created_at: string
@@ -466,15 +424,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["hostess_status"]
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "hostess_profiles_invite_id_fkey"
-            columns: ["invite_id"]
-            isOneToOne: false
-            referencedRelation: "hostess_invites"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {

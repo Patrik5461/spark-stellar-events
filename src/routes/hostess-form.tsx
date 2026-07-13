@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { CheckCircle2, Loader2, Upload, X } from "lucide-react";
-import {
-  getHostessInviteInfo,
-  submitHostessApplication,
-} from "@/lib/hostess.functions";
+import { submitHostessApplication } from "@/lib/hostess.functions";
 import {
   CONTRACT_TYPES,
   CONSENTS,
@@ -19,7 +16,7 @@ import {
   type ConsentType,
 } from "@/lib/hostess-data";
 
-export const Route = createFileRoute("/hostess-form/$token")({
+export const Route = createFileRoute("/hostess-form")({
   head: () => ({
     meta: [
       { title: "Registračný formulár — NU-U" },
@@ -31,6 +28,9 @@ export const Route = createFileRoute("/hostess-form/$token")({
 });
 
 type PhotoState = { file: File; previewUrl: string; type: PhotoType };
+
+const DRAFT_KEY = "hostess-draft";
+const RECENT_SUBMIT_KEY = "hostess-recent-submit";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((res, rej) => {
@@ -44,89 +44,69 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-function HostessFormPage() {
-  const { token } = Route.useParams();
-  const navigate = useNavigate();
-  const [status, setStatus] = useState<"loading" | "ok" | "blocked">("loading");
-  const [blockedReason, setBlockedReason] = useState<string>("");
-  const [inviteLabel, setInviteLabel] = useState<string | null>(null);
+const EMPTY_FORM = {
+  first_name: "",
+  last_name: "",
+  birth_date: "",
+  phone: "",
+  email: "",
+  address: "",
+  city: "",
+  postal_code: "",
+  national_id: "",
+  identity_card_number: "",
+  iban: "",
+  nationality: "",
+  height: "",
+  clothing_size: "",
+  shoe_size: "",
+  hair_color: "",
+  languages: "",
+  experience: "",
+  availability: "",
+  note: "",
+  contract_type: "bez_zmluvy" as ContractType,
+};
+const EMPTY_CONSENTS: Record<ConsentType, boolean> = {
+  osobne_udaje: false,
+  pravdivost: false,
+  fotografie: false,
+  elektronicke_dokumenty: false,
+};
 
-  const [form, setForm] = useState({
-    first_name: "",
-    last_name: "",
-    birth_date: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "",
-    postal_code: "",
-    national_id: "",
-    identity_card_number: "",
-    iban: "",
-    nationality: "",
-    height: "",
-    clothing_size: "",
-    shoe_size: "",
-    hair_color: "",
-    languages: "",
-    experience: "",
-    availability: "",
-    note: "",
-    contract_type: "bez_zmluvy" as ContractType,
-  });
+function HostessFormPage() {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState(EMPTY_FORM);
   const [photos, setPhotos] = useState<Record<string, PhotoState[]>>({
     portret: [],
     cela_postava: [],
     profil: [],
     dalsia: [],
   });
-  const [consents, setConsents] = useState<Record<ConsentType, boolean>>({
-    osobne_udaje: false,
-    pravdivost: false,
-    fotografie: false,
-    elektronicke_dokumenty: false,
-  });
+  const [consents, setConsents] = useState<Record<ConsentType, boolean>>(EMPTY_CONSENTS);
   const [submitting, setSubmitting] = useState(false);
   const [successCode, setSuccessCode] = useState<string | null>(null);
 
-  const check = useServerFn(getHostessInviteInfo);
   const submit = useServerFn(submitHostessApplication);
 
+  // Load draft
   useEffect(() => {
-    (async () => {
-      try {
-        const r = await check({ data: { token } });
-        setInviteLabel(r.label);
-        if (r.usable) setStatus("ok");
-        else {
-          setBlockedReason(r.reason || "Odkaz nie je aktívny.");
-          setStatus("blocked");
-        }
-      } catch (e: any) {
-        setBlockedReason(e?.message || "Odkaz neexistuje.");
-        setStatus("blocked");
-      }
-    })();
-  }, [token, check]);
-
-  // persist draft
-  useEffect(() => {
-    const key = `hostess-draft-${token}`;
     try {
-      const raw = localStorage.getItem(key);
+      const raw = localStorage.getItem(DRAFT_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed.form) setForm((f) => ({ ...f, ...parsed.form }));
         if (parsed.consents) setConsents((c) => ({ ...c, ...parsed.consents }));
       }
     } catch {}
-  }, [token]);
+  }, []);
+  // Save draft
   useEffect(() => {
-    const key = `hostess-draft-${token}`;
     try {
-      localStorage.setItem(key, JSON.stringify({ form, consents }));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, consents }));
     } catch {}
-  }, [form, consents, token]);
+  }, [form, consents]);
 
   function set<K extends keyof typeof form>(k: K, v: (typeof form)[K]) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -168,6 +148,16 @@ function HostessFormPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (submitting) return;
+
+    // accidental duplicate protection (same browser session, within 30s)
+    try {
+      const last = sessionStorage.getItem(RECENT_SUBMIT_KEY);
+      if (last && Date.now() - Number(last) < 30_000) {
+        toast.error("Prihláška bola práve odoslaná. Skúste to prosím o chvíľu.");
+        return;
+      }
+    } catch {}
+
     // required checks
     if (!form.first_name.trim() || !form.last_name.trim()) {
       toast.error("Vyplňte meno a priezvisko.");
@@ -200,7 +190,6 @@ function HostessFormPage() {
       );
       const result = await submit({
         data: {
-          token,
           profile: form,
           photos: encoded,
           consents: CONSENTS.map((c) => ({ type: c.value, accepted: consents[c.value] })),
@@ -208,8 +197,17 @@ function HostessFormPage() {
       });
       setSuccessCode(result.applicationCode);
       try {
-        localStorage.removeItem(`hostess-draft-${token}`);
+        sessionStorage.setItem(RECENT_SUBMIT_KEY, String(Date.now()));
+        localStorage.removeItem(DRAFT_KEY);
       } catch {}
+      // Clear the form
+      setForm(EMPTY_FORM);
+      setConsents(EMPTY_CONSENTS);
+      // revoke previews
+      for (const t of Object.keys(photos) as PhotoType[]) {
+        for (const p of photos[t]) URL.revokeObjectURL(p.previewUrl);
+      }
+      setPhotos({ portret: [], cela_postava: [], profil: [], dalsia: [] });
     } catch (err: any) {
       toast.error(err?.message || "Odoslanie zlyhalo. Skúste znova.");
     } finally {
@@ -217,23 +215,6 @@ function HostessFormPage() {
     }
   }
 
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen grid place-items-center bg-[#EBE6E2] text-[#726D6A]">
-        <Loader2 className="h-6 w-6 animate-spin" />
-      </div>
-    );
-  }
-  if (status === "blocked") {
-    return (
-      <div className="min-h-screen grid place-items-center bg-[#EBE6E2] px-6">
-        <div className="max-w-md w-full bg-[#F5F1EC] border border-[#D9D2CC] rounded-2xl p-8 text-center">
-          <h1 className="text-xl font-medium text-[#383B3A] mb-2">Odkaz nie je dostupný</h1>
-          <p className="text-sm text-[#726D6A]">{blockedReason}</p>
-        </div>
-      </div>
-    );
-  }
   if (successCode) {
     return (
       <div className="min-h-screen grid place-items-center bg-[#EBE6E2] px-6 py-12">
@@ -245,12 +226,20 @@ function HostessFormPage() {
           </p>
           <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A]">Číslo prihlášky</div>
           <div className="mt-1 font-mono text-lg text-[#383B3A]">{successCode}</div>
-          <button
-            onClick={() => navigate({ to: "/" })}
-            className="mt-6 inline-flex rounded-full bg-[#383B3A] text-[#F5F1EC] px-6 py-2.5 text-sm"
-          >
-            Späť na domovskú stránku
-          </button>
+          <div className="mt-6 flex flex-col gap-2">
+            <button
+              onClick={() => setSuccessCode(null)}
+              className="inline-flex justify-center rounded-full border border-[#D9D2CC] px-6 py-2.5 text-sm"
+            >
+              Vyplniť ďalšiu prihlášku
+            </button>
+            <button
+              onClick={() => navigate({ to: "/" })}
+              className="inline-flex justify-center rounded-full bg-[#383B3A] text-[#F5F1EC] px-6 py-2.5 text-sm"
+            >
+              Späť na domovskú stránku
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -262,9 +251,6 @@ function HostessFormPage() {
         <header className="mb-8 text-center">
           <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A]">NU-U agentúra</div>
           <h1 className="text-2xl md:text-3xl font-medium mt-2">Registračný formulár hostesky</h1>
-          {inviteLabel && (
-            <div className="mt-2 text-sm text-[#726D6A]">Pozvánka: {inviteLabel}</div>
-          )}
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-8">

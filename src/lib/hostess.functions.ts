@@ -4,18 +4,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { ContractType, HostessStatus, PhotoType, ConsentType } from "./hostess-data";
 
 const BUCKET = "hostess-photos";
-const CONTRACT_BUCKET = "contract-templates"; // may be created later; template upload will surface a message if missing
-
-// ---------- utils ----------
-async function sha256Hex(input: string): Promise<string> {
-  const { createHash } = await import("crypto");
-  return createHash("sha256").update(input).digest("hex");
-}
-
-function randomToken(): string {
-  const { randomBytes } = require("crypto") as typeof import("crypto");
-  return randomBytes(24).toString("base64url");
-}
 
 async function assertAdmin(supabase: any, userId: string) {
   const { data, error } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
@@ -34,36 +22,6 @@ function getClientIp(): string | null {
     return null;
   }
 }
-
-// ---------- public: get invite info ----------
-export const getHostessInviteInfo = createServerFn({ method: "POST" })
-  .inputValidator((d: { token: string }) => d)
-  .handler(async ({ data }) => {
-    const token = (data.token || "").trim();
-    if (!token) throw new Error("Neplatný odkaz.");
-    const tokenHash = await sha256Hex(token);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: invite } = await supabaseAdmin
-      .from("hostess_invites")
-      .select("id, label, max_submissions, submission_count, expires_at, is_active")
-      .eq("token_hash", tokenHash)
-      .maybeSingle();
-    if (!invite) throw new Error("Odkaz neexistuje.");
-    const expired = invite.expires_at && new Date(invite.expires_at).getTime() < Date.now();
-    const exhausted = invite.submission_count >= invite.max_submissions;
-    const usable = invite.is_active && !expired && !exhausted;
-    return {
-      label: invite.label,
-      usable,
-      reason: !invite.is_active
-        ? "Odkaz bol deaktivovaný."
-        : expired
-          ? "Platnosť odkazu vypršala."
-          : exhausted
-            ? "Odkaz bol už použitý."
-            : null,
-    };
-  });
 
 // ---------- public: submit application ----------
 type PhotoPayload = { type: PhotoType; base64: string; filename: string; mime: string; size: number };
@@ -94,30 +52,13 @@ type ProfileFields = {
 export const submitHostessApplication = createServerFn({ method: "POST" })
   .inputValidator(
     (d: {
-      token: string;
       profile: ProfileFields;
       photos: PhotoPayload[];
       consents: { type: ConsentType; accepted: boolean }[];
     }) => d,
   )
   .handler(async ({ data }) => {
-    const token = (data.token || "").trim();
-    if (!token) throw new Error("Neplatný odkaz.");
-    const tokenHash = await sha256Hex(token);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    // validate invite
-    const { data: invite, error: iErr } = await supabaseAdmin
-      .from("hostess_invites")
-      .select("id, max_submissions, submission_count, expires_at, is_active")
-      .eq("token_hash", tokenHash)
-      .maybeSingle();
-    if (iErr || !invite) throw new Error("Odkaz neexistuje.");
-    if (!invite.is_active) throw new Error("Odkaz bol deaktivovaný.");
-    if (invite.expires_at && new Date(invite.expires_at).getTime() < Date.now())
-      throw new Error("Platnosť odkazu vypršala.");
-    if (invite.submission_count >= invite.max_submissions)
-      throw new Error("Odkaz bol už použitý.");
 
     // validate required fields
     if (!data.profile.first_name?.trim() || !data.profile.last_name?.trim())
@@ -142,7 +83,6 @@ export const submitHostessApplication = createServerFn({ method: "POST" })
     const { data: profile, error: pErr } = await supabaseAdmin
       .from("hostess_profiles")
       .insert({
-        invite_id: invite.id,
         first_name: data.profile.first_name.trim(),
         last_name: data.profile.last_name.trim(),
         birth_date: data.profile.birth_date || null,
@@ -213,92 +153,7 @@ export const submitHostessApplication = createServerFn({ method: "POST" })
       })),
     );
 
-    // increment invite
-    await supabaseAdmin
-      .from("hostess_invites")
-      .update({ submission_count: invite.submission_count + 1 })
-      .eq("id", invite.id);
-
     return { applicationCode: profile.application_code, profileId: profile.id };
-  });
-
-// ---------- admin: invites ----------
-export const createHostessInvite = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (d: {
-      label?: string;
-      internal_note?: string;
-      max_submissions: number;
-      expires_at?: string | null;
-    }) => d,
-  )
-  .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const token = randomToken();
-    const tokenHash = await sha256Hex(token);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
-      .from("hostess_invites")
-      .insert({
-        token_hash: tokenHash,
-        label: data.label?.trim() || null,
-        internal_note: data.internal_note?.trim() || null,
-        max_submissions: Math.max(1, Math.min(1000, data.max_submissions || 1)),
-        expires_at: data.expires_at || null,
-        created_by: context.userId,
-      })
-      .select("id")
-      .single();
-    if (error || !row) throw new Error(error?.message || "Nepodarilo sa vytvoriť odkaz.");
-    await supabaseAdmin.from("hostess_admin_log").insert({
-      admin_id: context.userId,
-      action: "invite.create",
-      target_type: "hostess_invite",
-      target_id: row.id,
-    });
-    return { id: row.id, token };
-  });
-
-export const listHostessInvites = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { data, error } = await context.supabase
-      .from("hostess_invites")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
-    return data || [];
-  });
-
-export const setHostessInviteActive = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d: { id: string; active: boolean }) => d)
-  .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase
-      .from("hostess_invites")
-      .update({ is_active: data.active })
-      .eq("id", data.id);
-    if (error) throw new Error(error.message);
-    await context.supabase.from("hostess_admin_log").insert({
-      admin_id: context.userId,
-      action: data.active ? "invite.activate" : "invite.deactivate",
-      target_type: "hostess_invite",
-      target_id: data.id,
-    });
-    return { ok: true };
-  });
-
-export const deleteHostessInvite = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d: { id: string }) => d)
-  .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase.from("hostess_invites").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { ok: true };
   });
 
 // ---------- admin: hostesses ----------
@@ -382,7 +237,6 @@ export const deleteHostess = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    // remove storage files
     const { data: photos } = await supabaseAdmin
       .from("hostess_photos")
       .select("storage_path")

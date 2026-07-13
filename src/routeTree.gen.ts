@@ -10,11 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrenajomObleceniaRouteImport } from './routes/prenajom-oblecenia'
+import { Route as HostessFormRouteImport } from './routes/hostess-form'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as HostessFormTokenRouteImport } from './routes/hostess-form.$token'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
@@ -24,12 +24,16 @@ import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminContractsRouteImport } from './routes/admin.contracts'
 import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
 import { Route as AdminHostessesIndexRouteImport } from './routes/admin.hostesses.index'
-import { Route as AdminHostessesInvitationsRouteImport } from './routes/admin.hostesses.invitations'
 import { Route as AdminHostessesIdRouteImport } from './routes/admin.hostesses.$id'
 
 const PrenajomObleceniaRoute = PrenajomObleceniaRouteImport.update({
   id: '/prenajom-oblecenia',
   path: '/prenajom-oblecenia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostessFormRoute = HostessFormRouteImport.update({
+  id: '/hostess-form',
+  path: '/hostess-form',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GaleriaRoute = GaleriaRouteImport.update({
@@ -51,11 +55,6 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
-} as any)
-const HostessFormTokenRoute = HostessFormTokenRouteImport.update({
-  id: '/hostess-form/$token',
-  path: '/hostess-form/$token',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
@@ -102,12 +101,6 @@ const AdminHostessesIndexRoute = AdminHostessesIndexRouteImport.update({
   path: '/hostesses/',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminHostessesInvitationsRoute =
-  AdminHostessesInvitationsRouteImport.update({
-    id: '/hostesses/invitations',
-    path: '/hostesses/invitations',
-    getParentRoute: () => AdminRoute,
-  } as any)
 const AdminHostessesIdRoute = AdminHostessesIdRouteImport.update({
   id: '/hostesses/$id',
   path: '/hostesses/$id',
@@ -118,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
+  '/hostess-form': typeof HostessFormRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
@@ -127,15 +121,14 @@ export interface FileRoutesByFullPath {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/hostesses/$id': typeof AdminHostessesIdRoute
-  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
   '/admin/hostesses/': typeof AdminHostessesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/galeria': typeof GaleriaRoute
+  '/hostess-form': typeof HostessFormRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
@@ -145,10 +138,8 @@ export interface FileRoutesByTo {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin': typeof AdminIndexRoute
   '/admin/hostesses/$id': typeof AdminHostessesIdRoute
-  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
   '/admin/hostesses': typeof AdminHostessesIndexRoute
 }
 export interface FileRoutesById {
@@ -156,6 +147,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/galeria': typeof GaleriaRoute
+  '/hostess-form': typeof HostessFormRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
@@ -165,10 +157,8 @@ export interface FileRoutesById {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/hostesses/$id': typeof AdminHostessesIdRoute
-  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
   '/admin/hostesses/': typeof AdminHostessesIndexRoute
 }
 export interface FileRouteTypes {
@@ -177,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/galeria'
+    | '/hostess-form'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
@@ -186,15 +177,14 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
-    | '/hostess-form/$token'
     | '/admin/'
     | '/admin/hostesses/$id'
-    | '/admin/hostesses/invitations'
     | '/admin/hostesses/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/galeria'
+    | '/hostess-form'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
@@ -204,16 +194,15 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
-    | '/hostess-form/$token'
     | '/admin'
     | '/admin/hostesses/$id'
-    | '/admin/hostesses/invitations'
     | '/admin/hostesses'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/galeria'
+    | '/hostess-form'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
@@ -223,10 +212,8 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
-    | '/hostess-form/$token'
     | '/admin/'
     | '/admin/hostesses/$id'
-    | '/admin/hostesses/invitations'
     | '/admin/hostesses/'
   fileRoutesById: FileRoutesById
 }
@@ -234,8 +221,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   GaleriaRoute: typeof GaleriaRoute
+  HostessFormRoute: typeof HostessFormRoute
   PrenajomObleceniaRoute: typeof PrenajomObleceniaRoute
-  HostessFormTokenRoute: typeof HostessFormTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -245,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/prenajom-oblecenia'
       fullPath: '/prenajom-oblecenia'
       preLoaderRoute: typeof PrenajomObleceniaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hostess-form': {
+      id: '/hostess-form'
+      path: '/hostess-form'
+      fullPath: '/hostess-form'
+      preLoaderRoute: typeof HostessFormRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galeria': {
@@ -274,13 +268,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
-    }
-    '/hostess-form/$token': {
-      id: '/hostess-form/$token'
-      path: '/hostess-form/$token'
-      fullPath: '/hostess-form/$token'
-      preLoaderRoute: typeof HostessFormTokenRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/admin/settings': {
       id: '/admin/settings'
@@ -345,13 +332,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHostessesIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/hostesses/invitations': {
-      id: '/admin/hostesses/invitations'
-      path: '/hostesses/invitations'
-      fullPath: '/admin/hostesses/invitations'
-      preLoaderRoute: typeof AdminHostessesInvitationsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/hostesses/$id': {
       id: '/admin/hostesses/$id'
       path: '/hostesses/$id'
@@ -373,7 +353,6 @@ interface AdminRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminHostessesIdRoute: typeof AdminHostessesIdRoute
-  AdminHostessesInvitationsRoute: typeof AdminHostessesInvitationsRoute
   AdminHostessesIndexRoute: typeof AdminHostessesIndexRoute
 }
 
@@ -388,7 +367,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminHostessesIdRoute: AdminHostessesIdRoute,
-  AdminHostessesInvitationsRoute: AdminHostessesInvitationsRoute,
   AdminHostessesIndexRoute: AdminHostessesIndexRoute,
 }
 
@@ -398,19 +376,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   GaleriaRoute: GaleriaRoute,
+  HostessFormRoute: HostessFormRoute,
   PrenajomObleceniaRoute: PrenajomObleceniaRoute,
-  HostessFormTokenRoute: HostessFormTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

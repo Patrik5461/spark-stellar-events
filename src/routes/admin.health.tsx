@@ -80,6 +80,54 @@ function HealthPage() {
       results.push({ label: "Prijaté správy", status: "error", detail: (e as Error).message });
     }
 
+    // Hostess profiles (admin select)
+    try {
+      const { count, error } = await supabase.from("hostess_profiles").select("id", { count: "exact", head: true });
+      results.push({
+        label: "Hostess profiles – admin select",
+        status: error ? "error" : "healthy",
+        detail: error?.message ?? `${count ?? 0} prihlášok`,
+      });
+    } catch (e) {
+      results.push({ label: "Hostess profiles – admin select", status: "error", detail: (e as Error).message });
+    }
+
+    // Hostess photos storage bucket
+    try {
+      const { data, error } = await supabase.storage.from("hostess-photos").list("", { limit: 1 });
+      results.push({
+        label: "Storage bucket 'hostess-photos'",
+        status: error ? "error" : "healthy",
+        detail: error?.message ?? `Prístup OK (${data?.length ?? 0} položiek)`,
+      });
+    } catch (e) {
+      results.push({ label: "Storage bucket 'hostess-photos'", status: "error", detail: (e as Error).message });
+    }
+
+    // Contract templates
+    try {
+      const { count, error } = await supabase.from("contract_templates").select("id", { count: "exact", head: true });
+      results.push({
+        label: "Šablóny zmlúv",
+        status: error ? "error" : "healthy",
+        detail: error?.message ?? `${count ?? 0} šablón`,
+      });
+    } catch (e) {
+      results.push({ label: "Šablóny zmlúv", status: "error", detail: (e as Error).message });
+    }
+
+    // Public hostess form availability
+    try {
+      const r = await fetch("/hostess-form", { method: "GET", redirect: "follow" });
+      results.push({
+        label: "Verejný formulár /hostess-form",
+        status: r.ok ? "healthy" : "error",
+        detail: r.ok ? `HTTP ${r.status}` : `HTTP ${r.status}`,
+      });
+    } catch (e) {
+      results.push({ label: "Verejný formulár /hostess-form", status: "error", detail: (e as Error).message });
+    }
+
     // Env
     const env = !!import.meta.env.VITE_SUPABASE_URL && !!import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     results.push({ label: "Prostredie (env)", status: env ? "healthy" : "error", detail: env ? "VITE_SUPABASE_* nastavené" : "Chýba VITE_SUPABASE_*" });
