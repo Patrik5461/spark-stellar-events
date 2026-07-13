@@ -5,12 +5,12 @@ import { toast } from "sonner";
 import { CheckCircle2, Loader2, Upload, X } from "lucide-react";
 import { submitHostessApplication } from "@/lib/hostess.functions";
 import {
-  CONTRACT_TYPES,
   CONSENTS,
   PHOTO_TYPES,
   ACCEPT_EXT,
   ACCEPT_MIME,
   MAX_PHOTO_BYTES,
+  DEFAULT_CONTRACT_TYPE,
   type ContractType,
   type PhotoType,
   type ConsentType,
