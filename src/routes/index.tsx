@@ -15,6 +15,7 @@ import g5 from "@/assets/g5.jpg";
 import g6 from "@/assets/g6.jpg";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
 import { useGalleryImages } from "@/lib/use-gallery";
+import { useSiteSettings, pick, type SiteSettings } from "@/lib/use-site-settings";
 
 export const Route = createFileRoute("/")({
   head: () => ({
