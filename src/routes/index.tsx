@@ -291,7 +291,7 @@ function Services() {
   );
 }
 
-function WhyUs() {
+function WhyUs({ settings }: { settings: SiteSettings | null }) {
   const stats = [
     ["10+", "rokov skúseností"],
     ["500+", "úspešných eventov"],
