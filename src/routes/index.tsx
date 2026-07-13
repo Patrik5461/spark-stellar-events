@@ -352,7 +352,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
   );
 }
 
-function GalleryPreview() {
+function GalleryPreview({ settings }: { settings: SiteSettings | null }) {
   const { items, loading } = useGalleryImages({ featuredOnly: true, limit: 6 });
   const featured = items.slice(0, 6);
   const isEmpty = !loading && featured.length === 0;
@@ -367,7 +367,7 @@ function GalleryPreview() {
               Galéria
             </h2>
             <p className="mt-6 max-w-md text-[#726D6A] leading-relaxed">
-              Pozrite si výber z našich realizácií.
+              {pick(settings, "gallery_intro", "Pozrite si výber z našich realizácií.")}
             </p>
           </div>
           {!isEmpty && (
