@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
 import { ArrowUpRight, ImageIcon, Upload } from "lucide-react";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
 import { GalleryGrid } from "@/components/gallery-grid";
-import { GALLERY_CATEGORIES } from "@/lib/gallery-data";
 import { useGalleryImages } from "@/lib/use-gallery";
 import { useAdminAuth } from "@/lib/admin-auth";
 
@@ -24,15 +22,10 @@ export const Route = createFileRoute("/galeria")({
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 function GaleriaPage() {
-  const [filter, setFilter] = useState<(typeof GALLERY_CATEGORIES)[number]>("Všetko");
-  const { items: allItems, loading } = useGalleryImages();
+  const { items, loading } = useGalleryImages();
   const { isAdmin } = useAdminAuth();
-  const items = useMemo(
-    () => (filter === "Všetko" ? allItems : allItems.filter((g) => g.category === filter)),
-    [filter, allItems],
-  );
 
-  const isEmpty = !loading && allItems.length === 0;
+  const isEmpty = !loading && items.length === 0;
 
   return (
     <motion.main
@@ -68,41 +61,7 @@ function GaleriaPage() {
           {isEmpty ? (
             <GalleryEmptyState isAdmin={isAdmin} />
           ) : (
-            <>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
-                className="flex flex-wrap gap-2 mb-12"
-              >
-                {GALLERY_CATEGORIES.map((c) => {
-                  const active = filter === c;
-                  return (
-                    <button
-                      key={c}
-                      type="button"
-                      onClick={() => setFilter(c)}
-                      className={`rounded-full px-5 py-2.5 text-sm transition-all border ${
-                        active
-                          ? "bg-[#383B3A] text-[#F5F1EC] border-[#383B3A]"
-                          : "bg-transparent text-[#383B3A] border-[#D9D2CC] hover:bg-[#D4C7BD]/50"
-                      }`}
-                      aria-pressed={active}
-                    >
-                      {c}
-                    </button>
-                  );
-                })}
-              </motion.div>
-
-              <GalleryGrid items={items} />
-
-              {items.length === 0 && (
-                <p className="text-center text-[#726D6A] py-20">
-                  V tejto kategórii zatiaľ nemáme zverejnené žiadne fotografie.
-                </p>
-              )}
-            </>
+            <GalleryGrid items={items} />
           )}
 
           <div className="mt-20 text-center">
