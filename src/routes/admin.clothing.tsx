@@ -42,7 +42,8 @@ type FormState = {
   priceOnRequest: boolean;
   size: string;
   color: string;
-  availability: Availability;
+  material: string;
+  quantity: string;
   internalNote: string;
   sortOrder: string;
   isActive: boolean;
@@ -63,7 +64,8 @@ function emptyForm(): FormState {
     priceOnRequest: false,
     size: "",
     color: "",
-    availability: "available",
+    material: "",
+    quantity: "0",
     internalNote: "",
     sortOrder: "0",
     isActive: true,
@@ -85,7 +87,8 @@ function rowToForm(r: Row): FormState {
     priceOnRequest: r.price_on_request ?? false,
     size: r.size ?? "",
     color: r.color ?? "",
-    availability: (r.availability as Availability) ?? "available",
+    material: (r as unknown as { material?: string }).material ?? "",
+    quantity: String((r as unknown as { quantity?: number }).quantity ?? 0),
     internalNote: r.internal_note ?? "",
     sortOrder: String(r.sort_order ?? 0),
     isActive: r.is_active ?? true,
