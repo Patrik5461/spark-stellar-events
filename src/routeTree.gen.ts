@@ -14,13 +14,18 @@ import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as HostessFormTokenRouteImport } from './routes/hostess-form.$token'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminContractsRouteImport } from './routes/admin.contracts'
 import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
+import { Route as AdminHostessesIndexRouteImport } from './routes/admin.hostesses.index'
+import { Route as AdminHostessesInvitationsRouteImport } from './routes/admin.hostesses.invitations'
+import { Route as AdminHostessesIdRouteImport } from './routes/admin.hostesses.$id'
 
 const PrenajomObleceniaRoute = PrenajomObleceniaRouteImport.update({
   id: '/prenajom-oblecenia',
@@ -46,6 +51,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const HostessFormTokenRoute = HostessFormTokenRouteImport.update({
+  id: '/hostess-form/$token',
+  path: '/hostess-form/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
@@ -77,9 +87,30 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminContractsRoute = AdminContractsRouteImport.update({
+  id: '/contracts',
+  path: '/contracts',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminClothingRoute = AdminClothingRouteImport.update({
   id: '/clothing',
   path: '/clothing',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHostessesIndexRoute = AdminHostessesIndexRouteImport.update({
+  id: '/hostesses/',
+  path: '/hostesses/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHostessesInvitationsRoute =
+  AdminHostessesInvitationsRouteImport.update({
+    id: '/hostesses/invitations',
+    path: '/hostesses/invitations',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminHostessesIdRoute = AdminHostessesIdRouteImport.update({
+  id: '/hostesses/$id',
+  path: '/hostesses/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -89,26 +120,36 @@ export interface FileRoutesByFullPath {
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
+  '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/hostesses/$id': typeof AdminHostessesIdRoute
+  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
+  '/admin/hostesses/': typeof AdminHostessesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
+  '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/hostesses/$id': typeof AdminHostessesIdRoute
+  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
+  '/admin/hostesses': typeof AdminHostessesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,13 +158,18 @@ export interface FileRoutesById {
   '/galeria': typeof GaleriaRoute
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
+  '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/hostess-form/$token': typeof HostessFormTokenRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/hostesses/$id': typeof AdminHostessesIdRoute
+  '/admin/hostesses/invitations': typeof AdminHostessesInvitationsRoute
+  '/admin/hostesses/': typeof AdminHostessesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -133,26 +179,36 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
+    | '/admin/contracts'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
+    | '/hostess-form/$token'
     | '/admin/'
+    | '/admin/hostesses/$id'
+    | '/admin/hostesses/invitations'
+    | '/admin/hostesses/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/galeria'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
+    | '/admin/contracts'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
+    | '/hostess-form/$token'
     | '/admin'
+    | '/admin/hostesses/$id'
+    | '/admin/hostesses/invitations'
+    | '/admin/hostesses'
   id:
     | '__root__'
     | '/'
@@ -160,13 +216,18 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/prenajom-oblecenia'
     | '/admin/clothing'
+    | '/admin/contracts'
     | '/admin/gallery'
     | '/admin/health'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
+    | '/hostess-form/$token'
     | '/admin/'
+    | '/admin/hostesses/$id'
+    | '/admin/hostesses/invitations'
+    | '/admin/hostesses/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -174,6 +235,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   GaleriaRoute: typeof GaleriaRoute
   PrenajomObleceniaRoute: typeof PrenajomObleceniaRoute
+  HostessFormTokenRoute: typeof HostessFormTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +274,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/hostess-form/$token': {
+      id: '/hostess-form/$token'
+      path: '/hostess-form/$token'
+      fullPath: '/hostess-form/$token'
+      preLoaderRoute: typeof HostessFormTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/settings': {
       id: '/admin/settings'
@@ -255,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGalleryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/contracts': {
+      id: '/admin/contracts'
+      path: '/contracts'
+      fullPath: '/admin/contracts'
+      preLoaderRoute: typeof AdminContractsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/clothing': {
       id: '/admin/clothing'
       path: '/clothing'
@@ -262,11 +338,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminClothingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/hostesses/': {
+      id: '/admin/hostesses/'
+      path: '/hostesses'
+      fullPath: '/admin/hostesses/'
+      preLoaderRoute: typeof AdminHostessesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hostesses/invitations': {
+      id: '/admin/hostesses/invitations'
+      path: '/hostesses/invitations'
+      fullPath: '/admin/hostesses/invitations'
+      preLoaderRoute: typeof AdminHostessesInvitationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hostesses/$id': {
+      id: '/admin/hostesses/$id'
+      path: '/hostesses/$id'
+      fullPath: '/admin/hostesses/$id'
+      preLoaderRoute: typeof AdminHostessesIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
   AdminClothingRoute: typeof AdminClothingRoute
+  AdminContractsRoute: typeof AdminContractsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminHealthRoute: typeof AdminHealthRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -274,10 +372,14 @@ interface AdminRouteChildren {
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminHostessesIdRoute: typeof AdminHostessesIdRoute
+  AdminHostessesInvitationsRoute: typeof AdminHostessesInvitationsRoute
+  AdminHostessesIndexRoute: typeof AdminHostessesIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminClothingRoute: AdminClothingRoute,
+  AdminContractsRoute: AdminContractsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminHealthRoute: AdminHealthRoute,
   AdminLoginRoute: AdminLoginRoute,
@@ -285,6 +387,9 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminHostessesIdRoute: AdminHostessesIdRoute,
+  AdminHostessesInvitationsRoute: AdminHostessesInvitationsRoute,
+  AdminHostessesIndexRoute: AdminHostessesIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -294,6 +399,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   GaleriaRoute: GaleriaRoute,
   PrenajomObleceniaRoute: PrenajomObleceniaRoute,
+  HostessFormTokenRoute: HostessFormTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
