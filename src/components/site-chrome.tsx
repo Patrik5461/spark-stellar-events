@@ -3,6 +3,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowUp, Instagram, Linkedin, Facebook, Lock, Menu, X } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { useSiteSettings, pick } from "@/lib/use-site-settings";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
