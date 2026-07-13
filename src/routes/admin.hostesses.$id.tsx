@@ -135,6 +135,8 @@ function HostessDetail() {
             <p className="mt-3 text-xs text-[#726D6A]">Zvolený typ zmluvy sa použije pri generovaní zmluvného dokumentu.</p>
           </div>
 
+          <ContractsSection hostessId={id} />
+
           <Fieldset title="Osobné údaje" form={form} setForm={setForm} fields={[
             ["first_name","Meno"],["last_name","Priezvisko"],
             ["birth_date","Dátum narodenia","date"],["phone","Telefón"],
