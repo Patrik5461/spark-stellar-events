@@ -15,6 +15,7 @@ import g5 from "@/assets/g5.jpg";
 import g6 from "@/assets/g6.jpg";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
 import { useGalleryImages } from "@/lib/use-gallery";
+import { useSiteSettings, pick, type SiteSettings } from "@/lib/use-site-settings";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -81,12 +82,16 @@ function AnimatedHeadline({ text, className }: { text: string; className?: strin
 
 
 
-function Hero() {
+function Hero({ settings }: { settings: SiteSettings | null }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const headline = pick(settings, "hero_headline", "Ľudia, ktorí robia rozdiel na každom evente.");
+  const subtitle = pick(settings, "hero_subtitle", "Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku aj v zahraničí.");
+  const ctaPrimary = pick(settings, "cta_primary", "Kontaktujte nás");
+  const ctaSecondary = pick(settings, "cta_secondary", "Naše služby");
   return (
     <section ref={ref} className="relative min-h-[96vh] flex flex-col pt-32 md:pt-44 pb-16 px-6">
       <div className="mx-auto max-w-7xl w-full flex-1 flex flex-col">
@@ -102,7 +107,7 @@ function Hero() {
 
         <motion.div style={{ y: textY }}>
           <AnimatedHeadline
-            text="Ľudia, ktorí robia rozdiel na každom evente."
+            text={headline}
             className="font-display font-semibold text-[clamp(2.5rem,9vw,8.5rem)] leading-[1.02] tracking-[-0.02em] text-balance text-[#383B3A] max-w-[18ch]"
           />
         </motion.div>
@@ -113,8 +118,7 @@ function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="max-w-[52ch] text-lg md:text-xl text-[#726D6A] leading-[1.7]"
           >
-            Profesionálny hostessing, promotéri, helperi a kompletné
-            personálne zabezpečenie eventov na Slovensku aj v zahraničí.
+            {subtitle}
           </motion.p>
 
           <motion.div
@@ -128,7 +132,7 @@ function Hero() {
               whileTap={{ scale: 0.98 }}
               className="group inline-flex items-center gap-3 rounded-full bg-[#383B3A] px-8 py-4 text-sm font-medium text-[#F5F1EC] transition-shadow duration-500 hover:shadow-[0_20px_50px_-15px_rgba(56,59,58,0.55)]"
             >
-              Kontaktujte nás
+              {ctaPrimary}
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </motion.a>
             <motion.a
@@ -137,7 +141,7 @@ function Hero() {
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-3 rounded-full border border-[#383B3A] px-8 py-4 text-sm text-[#383B3A] transition-colors hover:bg-[#D4C7BD]/50"
             >
-              Naše služby
+              {ctaSecondary}
             </motion.a>
           </motion.div>
         </div>
@@ -287,7 +291,7 @@ function Services() {
   );
 }
 
-function WhyUs() {
+function WhyUs({ settings }: { settings: SiteSettings | null }) {
   const stats = [
     ["10+", "rokov skúseností"],
     ["500+", "úspešných eventov"],
@@ -319,10 +323,9 @@ function WhyUs() {
             Nie agentúra. <em className="italic text-[#726D6A]">Partner</em> pre vašu značku.
           </h2>
           <p className="mt-8 text-[#726D6A] leading-relaxed max-w-lg">
-            Vyberáme ľudí, ktorých by sme s pokojom poslali aj na vlastnú
-            svadbu. Trénujeme ich, oblečieme a postavíme za nimi celý
-            backoffice — vy len dostanete výsledok.
+            {pick(settings, "about_text", "Vyberáme ľudí, ktorých by sme s pokojom poslali aj na vlastnú svadbu. Trénujeme ich, oblečieme a postavíme za nimi celý backoffice — vy len dostanete výsledok.")}
           </p>
+
 
           <ul className="mt-8 space-y-3">
             {["Osobný projektový manažér 24/7", "Vlastné premium uniformy", "Záložný tím pre každý event", "Reporting a foto z miesta"].map((t) => (
@@ -349,7 +352,7 @@ function WhyUs() {
   );
 }
 
-function GalleryPreview() {
+function GalleryPreview({ settings }: { settings: SiteSettings | null }) {
   const { items, loading } = useGalleryImages({ featuredOnly: true, limit: 6 });
   const featured = items.slice(0, 6);
   const isEmpty = !loading && featured.length === 0;
@@ -364,7 +367,7 @@ function GalleryPreview() {
               Galéria
             </h2>
             <p className="mt-6 max-w-md text-[#726D6A] leading-relaxed">
-              Pozrite si výber z našich realizácií.
+              {pick(settings, "gallery_intro", "Pozrite si výber z našich realizácií.")}
             </p>
           </div>
           {!isEmpty && (
@@ -560,7 +563,17 @@ function CTABanner() {
   );
 }
 
-function Contact() {
+function Contact({ settings }: { settings: SiteSettings | null }) {
+  const email = pick(settings, "email", "info@nu-u.sk");
+  const phone = pick(settings, "phone", "+421 905 454 498");
+  const address = pick(settings, "address", "Gazdovská 1901/7b, 900 41 Rovinka");
+  const billingName = pick(settings, "billing_name", "nuu s.r.o.");
+  const billingAddress = pick(settings, "billing_address", "Gazdovská 1901/7b, 900 41 Rovinka");
+  const ico = pick(settings, "billing_ico", "550428872");
+  const dic = pick(settings, "billing_dic", "2121851754");
+  const icDph = pick(settings, "billing_ic_dph", "SK2121851754");
+  const iban = pick(settings, "billing_iban", "SK39 8330 0000 0020 0248 9216");
+  const contactText = pick(settings, "contact_text", "Odpovedáme do 24 hodín. Bez šablón, bez auto-mailov — odpíše vám konkrétny človek.");
   return (
     <section id="contact" className="py-40 px-6">
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16">
@@ -570,14 +583,14 @@ function Contact() {
             Povedzte nám o vašom <em className="italic text-[#726D6A]">evente.</em>
           </h2>
           <p className="mt-6 text-[#726D6A] max-w-md">
-            Odpovedáme do 24 hodín. Bez šablón, bez auto-mailov — odpíše vám konkrétny človek.
+            {contactText}
           </p>
 
           <div className="mt-12 space-y-5">
             {[
-              [Mail, "info@nu-u.sk", "mailto:info@nu-u.sk"],
-              [Phone, "+421 905 454 498", "tel:+421905454498"],
-              [MapPin, "nuu s.r.o. · Gazdovská 1901/7b, 900 41 Rovinka", "#"],
+              [Mail, email, `mailto:${email}`],
+              [Phone, phone, `tel:${phone.replace(/\s+/g, "")}`],
+              [MapPin, `${billingName} · ${address}`, "#"],
             ].map(([Icon, label, href], i) => {
               const I = Icon as typeof Mail;
               return (
@@ -594,15 +607,15 @@ function Contact() {
           <div className="mt-10 rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow">
             <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
             <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
-              <p className="font-medium">nuu s.r.o.</p>
-              <p>Gazdovská 1901/7b</p>
-              <p>900 41 Rovinka</p>
-              <p>IČO: 550428872</p>
-              <p>DIČ: 2121851754</p>
-              <p>IČ DPH: SK2121851754</p>
-              <p>IBAN: SK39 8330 0000 0020 0248 9216</p>
+              <p className="font-medium">{billingName}</p>
+              <p>{billingAddress}</p>
+              <p>IČO: {ico}</p>
+              <p>DIČ: {dic}</p>
+              <p>IČ DPH: {icDph}</p>
+              <p>IBAN: {iban}</p>
             </div>
           </div>
+
 
           <div className="mt-6 aspect-[2/1] rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow">
             <iframe
@@ -756,18 +769,19 @@ function ContactForm() {
 
 
 function Home() {
+  const settings = useSiteSettings();
   return (
     <main className="bg-[#EBE6E2] text-[#383B3A] overflow-x-hidden">
       <Navbar />
-      <Hero />
+      <Hero settings={settings} />
       <Marquee />
       <Services />
-      <WhyUs />
-      <GalleryPreview />
+      <WhyUs settings={settings} />
+      <GalleryPreview settings={settings} />
       <Process />
       <Testimonials />
       <CTABanner />
-      <Contact />
+      <Contact settings={settings} />
       <Footer />
       <BackToTop />
     </main>
