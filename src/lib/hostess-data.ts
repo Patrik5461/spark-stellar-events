@@ -1,9 +1,11 @@
 export const CONTRACT_TYPES = [
+  { value: "nepriradene", label: "Zatiaľ nepriradené" },
   { value: "prikazna_zmluva", label: "Príkazná zmluva" },
   { value: "dohoda_o_vykonani_prace", label: "Dohoda o vykonaní práce" },
-  { value: "bez_zmluvy", label: "Zatiaľ bez zmluvy" },
+  { value: "brigada_bez_zmluvy", label: "Brigáda bez zmluvy" },
 ] as const;
 export type ContractType = (typeof CONTRACT_TYPES)[number]["value"];
+export const DEFAULT_CONTRACT_TYPE: ContractType = "nepriradene";
 
 export const HOSTESS_STATUSES = [
   { value: "nova", label: "Nová" },
