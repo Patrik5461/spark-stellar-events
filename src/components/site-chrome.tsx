@@ -160,6 +160,7 @@ export function Navbar() {
 export function Footer() {
   const { pathname } = useLocation();
   const isHome = pathname === "/";
+  const settings = useSiteSettings();
   const prefix = (h: string) => (h.startsWith("#") ? (isHome ? h : `/${h}`) : h);
   const nav: [string, string][] = [
     ["O nás", prefix("#why")],
@@ -167,10 +168,23 @@ export function Footer() {
     ["Galéria", "/galeria"],
     ["Kontakt", prefix("#contact")],
   ];
+  const footerText = pick(settings, "footer_text", "Hostessing, promotion a produkcia eventov. Slovensko & zahraničie.");
+  const contactPerson = pick(settings, "contact_person", "Jana Henčeková");
+  const email = pick(settings, "email", "info@nu-u.sk");
+  const phone = pick(settings, "phone", "+421 905 454 498");
+  const address = pick(settings, "address", "Gazdovská 1901/7b, 900 41 Rovinka");
+  const billingName = pick(settings, "billing_name", "nuu s.r.o.");
+  const ico = pick(settings, "billing_ico", "550428872");
+  const dic = pick(settings, "billing_dic", "2121851754");
+  const icDph = pick(settings, "billing_ic_dph", "SK2121851754");
+  const iban = pick(settings, "billing_iban", "SK39 8330 0000 0020 0248 9216");
+  const igUrl = pick(settings, "instagram_url", "https://instagram.com");
+  const liUrl = pick(settings, "linkedin_url", "https://linkedin.com");
+  const fbUrl = pick(settings, "facebook_url", "https://facebook.com");
   const socials = [
-    [Instagram, "https://instagram.com", "Instagram"],
-    [Linkedin, "https://linkedin.com", "LinkedIn"],
-    [Facebook, "https://facebook.com", "Facebook"],
+    [Instagram, igUrl, "Instagram"],
+    [Linkedin, liUrl, "LinkedIn"],
+    [Facebook, fbUrl, "Facebook"],
   ] as const;
   return (
     <footer className="border-t border-[#D9D2CC] pt-20 pb-10 px-6 bg-[#EBE6E2]">
@@ -185,7 +199,7 @@ export function Footer() {
           <div>
             <Link to="/" aria-label="NU-U — domov" className="inline-flex text-[#383B3A] hover:opacity-80 transition-opacity"><Logo className="h-[72px] w-[72px]" /></Link>
             <p className="mt-4 text-sm text-[#726D6A] max-w-xs leading-relaxed">
-              Hostessing, promotion a produkcia eventov. Slovensko & zahraničie.
+              {footerText}
             </p>
           </div>
           <div>
@@ -205,13 +219,13 @@ export function Footer() {
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Kontakt</div>
             <ul className="space-y-2 text-sm text-[#383B3A]">
-              <li className="font-medium">Jana Henčeková</li>
-              <li><a href="mailto:info@nu-u.sk" className="hover:text-[#726D6A] transition-colors">info@nu-u.sk</a></li>
-              <li><a href="tel:+421905454498" className="hover:text-[#726D6A] transition-colors">+421 905 454 498</a></li>
-              <li className="text-[#726D6A]">Gazdovská 1901/7b, 900 41 Rovinka</li>
+              <li className="font-medium">{contactPerson}</li>
+              <li><a href={`mailto:${email}`} className="hover:text-[#726D6A] transition-colors">{email}</a></li>
+              <li><a href={`tel:${phone.replace(/\s+/g, "")}`} className="hover:text-[#726D6A] transition-colors">{phone}</a></li>
+              <li className="text-[#726D6A]">{address}</li>
             </ul>
             <div className="mt-5 text-xs text-[#726D6A] leading-relaxed">
-              <span className="text-[#383B3A] font-medium">nua s.r.o.</span> · IČO 550428872 · DIČ 2121851754 · IČ DPH SK2121851754 · IBAN SK39 8330 0000 0020 0248 9216
+              <span className="text-[#383B3A] font-medium">{billingName}</span> · IČO {ico} · DIČ {dic} · IČ DPH {icDph} · IBAN {iban}
             </div>
             <div className="mt-5 flex gap-3">
               {socials.map(([Icon, href, label]) => (
@@ -228,7 +242,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-[#726D6A]">
-          <div>© {new Date().getFullYear()} nuu s.r.o. · nu-u.sk · IČO 550428872</div>
+          <div>© {new Date().getFullYear()} {billingName} · nu-u.sk · IČO {ico}</div>
           <div className="flex items-center gap-3">
             <span>Handcrafted in Rovinka</span>
             <Link
