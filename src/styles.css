@@ -98,7 +98,16 @@
     border: 1px solid #D9D2CC;
     box-shadow: 0 1px 2px rgba(56,59,58,0.04), 0 12px 40px -12px rgba(56,59,58,0.08);
   }
+  .contract-preview p { margin: 0 0 0.6em; line-height: 1.55; }
+  .contract-preview h1, .contract-preview h2, .contract-preview h3 { font-weight: 600; margin: 1em 0 0.4em; }
+  .contract-preview h1 { font-size: 1.15rem; }
+  .contract-preview h2 { font-size: 1.05rem; }
+  .contract-preview table { border-collapse: collapse; margin: 0.6em 0; }
+  .contract-preview td, .contract-preview th { border: 1px solid #D9D2CC; padding: 4px 8px; }
+  .contract-preview ul, .contract-preview ol { padding-left: 1.4em; margin: 0.4em 0; }
+  .contract-preview strong { font-weight: 600; }
 }
+
 
 @keyframes marquee {
   from { transform: translateX(0); }
