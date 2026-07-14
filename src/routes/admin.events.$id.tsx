@@ -90,6 +90,7 @@ function EditEventPage() {
   const tabs: { id: Tab; label: string }[] = [
     { id: "prehlad", label: "Prehľad" },
     { id: "pracovnici", label: "Pracovníci" },
+    { id: "dochadzka", label: "Dochádzka" },
     { id: "poznamky", label: "Poznámky" },
     { id: "historia", label: "História" },
   ];
