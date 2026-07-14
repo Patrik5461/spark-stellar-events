@@ -514,3 +514,365 @@ export const listEventAudit = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return rows || [];
   });
+
+// ---------- Attendance ----------
+
+function combineDateTime(date: string, time: string | null | undefined): string | null {
+  if (!time) return null;
+  // date: YYYY-MM-DD, time: HH:MM
+  const iso = new Date(`${date}T${time}:00`);
+  return isNaN(iso.getTime()) ? null : iso.toISOString();
+}
+
+function computeWorkedHours(
+  arrival: string | null,
+  departure: string | null,
+  breakMinutes: number,
+): number | null {
+  if (!arrival || !departure) return null;
+  const a = new Date(arrival).getTime();
+  const d = new Date(departure).getTime();
+  if (isNaN(a) || isNaN(d) || d <= a) return null;
+  const minutes = (d - a) / 60000 - (breakMinutes || 0);
+  if (minutes <= 0) return 0;
+  return Math.round((minutes / 60) * 100) / 100;
+}
+
+export const updateAssignmentAttendance = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (d: {
+      id: string;
+      arrival_time?: string | null;
+      departure_time?: string | null;
+      break_minutes?: number;
+      worked_hours?: number | null;
+      attendance_status?: string;
+      worker_note?: string | null;
+    }) => d,
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const patch: Record<string, any> = {};
+    if (data.arrival_time !== undefined) patch.arrival_time = data.arrival_time;
+    if (data.departure_time !== undefined) patch.departure_time = data.departure_time;
+    if (data.break_minutes !== undefined) patch.break_minutes = data.break_minutes;
+    if (data.worked_hours !== undefined) patch.worked_hours = data.worked_hours;
+    if (data.attendance_status !== undefined)
+      patch.attendance_status = data.attendance_status;
+    if (data.worker_note !== undefined) patch.worker_note = data.worker_note;
+
+    const { data: row, error } = await context.supabase
+      .from("event_assignments")
+      .update(patch)
+      .eq("id", data.id)
+      .select()
+      .single();
+    if (error) throw new Error(error.message);
+    await context.supabase.from("event_audit_log").insert({
+      event_id: row.event_id,
+      action: "attendance_updated",
+      actor_id: context.userId,
+      actor_email: (context.claims as any)?.email ?? null,
+      details: { assignment_id: data.id, patch },
+    });
+    return row;
+  });
+
+export const bulkUpdateAttendance = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (d: {
+      event_id: string;
+      assignment_ids: string[];
+      arrival_time?: string | null;
+      departure_time?: string | null;
+      attendance_status?: string;
+    }) => d,
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    if (!data.assignment_ids.length) return { updated: 0 };
+    const patch: Record<string, any> = {};
+    if (data.arrival_time !== undefined) patch.arrival_time = data.arrival_time;
+    if (data.departure_time !== undefined) patch.departure_time = data.departure_time;
+    if (data.attendance_status !== undefined)
+      patch.attendance_status = data.attendance_status;
+    const { error } = await context.supabase
+      .from("event_assignments")
+      .update(patch)
+      .in("id", data.assignment_ids);
+    if (error) throw new Error(error.message);
+    await context.supabase.from("event_audit_log").insert({
+      event_id: data.event_id,
+      action: "attendance_bulk_updated",
+      actor_id: context.userId,
+      actor_email: (context.claims as any)?.email ?? null,
+      details: { count: data.assignment_ids.length, patch },
+    });
+    return { updated: data.assignment_ids.length };
+  });
+
+export { combineDateTime };
+
+// ---------- Contract from assignment ----------
+
+export const generateContractForAssignment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (d: {
+      assignment_id: string;
+      kind: string;
+      event: {
+        miesto_vykonu?: string;
+        datum_od?: string;
+        datum_do?: string;
+        datum_podpisu?: string;
+        hodinova_sadzba?: string;
+        jednorazova_odmena?: string;
+        rozsah_prace?: string;
+        nazov_klienta?: string;
+        poznamka?: string;
+      };
+    }) => d,
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import(
+      "@/integrations/supabase/client.server"
+    );
+
+    const { data: assn, error: aErr } = await supabaseAdmin
+      .from("event_assignments")
+      .select("id, event_id, hostess_profile_id")
+      .eq("id", data.assignment_id)
+      .maybeSingle();
+    if (aErr || !assn) throw new Error("Priradenie neexistuje.");
+
+    const { data: tpl } = await supabaseAdmin
+      .from("contract_templates")
+      .select("*")
+      .eq("contract_type", data.kind)
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!tpl)
+      throw new Error(
+        "Pre tento typ zmluvy nie je nahraná žiadna aktívna šablóna. Nahrajte ju v /admin/contracts.",
+      );
+
+    const { data: h } = await supabaseAdmin
+      .from("hostess_profiles")
+      .select("*")
+      .eq("id", assn.hostess_profile_id)
+      .maybeSingle();
+    if (!h) throw new Error("Profil hostesky neexistuje.");
+
+    const { COMPANY } = await import("./contract-constants");
+
+    const { data: file, error: dErr } = await supabaseAdmin.storage
+      .from("contract-templates")
+      .download(tpl.storage_path);
+    if (dErr || !file) throw new Error("Nepodarilo sa načítať šablónu.");
+    const ab = await file.arrayBuffer();
+
+    const PizZip = (await import("pizzip")).default;
+    const Docxtemplater = (await import("docxtemplater")).default;
+    const zip = new PizZip(new Uint8Array(ab));
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+      delimiters: { start: "{{", end: "}}" },
+      nullGetter: () => "",
+    });
+
+    const fmtDate = (v?: string) => {
+      if (!v) return "";
+      const d = new Date(v);
+      return isNaN(d.getTime()) ? v : d.toLocaleDateString("sk-SK");
+    };
+    const fullName = `${h.first_name || ""} ${h.last_name || ""}`.trim();
+    const podpis = fmtDate(data.event.datum_podpisu);
+    const dnes = podpis || new Date().toLocaleDateString("sk-SK");
+    const birth = h.birth_date
+      ? new Date(h.birth_date).toLocaleDateString("sk-SK")
+      : "";
+    const adresa = [h.address, h.postal_code, h.city].filter(Boolean).join(", ");
+
+    try {
+      doc.render({
+        meno: h.first_name || "",
+        priezvisko: h.last_name || "",
+        cele_meno: fullName,
+        datum_narodenia: birth,
+        rodne_cislo: h.national_id || "",
+        adresa,
+        cislo_op: h.identity_card_number || "",
+        iban: h.iban || "",
+        telefon: h.phone || "",
+        email: h.email || "",
+        statna_prislusnost: h.nationality || "",
+        rodinny_stav: h.marital_status || "",
+        miesto_narodenia: h.birth_place || "",
+        datum_a_miesto_narodenia: [birth, h.birth_place].filter(Boolean).join(", "),
+        zdravotna_poistovna: h.health_insurance || "",
+        zdravotne_obmedzenia: h.health_restrictions || "Žiadne",
+        poberatel_dochodku: h.pension_type || "",
+        cislo_uctu: h.iban || "",
+        trvaly_pobyt: adresa,
+        rodne_priezvisko: h.last_name || "",
+        dnes,
+        datum_podpisu: podpis,
+        spolocnost_nazov: COMPANY.nazov,
+        spolocnost_sidlo: COMPANY.sidlo,
+        spolocnost_ico: COMPANY.ico,
+        spolocnost_dic: COMPANY.dic,
+        spolocnost_ic_dph: COMPANY.ic_dph,
+        spolocnost_iban: COMPANY.iban,
+        spolocnost_banka: COMPANY.banka,
+        spolocnost_telefon: COMPANY.telefon,
+        spolocnost_email: COMPANY.email,
+        spolocnost_register: COMPANY.register,
+        spolocnost_zastupena: COMPANY.zastupena,
+        miesto_vykonu: data.event.miesto_vykonu || "",
+        datum_od: fmtDate(data.event.datum_od),
+        datum_do: fmtDate(data.event.datum_do),
+        hodinova_sadzba: data.event.hodinova_sadzba || "",
+        jednorazova_odmena: data.event.jednorazova_odmena || "",
+        rozsah_prace: data.event.rozsah_prace || "",
+        nazov_klienta: data.event.nazov_klienta || "",
+        poznamka: data.event.poznamka || "",
+      });
+    } catch (e: any) {
+      throw new Error(
+        "Chyba pri vypĺňaní šablóny: " + (e?.message || String(e)),
+      );
+    }
+    const out: Uint8Array = doc
+      .getZip()
+      .generate({ type: "uint8array" }) as Uint8Array;
+
+    const { data: existing } = await supabaseAdmin
+      .from("generated_contracts")
+      .select("version")
+      .eq("hostess_id", assn.hostess_profile_id)
+      .eq("contract_type", data.kind)
+      .order("version", { ascending: false })
+      .limit(1);
+    const version = ((existing?.[0]?.version as number) || 0) + 1;
+
+    const docxPath = `${assn.hostess_profile_id}/${data.kind}-v${version}-${Date.now()}.docx`;
+    const { error: upErr } = await supabaseAdmin.storage
+      .from("generated-contracts")
+      .upload(docxPath, out, {
+        contentType:
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        upsert: false,
+      });
+    if (upErr) throw new Error(upErr.message);
+
+    const { data: userData } = await supabaseAdmin.auth.admin.getUserById(
+      context.userId,
+    );
+    const email = userData?.user?.email || null;
+
+    const { data: row, error: rErr } = await supabaseAdmin
+      .from("generated_contracts")
+      .insert({
+        hostess_id: assn.hostess_profile_id,
+        template_id: tpl.id,
+        contract_type: data.kind,
+        version,
+        generated_by: context.userId,
+        generated_by_email: email,
+        docx_path: docxPath,
+        event_id: assn.event_id,
+        event_assignment_id: assn.id,
+        event_data: data.event,
+        hostess_snapshot: {
+          first_name: h.first_name,
+          last_name: h.last_name,
+          birth_date: h.birth_date,
+          national_id: h.national_id,
+          address: adresa,
+          identity_card_number: h.identity_card_number,
+          iban: h.iban,
+          phone: h.phone,
+          email: h.email,
+        },
+      })
+      .select("*")
+      .single();
+    if (rErr) throw new Error(rErr.message);
+
+    await supabaseAdmin
+      .from("event_assignments")
+      .update({
+        generated_contract_id: row.id,
+        contract_required: true,
+      })
+      .eq("id", assn.id);
+
+    await supabaseAdmin.from("event_audit_log").insert({
+      event_id: assn.event_id,
+      action: "contract_generated",
+      actor_id: context.userId,
+      actor_email: email,
+      details: {
+        assignment_id: assn.id,
+        contract_id: row.id,
+        kind: data.kind,
+        version,
+      },
+    });
+
+    return { id: row.id, version };
+  });
+
+export const listAssignmentContracts = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { assignment_id: string }) => d)
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: assn } = await context.supabase
+      .from("event_assignments")
+      .select("hostess_profile_id, event_id, generated_contract_id")
+      .eq("id", data.assignment_id)
+      .maybeSingle();
+    if (!assn) return { current: null, history: [] };
+    const { data: rows } = await context.supabase
+      .from("generated_contracts")
+      .select("*")
+      .eq("hostess_id", assn.hostess_profile_id)
+      .eq("event_id", assn.event_id)
+      .order("version", { ascending: false });
+    const history = rows || [];
+    const current =
+      history.find((r: any) => r.id === assn.generated_contract_id) ||
+      history[0] ||
+      null;
+    return { current, history };
+  });
+
+export const setAssignmentContractSigned = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; signed: boolean }) => d)
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: row, error } = await context.supabase
+      .from("event_assignments")
+      .update({ contract_signed: data.signed })
+      .eq("id", data.id)
+      .select()
+      .single();
+    if (error) throw new Error(error.message);
+    await context.supabase.from("event_audit_log").insert({
+      event_id: row.event_id,
+      action: data.signed ? "contract_signed" : "contract_unsigned",
+      actor_id: context.userId,
+      actor_email: (context.claims as any)?.email ?? null,
+      details: { assignment_id: data.id },
+    });
+    return row;
+  });
