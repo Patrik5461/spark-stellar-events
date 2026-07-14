@@ -41,6 +41,7 @@ function AdminLayout() {
   }
 
   const navItems = [
+    { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { to: "/admin/gallery", label: "Galéria", icon: ImageIcon },
     { to: "/admin/clothing", label: "Oblečenie", icon: Shirt },
     { to: "/admin/hostesses", label: "Hostesky", icon: Users },
