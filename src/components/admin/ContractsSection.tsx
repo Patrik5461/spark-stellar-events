@@ -341,9 +341,18 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                   onClick={downloadPreview}
                   className="inline-flex items-center gap-1.5 rounded-full border border-[#D9D2CC] px-4 py-2 text-xs"
                 >
-                  <Download className="h-3.5 w-3.5" /> Stiahnuť náhľad
+                  <Download className="h-3.5 w-3.5" /> DOCX
                 </button>
               )}
+              {previewHtml && (
+                <button
+                  onClick={downloadPreviewPdf}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#D9D2CC] px-4 py-2 text-xs"
+                >
+                  <Download className="h-3.5 w-3.5" /> PDF
+                </button>
+              )}
+
               <button
                 onClick={doPreview}
                 disabled={busy}
