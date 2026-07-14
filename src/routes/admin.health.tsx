@@ -14,9 +14,11 @@ export const Route = createFileRoute("/admin/health")({
 });
 
 function HealthPage() {
+  const eventsHealthFn = useServerFn(getEventsHealthSnapshot);
   const [checks, setChecks] = useState<Check[]>([]);
   const [running, setRunning] = useState(false);
   const [ranAt, setRanAt] = useState<Date | null>(null);
+
 
   const run = async () => {
     setRunning(true);
