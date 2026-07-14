@@ -84,6 +84,7 @@ export function EventWorkersTab({
   const [asSubstitute, setAsSubstitute] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [conflicts, setConflicts] = useState<Record<string, any[]>>({});
+  const [contractFor, setContractFor] = useState<Assignment | null>(null);
 
   async function refresh() {
     setLoading(true);
