@@ -8,6 +8,8 @@ import {
   Trash2,
   AlertTriangle,
   ExternalLink,
+  FileText,
+  CheckCircle2,
 } from "lucide-react";
 import {
   listAssignableHostesses,
@@ -22,6 +24,7 @@ import {
   ASSIGNMENT_STATUS_LABEL,
   type AssignmentStatus,
 } from "@/lib/event-constants";
+import { EventContractDialog } from "./EventContractDialog";
 
 type Hostess = {
   id: string;
@@ -41,6 +44,11 @@ type Assignment = {
   status: AssignmentStatus;
   hostess: Hostess | null;
   created_at: string;
+  generated_contract_id: string | null;
+  contract_signed: boolean;
+  contract_required: boolean;
+  agreed_payment: number | null;
+  payment_type: string | null;
 };
 
 const badge: Record<AssignmentStatus, string> = {
