@@ -259,12 +259,12 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                   <Download className="h-3.5 w-3.5" /> DOCX
                 </button>
                 <button
-                  disabled
-                  title="PDF export bude doplnený neskôr"
-                  className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs opacity-50 cursor-not-allowed"
+                  onClick={() => downloadRowPdf(r)}
+                  className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
                 >
                   <Download className="h-3.5 w-3.5" /> PDF
                 </button>
+
                 <button
                   onClick={() => regenerate(r)}
                   className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
