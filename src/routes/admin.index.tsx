@@ -13,6 +13,9 @@ import {
   AlertTriangle,
   Info,
   ArrowRight,
+  Wallet,
+  Coins,
+  CheckCircle2,
 } from "lucide-react";
 import {
   getDashboardStats,
@@ -40,6 +43,9 @@ type Stats = {
   unsigned_contracts: number;
   missing_attendance: number;
   new_hostesses: number;
+  unpaid_total: number;
+  month_total: number;
+  month_paid: number;
 };
 type UpcomingEvent = {
   id: string;
@@ -168,6 +174,25 @@ function DashboardPage() {
               value={stats.new_hostesses}
               Icon={UserPlus}
               tone={stats.new_hostesses > 0 ? "warn" : "neutral"}
+            />
+            <Tile
+              to="/admin/finance"
+              label="Neuhradené odmeny (€)"
+              value={stats.unpaid_total.toLocaleString("sk-SK")}
+              Icon={Wallet}
+              tone={stats.unpaid_total > 0 ? "warn" : "neutral"}
+            />
+            <Tile
+              to="/admin/finance"
+              label="Odmeny tento mesiac (€)"
+              value={stats.month_total.toLocaleString("sk-SK")}
+              Icon={Coins}
+            />
+            <Tile
+              to="/admin/finance"
+              label="Uhradené tento mesiac (€)"
+              value={stats.month_paid.toLocaleString("sk-SK")}
+              Icon={CheckCircle2}
             />
           </div>
 

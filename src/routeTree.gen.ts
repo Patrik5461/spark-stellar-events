@@ -22,6 +22,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as AdminGeneratedContractsRouteImport } from './routes/admin.generated-contracts'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
 import { Route as AdminContractsRouteImport } from './routes/admin.contracts'
 import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
@@ -96,6 +97,11 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFinanceRoute = AdminFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEventsRoute = AdminEventsRouteImport.update({
   id: '/events',
   path: '/events',
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/events': typeof AdminEventsRouteWithChildren
+  '/admin/finance': typeof AdminFinanceRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
@@ -167,6 +174,7 @@ export interface FileRoutesByTo {
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
+  '/admin/finance': typeof AdminFinanceRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/events': typeof AdminEventsRouteWithChildren
+  '/admin/finance': typeof AdminFinanceRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
@@ -216,6 +225,7 @@ export interface FileRouteTypes {
     | '/admin/clothing'
     | '/admin/contracts'
     | '/admin/events'
+    | '/admin/finance'
     | '/admin/gallery'
     | '/admin/generated-contracts'
     | '/admin/health'
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
+    | '/admin/finance'
     | '/admin/gallery'
     | '/admin/generated-contracts'
     | '/admin/health'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/admin/clothing'
     | '/admin/contracts'
     | '/admin/events'
+    | '/admin/finance'
     | '/admin/gallery'
     | '/admin/generated-contracts'
     | '/admin/health'
@@ -376,6 +388,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGalleryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/finance': {
+      id: '/admin/finance'
+      path: '/finance'
+      fullPath: '/admin/finance'
+      preLoaderRoute: typeof AdminFinanceRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/events': {
       id: '/admin/events'
       path: '/events'
@@ -455,6 +474,7 @@ interface AdminRouteChildren {
   AdminClothingRoute: typeof AdminClothingRoute
   AdminContractsRoute: typeof AdminContractsRoute
   AdminEventsRoute: typeof AdminEventsRouteWithChildren
+  AdminFinanceRoute: typeof AdminFinanceRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminGeneratedContractsRoute: typeof AdminGeneratedContractsRoute
   AdminHealthRoute: typeof AdminHealthRoute
@@ -471,6 +491,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminClothingRoute: AdminClothingRoute,
   AdminContractsRoute: AdminContractsRoute,
   AdminEventsRoute: AdminEventsRouteWithChildren,
+  AdminFinanceRoute: AdminFinanceRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminGeneratedContractsRoute: AdminGeneratedContractsRoute,
   AdminHealthRoute: AdminHealthRoute,

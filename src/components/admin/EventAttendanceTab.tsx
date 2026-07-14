@@ -1,13 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Save, Users, Clock } from "lucide-react";
+import { Save, Users, Clock, Calculator, CheckCircle2 } from "lucide-react";
 import {
   listEventAssignments,
   updateAssignmentAttendance,
   bulkUpdateAttendance,
   getEvent,
 } from "@/lib/events.functions";
+import {
+  recalcAssignmentPayment,
+  updateAssignmentPayment,
+} from "@/lib/finance.functions";
 import {
   ATTENDANCE_STATUSES,
   ATTENDANCE_STATUS_LABEL,
@@ -25,6 +29,11 @@ type Row = {
   attendance_status: AttendanceStatus;
   worker_note: string | null;
   status: string;
+  payment_amount_calculated: number | null;
+  payment_amount_final: number | null;
+  paid: boolean;
+  paid_at: string | null;
+  payment_note: string | null;
   hostess: { first_name: string; last_name: string } | null;
 };
 
@@ -69,6 +78,8 @@ export function EventAttendanceTab({ eventId }: { eventId: string }) {
   const eventFn = useServerFn(getEvent);
   const updateFn = useServerFn(updateAssignmentAttendance);
   const bulkFn = useServerFn(bulkUpdateAttendance);
+  const recalcFn = useServerFn(recalcAssignmentPayment);
+  const payFn = useServerFn(updateAssignmentPayment);
 
   const [rows, setRows] = useState<LocalRow[]>([]);
   const [eventDate, setEventDate] = useState<string>("");
@@ -214,6 +225,55 @@ export function EventAttendanceTab({ eventId }: { eventId: string }) {
       await refresh();
     } catch (e: any) {
       toast.error(e?.message || "Chyba.");
+    }
+  }
+
+  async function recalcOne(id: string) {
+    setBusyId(id);
+    try {
+      await recalcFn({ data: { assignment_id: id } });
+      toast.success("Prepočítané.");
+      await refresh();
+    } catch (e: any) {
+      toast.error(e?.message || "Chyba.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function togglePaid(id: string, paid: boolean) {
+    setBusyId(id);
+    try {
+      await payFn({ data: { id, paid } });
+      toast.success(paid ? "Označené ako uhradené." : "Zrušené.");
+      await refresh();
+    } catch (e: any) {
+      toast.error(e?.message || "Chyba.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function setFinal(id: string, value: string, note: string) {
+    setBusyId(id);
+    try {
+      const num =
+        value.trim() === "" ? null : Number(value.replace(",", "."));
+      await payFn({
+        data: {
+          id,
+          payment_amount_final: Number.isFinite(num as number)
+            ? (num as number)
+            : null,
+          payment_note: note,
+        },
+      });
+      toast.success("Uložené.");
+      await refresh();
+    } catch (e: any) {
+      toast.error(e?.message || "Chyba.");
+    } finally {
+      setBusyId(null);
     }
   }
 

@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle, Shirt, Users, FileText, Calendar, LayoutDashboard } from "lucide-react";
+import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle, Shirt, Users, FileText, Calendar, LayoutDashboard, Wallet } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useAdminAuth, signOut } from "@/lib/admin-auth";
 
@@ -48,6 +48,7 @@ function AdminLayout() {
     { to: "/admin/contracts", label: "Zmluvy", icon: FileText },
     { to: "/admin/generated-contracts", label: "Vygenerované zmluvy", icon: FileText },
     { to: "/admin/events", label: "Eventy", icon: Calendar },
+    { to: "/admin/finance", label: "Financie", icon: Wallet },
     { to: "/admin/services", label: "Služby", icon: Wrench },
     { to: "/admin/messages", label: "Správy", icon: MessageSquare },
     { to: "/admin/settings", label: "Nastavenia", icon: Settings },

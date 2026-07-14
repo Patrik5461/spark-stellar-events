@@ -171,6 +171,10 @@ export type Database = {
           hostess_profile_id: string
           id: string
           paid: boolean
+          paid_at: string | null
+          payment_amount_calculated: number | null
+          payment_amount_final: number | null
+          payment_note: string | null
           payment_type: Database["public"]["Enums"]["event_payment_type"] | null
           status: Database["public"]["Enums"]["event_assignment_status"]
           updated_at: string
@@ -192,6 +196,10 @@ export type Database = {
           hostess_profile_id: string
           id?: string
           paid?: boolean
+          paid_at?: string | null
+          payment_amount_calculated?: number | null
+          payment_amount_final?: number | null
+          payment_note?: string | null
           payment_type?:
             | Database["public"]["Enums"]["event_payment_type"]
             | null
@@ -215,6 +223,10 @@ export type Database = {
           hostess_profile_id?: string
           id?: string
           paid?: boolean
+          paid_at?: string | null
+          payment_amount_calculated?: number | null
+          payment_amount_final?: number | null
+          payment_note?: string | null
           payment_type?:
             | Database["public"]["Enums"]["event_payment_type"]
             | null
