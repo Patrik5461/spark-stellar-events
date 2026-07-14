@@ -16,6 +16,9 @@ import {
   fromRow,
   type EventFormValues,
 } from "@/components/admin/EventForm";
+import { EventWorkersTab } from "@/components/admin/EventWorkersTab";
+import { EventNotesTab } from "@/components/admin/EventNotesTab";
+import { EventHistoryTab } from "@/components/admin/EventHistoryTab";
 
 export const Route = createFileRoute("/admin/events/$id")({
   head: () => ({
@@ -26,6 +29,8 @@ export const Route = createFileRoute("/admin/events/$id")({
   }),
   component: EditEventPage,
 });
+
+type Tab = "prehlad" | "pracovnici" | "poznamky" | "historia";
 
 function EditEventPage() {
   const { id } = Route.useParams();
@@ -38,7 +43,9 @@ function EditEventPage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [initial, setInitial] = useState<EventFormValues>(emptyEvent);
+  const [requiredWorkers, setRequiredWorkers] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [tab, setTab] = useState<Tab>("prehlad");
 
   useEffect(() => {
     (async () => {
@@ -49,6 +56,7 @@ function EditEventPage() {
           setNotFound(true);
         } else {
           setInitial(fromRow(row));
+          setRequiredWorkers(row.required_workers ?? 1);
         }
       } catch (e: any) {
         toast.error(e?.message || "Nepodarilo sa načítať event.");
@@ -78,6 +86,13 @@ function EditEventPage() {
     );
   }
 
+  const tabs: { id: Tab; label: string }[] = [
+    { id: "prehlad", label: "Prehľad" },
+    { id: "pracovnici", label: "Pracovníci" },
+    { id: "poznamky", label: "Poznámky" },
+    { id: "historia", label: "História" },
+  ];
+
   return (
     <div className="max-w-[1000px]">
       <div className="flex items-center justify-between gap-3 mb-4">
@@ -104,7 +119,9 @@ function EditEventPage() {
           </button>
           <button
             onClick={async () => {
-              if (!confirm("Zmazať tento event? Zmažú sa aj priradenia a dokumenty."))
+              if (
+                !confirm("Zmazať tento event? Zmažú sa aj priradenia a dokumenty.")
+              )
                 return;
               try {
                 await delFn({ data: { id } });
@@ -121,28 +138,51 @@ function EditEventPage() {
         </div>
       </div>
 
-      <h1 className="text-2xl font-medium mb-2">{initial.name || "Event"}</h1>
-      <p className="text-sm text-[#726D6A] mb-6">
-        Ďalšie taby (Pracovníci, Dochádzka, Dokumenty, Poznámky, História) budú
-        dostupné v ďalšej fáze.
-      </p>
+      <h1 className="text-2xl font-medium mb-4">{initial.name || "Event"}</h1>
 
-      <EventForm
-        initial={initial}
-        submitLabel="Uložiť zmeny"
-        submitting={submitting}
-        onSubmit={async (v) => {
-          setSubmitting(true);
-          try {
-            await updateFn({ data: { id, ...(toPayload(v) as any) } });
-            toast.success("Zmeny uložené.");
-          } catch (e: any) {
-            toast.error(e?.message || "Chyba pri ukladaní.");
-          } finally {
-            setSubmitting(false);
-          }
-        }}
-      />
+      <div className="flex flex-wrap gap-1 border-b border-[#D9D2CC] mb-6">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`px-4 py-2 text-sm -mb-px border-b-2 transition ${
+              tab === t.id
+                ? "border-[#383B3A] text-[#383B3A] font-medium"
+                : "border-transparent text-[#726D6A] hover:text-[#383B3A]"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === "prehlad" && (
+        <EventForm
+          initial={initial}
+          submitLabel="Uložiť zmeny"
+          submitting={submitting}
+          onSubmit={async (v) => {
+            setSubmitting(true);
+            try {
+              await updateFn({ data: { id, ...(toPayload(v) as any) } });
+              toast.success("Zmeny uložené.");
+              setRequiredWorkers(Number(v.required_workers) || 0);
+            } catch (e: any) {
+              toast.error(e?.message || "Chyba pri ukladaní.");
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        />
+      )}
+
+      {tab === "pracovnici" && (
+        <EventWorkersTab eventId={id} requiredWorkers={requiredWorkers} />
+      )}
+
+      {tab === "poznamky" && <EventNotesTab eventId={id} />}
+
+      {tab === "historia" && <EventHistoryTab eventId={id} />}
     </div>
   );
 }
