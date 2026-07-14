@@ -335,7 +335,7 @@ export const checkHostessConflict = createServerFn({ method: "GET" })
       .from("event_assignments")
       .select("id, event_id, status")
       .eq("hostess_profile_id", data.hostess_id)
-      .in("status", ACTIVE_ASSIGNMENT_STATUSES);
+      .in("status", ACTIVE_ASSIGNMENT_STATUSES as unknown as string[]);
     const otherIds = ((assigns as any[]) || [])
       .filter((a) => a.event_id !== data.event_id)
       .map((a) => a.event_id);
