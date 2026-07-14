@@ -600,7 +600,7 @@ export const bulkUpdateAttendance = createServerFn({ method: "POST" })
       patch.attendance_status = data.attendance_status;
     const { error } = await context.supabase
       .from("event_assignments")
-      .update(patch)
+      .update(patch as any)
       .in("id", data.assignment_ids);
     if (error) throw new Error(error.message);
     await context.supabase.from("event_audit_log").insert({
