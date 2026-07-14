@@ -186,6 +186,8 @@ function EditEventPage() {
 
       {tab === "dochadzka" && <EventAttendanceTab eventId={id} />}
 
+      {tab === "dokumenty" && <EventDocumentsTab eventId={id} />}
+
       {tab === "poznamky" && <EventNotesTab eventId={id} />}
 
       {tab === "historia" && <EventHistoryTab eventId={id} />}
