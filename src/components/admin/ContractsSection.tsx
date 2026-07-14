@@ -136,6 +136,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
       miesto_vykonu: row.event_data?.miesto_vykonu || "",
       datum_od: row.event_data?.datum_od || "",
       datum_do: row.event_data?.datum_do || "",
+      datum_podpisu: row.event_data?.datum_podpisu || "",
       hodinova_sadzba: row.event_data?.hodinova_sadzba || "",
       jednorazova_odmena: row.event_data?.jednorazova_odmena || "",
       rozsah_prace: row.event_data?.rozsah_prace || "",
