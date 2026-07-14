@@ -49,6 +49,7 @@ export const getDashboardStats = createServerFn({ method: "GET" })
       allOpenEvents,
       allActiveAssigns,
       finishedNoAttendance,
+      unpaidRows,
     ] = await Promise.all([
       s.from("events").select("id", { count: "exact", head: true }).lte("date_from", today).gte("date_to", today),
       s.from("events").select("id", { count: "exact", head: true }).lte("date_from", in7).gte("date_to", today),
@@ -59,6 +60,7 @@ export const getDashboardStats = createServerFn({ method: "GET" })
       s.from("events").select("id, required_workers").in("status", OPEN_EVENT_STATUSES as any).gte("date_to", today),
       s.from("event_assignments").select("event_id, status").in("status", ACTIVE_ASSIGNMENT as any),
       s.from("events").select("id, date_to").lt("date_to", today).neq("status", "zrusene"),
+      s.from("event_assignments").select("payment_amount_final, payment_amount_calculated, paid, paid_at, event_id, status").eq("paid", false).not("status", "in", "(zrusena,odmietnutna)"),
     ]);
 
     // Unfilled slots across open, not-past events
@@ -87,6 +89,27 @@ export const getDashboardStats = createServerFn({ method: "GET" })
       missingAttendance = bad.size;
     }
 
+    // Finance widgets
+    const monthStart = today.slice(0, 8) + "01";
+    let unpaidTotal = 0;
+    for (const r of (unpaidRows.data as any[]) || []) {
+      const v = r.payment_amount_final ?? r.payment_amount_calculated ?? 0;
+      unpaidTotal += Number(v) || 0;
+    }
+    const { data: monthAssigns } = await s
+      .from("event_assignments")
+      .select("payment_amount_final, payment_amount_calculated, paid, paid_at, event_id, status, events!inner(date_from)")
+      .gte("events.date_from", monthStart)
+      .lte("events.date_from", today)
+      .not("status", "in", "(zrusena,odmietnutna)");
+    let monthTotal = 0;
+    let monthPaid = 0;
+    for (const r of (monthAssigns as any[]) || []) {
+      const v = Number(r.payment_amount_final ?? r.payment_amount_calculated ?? 0) || 0;
+      monthTotal += v;
+      if (r.paid) monthPaid += v;
+    }
+
     return {
       today: todayCount.count || 0,
       week: weekCount.count || 0,
@@ -96,6 +119,9 @@ export const getDashboardStats = createServerFn({ method: "GET" })
       unsigned_contracts: unsignedContracts.count || 0,
       missing_attendance: missingAttendance,
       new_hostesses: newHostesses.count || 0,
+      unpaid_total: Math.round(unpaidTotal * 100) / 100,
+      month_total: Math.round(monthTotal * 100) / 100,
+      month_paid: Math.round(monthPaid * 100) / 100,
       in48h: in2,
     };
   });
@@ -246,7 +272,94 @@ export const getDashboardAlerts = createServerFn({ method: "GET" })
         }
       }
     }
-    return alerts.slice(0, 30);
+
+    // 3) Finance-related alerts
+    // 3a) Finished/dokoncene events with unpaid amounts
+    const { data: doneEvents } = await s
+      .from("events")
+      .select("id, name, date_to, status")
+      .in("status", ["dokoncene"])
+      .order("date_to", { ascending: false })
+      .limit(50);
+    const doneIds = ((doneEvents as any[]) || []).map((e) => e.id);
+    if (doneIds.length) {
+      const { data: as } = await s
+        .from("event_assignments")
+        .select("event_id, paid, status")
+        .in("event_id", doneIds)
+        .eq("paid", false)
+        .not("status", "in", "(zrusena,odmietnutna)");
+      const unpaidBy: Record<string, number> = {};
+      for (const a of (as as any[]) || [])
+        unpaidBy[a.event_id] = (unpaidBy[a.event_id] || 0) + 1;
+      for (const e of (doneEvents as any[]) || []) {
+        if (unpaidBy[e.id])
+          alerts.push({
+            kind: "unpaid_finished",
+            severity: "warn",
+            message: `${e.name} — ukončený event má neuhradené odmeny (${unpaidBy[e.id]}).`,
+            event_id: e.id,
+          });
+      }
+    }
+    // 3b) Assignments in active events missing IBAN or calculated amount
+    const { data: activeAssigns } = await s
+      .from("event_assignments")
+      .select("id, event_id, hostess_profile_id, worked_hours, payment_amount_calculated, payment_amount_final")
+      .in("status", ACTIVE_ASSIGNMENT as any)
+      .limit(200);
+    const hIds2 = Array.from(
+      new Set(((activeAssigns as any[]) || []).map((a) => a.hostess_profile_id)),
+    );
+    let ibanMap = new Map<string, string | null>();
+    let nameMap = new Map<string, string>();
+    if (hIds2.length) {
+      const { data: hs } = await s
+        .from("hostess_profiles")
+        .select("id, iban, first_name, last_name")
+        .in("id", hIds2);
+      for (const h of (hs as any[]) || []) {
+        ibanMap.set(h.id, h.iban);
+        nameMap.set(h.id, `${h.first_name || ""} ${h.last_name || ""}`.trim());
+      }
+    }
+    const evIds3 = Array.from(
+      new Set(((activeAssigns as any[]) || []).map((a) => a.event_id)),
+    );
+    let evNames = new Map<string, string>();
+    if (evIds3.length) {
+      const { data: evs } = await s
+        .from("events")
+        .select("id, name")
+        .in("id", evIds3);
+      for (const e of (evs as any[]) || []) evNames.set(e.id, e.name);
+    }
+    for (const a of (activeAssigns as any[]) || []) {
+      if (!ibanMap.get(a.hostess_profile_id)) {
+        alerts.push({
+          kind: "missing_iban",
+          severity: "info",
+          message: `${evNames.get(a.event_id) || ""} — ${nameMap.get(a.hostess_profile_id) || "pracovník"} nemá IBAN.`,
+          event_id: a.event_id,
+          assignment_id: a.id,
+        });
+      }
+      if (
+        a.worked_hours != null &&
+        a.payment_amount_calculated == null &&
+        a.payment_amount_final == null
+      ) {
+        alerts.push({
+          kind: "missing_calc",
+          severity: "info",
+          message: `${evNames.get(a.event_id) || ""} — vyplnené hodiny bez vypočítanej odmeny.`,
+          event_id: a.event_id,
+          assignment_id: a.id,
+        });
+      }
+    }
+
+    return alerts.slice(0, 50);
   });
 
 export const getEventsHealthSnapshot = createServerFn({ method: "GET" })

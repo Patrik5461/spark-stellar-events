@@ -1,13 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Save, Users, Clock } from "lucide-react";
+import { Save, Users, Clock, Calculator, CheckCircle2 } from "lucide-react";
 import {
   listEventAssignments,
   updateAssignmentAttendance,
   bulkUpdateAttendance,
   getEvent,
 } from "@/lib/events.functions";
+import {
+  recalcAssignmentPayment,
+  updateAssignmentPayment,
+} from "@/lib/finance.functions";
 import {
   ATTENDANCE_STATUSES,
   ATTENDANCE_STATUS_LABEL,
@@ -25,6 +29,11 @@ type Row = {
   attendance_status: AttendanceStatus;
   worker_note: string | null;
   status: string;
+  payment_amount_calculated: number | null;
+  payment_amount_final: number | null;
+  paid: boolean;
+  paid_at: string | null;
+  payment_note: string | null;
   hostess: { first_name: string; last_name: string } | null;
 };
 
@@ -69,6 +78,8 @@ export function EventAttendanceTab({ eventId }: { eventId: string }) {
   const eventFn = useServerFn(getEvent);
   const updateFn = useServerFn(updateAssignmentAttendance);
   const bulkFn = useServerFn(bulkUpdateAttendance);
+  const recalcFn = useServerFn(recalcAssignmentPayment);
+  const payFn = useServerFn(updateAssignmentPayment);
 
   const [rows, setRows] = useState<LocalRow[]>([]);
   const [eventDate, setEventDate] = useState<string>("");
@@ -214,6 +225,55 @@ export function EventAttendanceTab({ eventId }: { eventId: string }) {
       await refresh();
     } catch (e: any) {
       toast.error(e?.message || "Chyba.");
+    }
+  }
+
+  async function recalcOne(id: string) {
+    setBusyId(id);
+    try {
+      await recalcFn({ data: { assignment_id: id } });
+      toast.success("Prepočítané.");
+      await refresh();
+    } catch (e: any) {
+      toast.error(e?.message || "Chyba.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function togglePaid(id: string, paid: boolean) {
+    setBusyId(id);
+    try {
+      await payFn({ data: { id, paid } });
+      toast.success(paid ? "Označené ako uhradené." : "Zrušené.");
+      await refresh();
+    } catch (e: any) {
+      toast.error(e?.message || "Chyba.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function setFinal(id: string, value: string, note: string) {
+    setBusyId(id);
+    try {
+      const num =
+        value.trim() === "" ? null : Number(value.replace(",", "."));
+      await payFn({
+        data: {
+          id,
+          payment_amount_final: Number.isFinite(num as number)
+            ? (num as number)
+            : null,
+          payment_note: note,
+        },
+      });
+      toast.success("Uložené.");
+      await refresh();
+    } catch (e: any) {
+      toast.error(e?.message || "Chyba.");
+    } finally {
+      setBusyId(null);
     }
   }
 
@@ -383,6 +443,139 @@ export function EventAttendanceTab({ eventId }: { eventId: string }) {
           </tbody>
         </table>
       </section>
+
+      <section className="bg-[#F5F1EC] border border-[#D9D2CC] rounded-xl p-5 overflow-x-auto">
+        <h3 className="text-sm uppercase tracking-wider text-[#726D6A] mb-3">
+          Odmeny
+        </h3>
+        <table className="w-full text-sm min-w-[900px]">
+          <thead className="text-left text-xs uppercase tracking-wider text-[#726D6A] border-b border-[#D9D2CC]">
+            <tr>
+              <th className="py-2 pr-3">Hosteska</th>
+              <th className="py-2 pr-3">Hodiny</th>
+              <th className="py-2 pr-3">Vypočítaná</th>
+              <th className="py-2 pr-3">Finálna</th>
+              <th className="py-2 pr-3">Poznámka</th>
+              <th className="py-2 pr-3">Stav</th>
+              <th className="py-2 text-right">Akcia</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activeRows.map((r) => (
+              <PaymentRow
+                key={r.id}
+                row={r}
+                busy={busyId === r.id}
+                onRecalc={() => recalcOne(r.id)}
+                onSetFinal={(v, n) => setFinal(r.id, v, n)}
+                onTogglePaid={(p) => togglePaid(r.id, p)}
+              />
+            ))}
+          </tbody>
+        </table>
+      </section>
     </div>
+  );
+}
+
+function PaymentRow({
+  row,
+  busy,
+  onRecalc,
+  onSetFinal,
+  onTogglePaid,
+}: {
+  row: LocalRow & {
+    payment_amount_calculated: number | null;
+    payment_amount_final: number | null;
+    paid: boolean;
+    paid_at: string | null;
+    payment_note: string | null;
+  };
+  busy: boolean;
+  onRecalc: () => void;
+  onSetFinal: (value: string, note: string) => void;
+  onTogglePaid: (paid: boolean) => void;
+}) {
+  const [finalStr, setFinalStr] = useState(
+    row.payment_amount_final != null ? String(row.payment_amount_final) : "",
+  );
+  const [note, setNote] = useState(row.payment_note || "");
+  const dirty =
+    finalStr !== (row.payment_amount_final != null ? String(row.payment_amount_final) : "") ||
+    note !== (row.payment_note || "");
+  return (
+    <tr className="border-b border-[#D9D2CC] last:border-0">
+      <td className="py-2 pr-3 font-medium">
+        {row.hostess ? `${row.hostess.first_name} ${row.hostess.last_name}` : "—"}
+      </td>
+      <td className="py-2 pr-3">{row.worked_hours ?? "—"}</td>
+      <td className="py-2 pr-3">
+        {row.payment_amount_calculated != null
+          ? `${Number(row.payment_amount_calculated).toLocaleString("sk-SK")} €`
+          : "—"}
+      </td>
+      <td className="py-2 pr-3">
+        <input
+          type="text"
+          value={finalStr}
+          onChange={(e) => setFinalStr(e.target.value)}
+          placeholder={row.payment_amount_calculated != null ? String(row.payment_amount_calculated) : "0"}
+          className="rounded border border-[#D9D2CC] bg-white px-2 py-1 text-sm w-24"
+        />
+      </td>
+      <td className="py-2 pr-3">
+        <input
+          type="text"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="rounded border border-[#D9D2CC] bg-white px-2 py-1 text-sm w-full min-w-[140px]"
+        />
+      </td>
+      <td className="py-2 pr-3">
+        <span
+          className={`text-xs px-2 py-0.5 rounded-full ${
+            row.paid
+              ? "bg-emerald-100 text-emerald-800"
+              : "bg-amber-100 text-amber-800"
+          }`}
+        >
+          {row.paid
+            ? `Uhradené${row.paid_at ? " " + new Date(row.paid_at).toLocaleDateString("sk-SK") : ""}`
+            : "Neuhradené"}
+        </span>
+      </td>
+      <td className="py-2 text-right">
+        <div className="inline-flex items-center gap-1">
+          <button
+            onClick={onRecalc}
+            disabled={busy}
+            title="Prepočítať"
+            className="text-xs rounded-lg border border-[#D9D2CC] px-2 py-1 hover:bg-white disabled:opacity-50"
+          >
+            <Calculator className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={() => onSetFinal(finalStr, note)}
+            disabled={busy || !dirty}
+            className="text-xs rounded-lg border border-[#D9D2CC] px-2 py-1 hover:bg-white disabled:opacity-50"
+          >
+            Uložiť
+          </button>
+          <button
+            onClick={() => onTogglePaid(!row.paid)}
+            disabled={busy}
+            className={`text-xs rounded-lg px-2 py-1 inline-flex items-center gap-1 ${
+              row.paid
+                ? "border border-[#D9D2CC] hover:bg-white"
+                : "bg-emerald-600 text-white hover:opacity-90"
+            }`}
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            {row.paid ? "Zrušiť" : "Uhradiť"}
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 }

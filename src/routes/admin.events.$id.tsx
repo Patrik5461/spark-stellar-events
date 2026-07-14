@@ -2,13 +2,14 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { ArrowLeft, Copy, Trash2 } from "lucide-react";
+import { ArrowLeft, Copy, Trash2, FileSpreadsheet } from "lucide-react";
 import {
   getEvent,
   updateEvent,
   duplicateEvent,
   deleteEvent,
 } from "@/lib/events.functions";
+import { exportEventXlsx } from "@/lib/finance.functions";
 import {
   EventForm,
   emptyEvent,
@@ -41,6 +42,25 @@ function EditEventPage() {
   const updateFn = useServerFn(updateEvent);
   const dupFn = useServerFn(duplicateEvent);
   const delFn = useServerFn(deleteEvent);
+  const exportFn = useServerFn(exportEventXlsx);
+
+  async function doExport(kind: "workers" | "attendance" | "payments" | "full") {
+    try {
+      const r: any = await exportFn({ data: { event_id: id, kind } });
+      const bin = atob(r.base64);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      const blob = new Blob([arr], { type: r.mime_type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = r.file_name;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e: any) {
+      toast.error(e?.message || "Chyba pri exporte.");
+    }
+  }
 
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -106,7 +126,36 @@ function EditEventPage() {
         >
           <ArrowLeft className="h-4 w-4" /> Späť na zoznam
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="inline-flex items-center gap-1 rounded-lg border border-[#D9D2CC] p-0.5 bg-[#F5F1EC]">
+            <span className="text-xs text-[#726D6A] px-2 inline-flex items-center gap-1">
+              <FileSpreadsheet className="h-3.5 w-3.5" /> Export
+            </span>
+            <button
+              onClick={() => doExport("workers")}
+              className="text-xs px-2 py-1 rounded hover:bg-white"
+            >
+              Pracovníci
+            </button>
+            <button
+              onClick={() => doExport("attendance")}
+              className="text-xs px-2 py-1 rounded hover:bg-white"
+            >
+              Dochádzka
+            </button>
+            <button
+              onClick={() => doExport("payments")}
+              className="text-xs px-2 py-1 rounded hover:bg-white"
+            >
+              Odmeny
+            </button>
+            <button
+              onClick={() => doExport("full")}
+              className="text-xs px-2 py-1 rounded hover:bg-white"
+            >
+              Kompletný
+            </button>
+          </div>
           <button
             onClick={async () => {
               try {
