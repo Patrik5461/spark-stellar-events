@@ -20,6 +20,7 @@ import { EventWorkersTab } from "@/components/admin/EventWorkersTab";
 import { EventAttendanceTab } from "@/components/admin/EventAttendanceTab";
 import { EventNotesTab } from "@/components/admin/EventNotesTab";
 import { EventHistoryTab } from "@/components/admin/EventHistoryTab";
+import { EventDocumentsTab } from "@/components/admin/EventDocumentsTab";
 
 export const Route = createFileRoute("/admin/events/$id")({
   head: () => ({
