@@ -92,6 +92,7 @@ function EditEventPage() {
     { id: "prehlad", label: "Prehľad" },
     { id: "pracovnici", label: "Pracovníci" },
     { id: "dochadzka", label: "Dochádzka" },
+    { id: "dokumenty", label: "Dokumenty" },
     { id: "poznamky", label: "Poznámky" },
     { id: "historia", label: "História" },
   ];
