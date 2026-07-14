@@ -107,6 +107,7 @@ type EventFields = {
   miesto_vykonu?: string;
   datum_od?: string;
   datum_do?: string;
+  datum_podpisu?: string;
   hodinova_sadzba?: string;
   jednorazova_odmena?: string;
   rozsah_prace?: string;
@@ -114,9 +115,16 @@ type EventFields = {
   poznamka?: string;
 };
 
+function fmtDate(v?: string): string {
+  if (!v) return "";
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? v : d.toLocaleDateString("sk-SK");
+}
+
 function buildPayload(h: any, event: EventFields) {
   const fullName = `${h.first_name || ""} ${h.last_name || ""}`.trim();
-  const dnes = new Date().toLocaleDateString("sk-SK");
+  const podpis = fmtDate(event.datum_podpisu);
+  const dnes = podpis || new Date().toLocaleDateString("sk-SK");
   const birth = h.birth_date
     ? new Date(h.birth_date).toLocaleDateString("sk-SK")
     : "";
@@ -143,6 +151,7 @@ function buildPayload(h: any, event: EventFields) {
     trvaly_pobyt: adresa,
     rodne_priezvisko: h.last_name || "",
     dnes,
+    datum_podpisu: podpis,
     spolocnost_nazov: COMPANY.nazov,
     spolocnost_sidlo: COMPANY.sidlo,
     spolocnost_ico: COMPANY.ico,
@@ -155,8 +164,8 @@ function buildPayload(h: any, event: EventFields) {
     spolocnost_register: COMPANY.register,
     spolocnost_zastupena: COMPANY.zastupena,
     miesto_vykonu: event.miesto_vykonu || "",
-    datum_od: event.datum_od || "",
-    datum_do: event.datum_do || "",
+    datum_od: fmtDate(event.datum_od),
+    datum_do: fmtDate(event.datum_do),
     hodinova_sadzba: event.hodinova_sadzba || "",
     jednorazova_odmena: event.jednorazova_odmena || "",
     rozsah_prace: event.rozsah_prace || "",
