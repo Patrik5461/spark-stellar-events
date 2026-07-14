@@ -48,6 +48,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
   const [event, setEvent] = useState<EventFields>(EMPTY_EVENT);
   const [previewB64, setPreviewB64] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
 
   async function refresh() {
     try {
