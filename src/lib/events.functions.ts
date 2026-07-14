@@ -652,7 +652,7 @@ export const generateContractForAssignment = createServerFn({ method: "POST" })
     const { data: tpl } = await supabaseAdmin
       .from("contract_templates")
       .select("*")
-      .eq("contract_type", data.kind)
+      .eq("contract_type", data.kind as any)
       .eq("is_active", true)
       .order("created_at", { ascending: false })
       .limit(1)
