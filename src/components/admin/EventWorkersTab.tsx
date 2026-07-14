@@ -247,6 +247,7 @@ export function EventWorkersTab({
                   <th className="py-2 pr-3">Kontakt</th>
                   <th className="py-2 pr-3">Stav</th>
                   <th className="py-2 pr-3">Konflikt</th>
+                  <th className="py-2 pr-3">Zmluva</th>
                   <th className="py-2 text-right">Akcie</th>
                 </tr>
               </thead>
