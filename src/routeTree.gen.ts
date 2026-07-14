@@ -22,10 +22,14 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as AdminGeneratedContractsRouteImport } from './routes/admin.generated-contracts'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminEventsRouteImport } from './routes/admin.events'
 import { Route as AdminContractsRouteImport } from './routes/admin.contracts'
 import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
 import { Route as AdminHostessesIndexRouteImport } from './routes/admin.hostesses.index'
+import { Route as AdminEventsIndexRouteImport } from './routes/admin.events.index'
 import { Route as AdminHostessesIdRouteImport } from './routes/admin.hostesses.$id'
+import { Route as AdminEventsNewRouteImport } from './routes/admin.events.new'
+import { Route as AdminEventsIdRouteImport } from './routes/admin.events.$id'
 
 const PrenajomObleceniaRoute = PrenajomObleceniaRouteImport.update({
   id: '/prenajom-oblecenia',
@@ -92,6 +96,11 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEventsRoute = AdminEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminContractsRoute = AdminContractsRouteImport.update({
   id: '/contracts',
   path: '/contracts',
@@ -107,10 +116,25 @@ const AdminHostessesIndexRoute = AdminHostessesIndexRouteImport.update({
   path: '/hostesses/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEventsIndexRoute = AdminEventsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminEventsRoute,
+} as any)
 const AdminHostessesIdRoute = AdminHostessesIdRouteImport.update({
   id: '/hostesses/$id',
   path: '/hostesses/$id',
   getParentRoute: () => AdminRoute,
+} as any)
+const AdminEventsNewRoute = AdminEventsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminEventsRoute,
+} as any)
+const AdminEventsIdRoute = AdminEventsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminEventsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -121,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
+  '/admin/events': typeof AdminEventsRouteWithChildren
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
@@ -129,7 +154,10 @@ export interface FileRoutesByFullPath {
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/events/$id': typeof AdminEventsIdRoute
+  '/admin/events/new': typeof AdminEventsNewRoute
   '/admin/hostesses/$id': typeof AdminHostessesIdRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
   '/admin/hostesses/': typeof AdminHostessesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -147,7 +175,10 @@ export interface FileRoutesByTo {
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/events/$id': typeof AdminEventsIdRoute
+  '/admin/events/new': typeof AdminEventsNewRoute
   '/admin/hostesses/$id': typeof AdminHostessesIdRoute
+  '/admin/events': typeof AdminEventsIndexRoute
   '/admin/hostesses': typeof AdminHostessesIndexRoute
 }
 export interface FileRoutesById {
@@ -159,6 +190,7 @@ export interface FileRoutesById {
   '/prenajom-oblecenia': typeof PrenajomObleceniaRoute
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
+  '/admin/events': typeof AdminEventsRouteWithChildren
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
@@ -167,7 +199,10 @@ export interface FileRoutesById {
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/events/$id': typeof AdminEventsIdRoute
+  '/admin/events/new': typeof AdminEventsNewRoute
   '/admin/hostesses/$id': typeof AdminHostessesIdRoute
+  '/admin/events/': typeof AdminEventsIndexRoute
   '/admin/hostesses/': typeof AdminHostessesIndexRoute
 }
 export interface FileRouteTypes {
@@ -180,6 +215,7 @@ export interface FileRouteTypes {
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
+    | '/admin/events'
     | '/admin/gallery'
     | '/admin/generated-contracts'
     | '/admin/health'
@@ -188,7 +224,10 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/admin/'
+    | '/admin/events/$id'
+    | '/admin/events/new'
     | '/admin/hostesses/$id'
+    | '/admin/events/'
     | '/admin/hostesses/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -206,7 +245,10 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/admin'
+    | '/admin/events/$id'
+    | '/admin/events/new'
     | '/admin/hostesses/$id'
+    | '/admin/events'
     | '/admin/hostesses'
   id:
     | '__root__'
@@ -217,6 +259,7 @@ export interface FileRouteTypes {
     | '/prenajom-oblecenia'
     | '/admin/clothing'
     | '/admin/contracts'
+    | '/admin/events'
     | '/admin/gallery'
     | '/admin/generated-contracts'
     | '/admin/health'
@@ -225,7 +268,10 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/admin/'
+    | '/admin/events/$id'
+    | '/admin/events/new'
     | '/admin/hostesses/$id'
+    | '/admin/events/'
     | '/admin/hostesses/'
   fileRoutesById: FileRoutesById
 }
@@ -330,6 +376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGalleryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/events': {
+      id: '/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof AdminEventsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/contracts': {
       id: '/admin/contracts'
       path: '/contracts'
@@ -351,6 +404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHostessesIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/events/': {
+      id: '/admin/events/'
+      path: '/'
+      fullPath: '/admin/events/'
+      preLoaderRoute: typeof AdminEventsIndexRouteImport
+      parentRoute: typeof AdminEventsRoute
+    }
     '/admin/hostesses/$id': {
       id: '/admin/hostesses/$id'
       path: '/hostesses/$id'
@@ -358,12 +418,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHostessesIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/events/new': {
+      id: '/admin/events/new'
+      path: '/new'
+      fullPath: '/admin/events/new'
+      preLoaderRoute: typeof AdminEventsNewRouteImport
+      parentRoute: typeof AdminEventsRoute
+    }
+    '/admin/events/$id': {
+      id: '/admin/events/$id'
+      path: '/$id'
+      fullPath: '/admin/events/$id'
+      preLoaderRoute: typeof AdminEventsIdRouteImport
+      parentRoute: typeof AdminEventsRoute
+    }
   }
 }
+
+interface AdminEventsRouteChildren {
+  AdminEventsIdRoute: typeof AdminEventsIdRoute
+  AdminEventsNewRoute: typeof AdminEventsNewRoute
+  AdminEventsIndexRoute: typeof AdminEventsIndexRoute
+}
+
+const AdminEventsRouteChildren: AdminEventsRouteChildren = {
+  AdminEventsIdRoute: AdminEventsIdRoute,
+  AdminEventsNewRoute: AdminEventsNewRoute,
+  AdminEventsIndexRoute: AdminEventsIndexRoute,
+}
+
+const AdminEventsRouteWithChildren = AdminEventsRoute._addFileChildren(
+  AdminEventsRouteChildren,
+)
 
 interface AdminRouteChildren {
   AdminClothingRoute: typeof AdminClothingRoute
   AdminContractsRoute: typeof AdminContractsRoute
+  AdminEventsRoute: typeof AdminEventsRouteWithChildren
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminGeneratedContractsRoute: typeof AdminGeneratedContractsRoute
   AdminHealthRoute: typeof AdminHealthRoute
@@ -379,6 +470,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminClothingRoute: AdminClothingRoute,
   AdminContractsRoute: AdminContractsRoute,
+  AdminEventsRoute: AdminEventsRouteWithChildren,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminGeneratedContractsRoute: AdminGeneratedContractsRoute,
   AdminHealthRoute: AdminHealthRoute,
