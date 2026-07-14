@@ -139,6 +139,34 @@ function HealthPage() {
     // App version
     results.push({ label: "Verzia aplikácie", status: "healthy", detail: APP_VERSION });
 
+    // Events module health
+    try {
+      const ev: any = await eventsHealthFn();
+      results.push({
+        label: "Storage bucket 'event-documents'",
+        status: ev.bucket_ok ? "healthy" : "error",
+        detail: ev.bucket_detail,
+      });
+      results.push({ label: "Počet eventov", status: "healthy", detail: `${ev.total_events}` });
+      results.push({
+        label: "Otvorené eventy",
+        status: "healthy",
+        detail: `${ev.open_events}`,
+      });
+      results.push({
+        label: "Priradenia bez zmluvy",
+        status: ev.assignments_missing_contract > 0 ? "warning" : "healthy",
+        detail: `${ev.assignments_missing_contract}`,
+      });
+      results.push({
+        label: "Ukončené eventy bez dochádzky",
+        status: ev.finished_no_attendance > 0 ? "warning" : "healthy",
+        detail: `${ev.finished_no_attendance}`,
+      });
+    } catch (e) {
+      results.push({ label: "Events health", status: "error", detail: (e as Error).message });
+    }
+
     setChecks(results);
     setRanAt(new Date());
     setRunning(false);
