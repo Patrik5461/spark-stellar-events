@@ -143,13 +143,13 @@ function HostessesPage() {
                 ) : filtered.length === 0 ? (
                   <tr><td colSpan={7} className="p-6 text-center text-[#726D6A]">Žiadne výsledky.</td></tr>
                 ) : filtered.map((r) => (
-                  <tr key={r.id} className="border-t border-[#D9D2CC] hover:bg-[#EBE6E2] cursor-pointer">
-                    <td className="px-4 py-3 font-mono text-xs">
-                      <Link to="/admin/hostesses/$id" params={{ id: r.id }} className="text-[#383B3A] hover:underline">{r.application_code}</Link>
-                    </td>
-                    <td className="px-4 py-3">
-                      <Link to="/admin/hostesses/$id" params={{ id: r.id }} className="font-medium text-[#383B3A]">{r.first_name} {r.last_name}</Link>
-                    </td>
+                  <tr
+                    key={r.id}
+                    onClick={() => navigate({ to: "/admin/hostesses/$id", params: { id: r.id } })}
+                    className="border-t border-[#D9D2CC] hover:bg-[#EBE6E2] cursor-pointer"
+                  >
+                    <td className="px-4 py-3 font-mono text-xs text-[#383B3A]">{r.application_code}</td>
+                    <td className="px-4 py-3 font-medium text-[#383B3A]">{r.first_name} {r.last_name}</td>
                     <td className="px-4 py-3 text-xs text-[#726D6A]">
                       {r.email && <div>{r.email}</div>}
                       {r.phone && <div>{r.phone}</div>}
