@@ -7,9 +7,52 @@ import {
   generateContract,
   listGeneratedContracts,
   getGeneratedContractUrl,
+  getGeneratedContractBase64,
   deleteGeneratedContract,
 } from "@/lib/contracts.functions";
 import { CONTRACT_KINDS, contractKindLabel, type ContractKind } from "@/lib/hostess-data";
+
+async function docxBase64ToHtml(b64: string): Promise<string> {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  const mammoth: any = await import("mammoth/mammoth.browser.js");
+  const conv = await (mammoth.convertToHtml || mammoth.default?.convertToHtml)(
+    { arrayBuffer: bytes.buffer },
+  );
+  return conv?.value || "";
+}
+
+async function htmlToPdf(html: string, filename: string) {
+  const container = document.createElement("div");
+  container.className = "contract-preview";
+  container.style.padding = "24px";
+  container.style.background = "white";
+  container.style.color = "#1c1c1c";
+  container.style.fontFamily = "Arial, sans-serif";
+  container.style.fontSize = "12pt";
+  container.style.width = "794px";
+  container.innerHTML = html;
+  document.body.appendChild(container);
+  try {
+    const mod: any = await import("html2pdf.js");
+    const html2pdf = mod.default || mod;
+    await html2pdf()
+      .set({
+        margin: [10, 12, 12, 12],
+        filename,
+        image: { type: "jpeg", quality: 0.95 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      })
+      .from(container)
+      .save();
+  } finally {
+    document.body.removeChild(container);
+  }
+}
+
 
 type EventFields = {
   miesto_vykonu: string;
@@ -39,7 +82,9 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
   const preview = useServerFn(previewContract);
   const generate = useServerFn(generateContract);
   const getUrl = useServerFn(getGeneratedContractUrl);
+  const getB64 = useServerFn(getGeneratedContractBase64);
   const del = useServerFn(deleteGeneratedContract);
+
 
   const [rows, setRows] = useState<any[]>([]);
   const [modalKind, setModalKind] = useState<ContractKind | null>(null);
@@ -80,11 +125,16 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     try {
       const r = (await preview({
         data: { hostess_id: hostessId, kind: modalKind, event },
-      })) as { base64: string; html?: string; filename: string };
+      })) as { base64: string; filename: string };
       setPreviewB64(r.base64);
-      setPreviewHtml(r.html || "");
+      try {
+        const html = await docxBase64ToHtml(r.base64);
+        setPreviewHtml(html);
+      } catch (err: any) {
+        setPreviewHtml("");
+        toast.error("Náhľad HTML zlyhal: " + (err?.message || err));
+      }
       toast.success("Náhľad pripravený — skontrolujte a potvrďte.");
-
     } catch (e: any) {
       toast.error(e?.message || "Náhľad zlyhal.");
     } finally {
@@ -100,6 +150,16 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     );
   }
+
+  async function downloadPreviewPdf() {
+    if (!previewHtml || !modalKind) return;
+    try {
+      await htmlToPdf(previewHtml, `${modalKind}-nahlad.pdf`);
+    } catch (e: any) {
+      toast.error("PDF export zlyhal: " + (e?.message || e));
+    }
+  }
+
 
   async function doGenerate() {
     if (!modalKind) return;
@@ -151,6 +211,22 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     });
   }
 
+  async function downloadRowPdf(row: any) {
+    try {
+      toast.message("Pripravujem PDF…");
+      const r = (await getB64({ data: { id: row.id } })) as {
+        base64: string;
+        filename: string;
+      };
+      const html = await docxBase64ToHtml(r.base64);
+      const name = `${row.contract_type}-v${row.version}.pdf`;
+      await htmlToPdf(html, name);
+    } catch (e: any) {
+      toast.error("PDF export zlyhal: " + (e?.message || e));
+    }
+  }
+
+
   return (
     <div className="rounded-xl border border-[#D9D2CC] bg-[#F5F1EC] p-5">
       <div className="flex items-center gap-2 mb-4">
@@ -201,12 +277,12 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                   <Download className="h-3.5 w-3.5" /> DOCX
                 </button>
                 <button
-                  disabled
-                  title="PDF export bude doplnený neskôr"
-                  className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs opacity-50 cursor-not-allowed"
+                  onClick={() => downloadRowPdf(r)}
+                  className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
                 >
                   <Download className="h-3.5 w-3.5" /> PDF
                 </button>
+
                 <button
                   onClick={() => regenerate(r)}
                   className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
@@ -283,9 +359,18 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                   onClick={downloadPreview}
                   className="inline-flex items-center gap-1.5 rounded-full border border-[#D9D2CC] px-4 py-2 text-xs"
                 >
-                  <Download className="h-3.5 w-3.5" /> Stiahnuť náhľad
+                  <Download className="h-3.5 w-3.5" /> DOCX
                 </button>
               )}
+              {previewHtml && (
+                <button
+                  onClick={downloadPreviewPdf}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#D9D2CC] px-4 py-2 text-xs"
+                >
+                  <Download className="h-3.5 w-3.5" /> PDF
+                </button>
+              )}
+
               <button
                 onClick={doPreview}
                 disabled={busy}

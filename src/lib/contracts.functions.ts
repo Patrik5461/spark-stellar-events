@@ -231,20 +231,9 @@ export const previewContract = createServerFn({ method: "POST" })
       .getZip()
       .generate({ type: "uint8array" }) as Uint8Array;
     const b64 = Buffer.from(out).toString("base64");
-
-    let html = "";
-    try {
-      const mammoth: any = await import("mammoth");
-      const conv = await (mammoth.convertToHtml || mammoth.default?.convertToHtml)(
-        { buffer: Buffer.from(out) },
-      );
-      html = conv?.value || "";
-    } catch (e) {
-      html = "";
-    }
-
-    return { base64: b64, html, filename: `${data.kind}-preview.docx` };
+    return { base64: b64, filename: `${data.kind}-preview.docx` };
   });
+
 
 
 // Confirm: same rendering, uploads to storage and stores history row.
@@ -395,6 +384,32 @@ export const getGeneratedContractUrl = createServerFn({ method: "POST" })
       .from(CONTRACTS_BUCKET)
       .createSignedUrl(r.docx_path, 600);
     return { url: s?.signedUrl || null };
+  });
+
+export const getGeneratedContractBase64 = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => d)
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import(
+      "@/integrations/supabase/client.server"
+    );
+    const { data: r } = await supabaseAdmin
+      .from("generated_contracts")
+      .select("docx_path, contract_type, version")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (!r) throw new Error("Zmluva neexistuje.");
+    const { data: file, error } = await supabaseAdmin.storage
+      .from(CONTRACTS_BUCKET)
+      .download(r.docx_path);
+    if (error || !file) throw new Error("Nepodarilo sa načítať zmluvu.");
+    const ab = await file.arrayBuffer();
+    const b64 = Buffer.from(new Uint8Array(ab)).toString("base64");
+    return {
+      base64: b64,
+      filename: `${r.contract_type}-v${r.version}.docx`,
+    };
   });
 
 export const deleteGeneratedContract = createServerFn({ method: "POST" })
