@@ -123,11 +123,16 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     try {
       const r = (await preview({
         data: { hostess_id: hostessId, kind: modalKind, event },
-      })) as { base64: string; html?: string; filename: string };
+      })) as { base64: string; filename: string };
       setPreviewB64(r.base64);
-      setPreviewHtml(r.html || "");
+      try {
+        const html = await docxBase64ToHtml(r.base64);
+        setPreviewHtml(html);
+      } catch (err: any) {
+        setPreviewHtml("");
+        toast.error("Náhľad HTML zlyhal: " + (err?.message || err));
+      }
       toast.success("Náhľad pripravený — skontrolujte a potvrďte.");
-
     } catch (e: any) {
       toast.error(e?.message || "Náhľad zlyhal.");
     } finally {
@@ -143,6 +148,16 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     );
   }
+
+  async function downloadPreviewPdf() {
+    if (!previewHtml || !modalKind) return;
+    try {
+      await htmlToPdf(previewHtml, `${modalKind}-nahlad.pdf`);
+    } catch (e: any) {
+      toast.error("PDF export zlyhal: " + (e?.message || e));
+    }
+  }
+
 
   async function doGenerate() {
     if (!modalKind) return;
