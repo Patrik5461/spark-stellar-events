@@ -308,6 +308,18 @@ export function EventWorkersTab({
                           <span className="text-xs text-[#726D6A]">—</span>
                         )}
                       </td>
+                      <td className="py-2 pr-3">
+                        <button
+                          onClick={() => setContractFor(a)}
+                          className="inline-flex items-center gap-1 text-xs rounded-lg border border-[#D9D2CC] px-2 py-1 hover:bg-white"
+                        >
+                          <FileText className="h-3.5 w-3.5" />
+                          {a.generated_contract_id ? "Zmluva" : "Generovať"}
+                          {a.contract_signed && (
+                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
+                          )}
+                        </button>
+                      </td>
                       <td className="py-2 text-right">
                         <button
                           onClick={() => onRemove(a.id, name)}
