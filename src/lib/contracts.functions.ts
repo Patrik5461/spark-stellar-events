@@ -366,6 +366,44 @@ export const listGeneratedContracts = createServerFn({ method: "POST" })
     return rows || [];
   });
 
+export const listAllGeneratedContracts = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import(
+      "@/integrations/supabase/client.server"
+    );
+    const { data: rows, error } = await supabaseAdmin
+      .from("generated_contracts")
+      .select(
+        "id, hostess_id, contract_type, version, created_at, generated_by_email, docx_path, event_data, hostess_snapshot",
+      )
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    const ids = Array.from(new Set((rows || []).map((r: any) => r.hostess_id)));
+    const hostessMap: Record<
+      string,
+      { first_name: string | null; last_name: string | null; email: string | null }
+    > = {};
+    if (ids.length) {
+      const { data: hs } = await supabaseAdmin
+        .from("hostess_profiles")
+        .select("id, first_name, last_name, email")
+        .in("id", ids);
+      for (const h of (hs as any[]) || []) {
+        hostessMap[h.id] = {
+          first_name: h.first_name,
+          last_name: h.last_name,
+          email: h.email,
+        };
+      }
+    }
+    return (rows || []).map((r: any) => ({
+      ...r,
+      hostess: hostessMap[r.hostess_id] || null,
+    }));
+  });
+
 export const getGeneratedContractUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { id: string }) => d)
