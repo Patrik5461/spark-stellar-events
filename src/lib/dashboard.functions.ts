@@ -9,14 +9,14 @@ async function assertAdmin(supabase: any, userId: string) {
   if (error || !data) throw new Error("Forbidden");
 }
 
-const OPEN_EVENT_STATUSES = ["koncept", "otvoreny_nabor", "obsadene", "prebieha"];
+const OPEN_EVENT_STATUSES = ["koncept", "otvoreny_nabor", "obsadene", "prebieha"] as const;
 const ACTIVE_ASSIGNMENT = [
   "navrhnuta",
   "kontaktovana",
   "potvrdena",
   "nahradnicka",
   "zucastnila_sa",
-];
+] as const;
 
 function todayISO() {
   const d = new Date();
