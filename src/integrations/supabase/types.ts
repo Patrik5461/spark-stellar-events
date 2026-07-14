@@ -399,6 +399,7 @@ export type Database = {
           application_code: string
           availability: string | null
           birth_date: string | null
+          birth_place: string | null
           city: string | null
           clothing_size: string | null
           contract_type: Database["public"]["Enums"]["hostess_contract_type"]
@@ -407,6 +408,8 @@ export type Database = {
           experience: string | null
           first_name: string
           hair_color: string | null
+          health_insurance: string | null
+          health_restrictions: string | null
           height: string | null
           iban: string | null
           id: string
@@ -415,9 +418,11 @@ export type Database = {
           invite_id: string | null
           languages: string | null
           last_name: string
+          marital_status: string | null
           national_id: string | null
           nationality: string | null
           note: string | null
+          pension_type: string | null
           phone: string | null
           postal_code: string | null
           shoe_size: string | null
@@ -429,6 +434,7 @@ export type Database = {
           application_code?: string
           availability?: string | null
           birth_date?: string | null
+          birth_place?: string | null
           city?: string | null
           clothing_size?: string | null
           contract_type?: Database["public"]["Enums"]["hostess_contract_type"]
@@ -437,6 +443,8 @@ export type Database = {
           experience?: string | null
           first_name: string
           hair_color?: string | null
+          health_insurance?: string | null
+          health_restrictions?: string | null
           height?: string | null
           iban?: string | null
           id?: string
@@ -445,9 +453,11 @@ export type Database = {
           invite_id?: string | null
           languages?: string | null
           last_name: string
+          marital_status?: string | null
           national_id?: string | null
           nationality?: string | null
           note?: string | null
+          pension_type?: string | null
           phone?: string | null
           postal_code?: string | null
           shoe_size?: string | null
@@ -459,6 +469,7 @@ export type Database = {
           application_code?: string
           availability?: string | null
           birth_date?: string | null
+          birth_place?: string | null
           city?: string | null
           clothing_size?: string | null
           contract_type?: Database["public"]["Enums"]["hostess_contract_type"]
@@ -467,6 +478,8 @@ export type Database = {
           experience?: string | null
           first_name?: string
           hair_color?: string | null
+          health_insurance?: string | null
+          health_restrictions?: string | null
           height?: string | null
           iban?: string | null
           id?: string
@@ -475,9 +488,11 @@ export type Database = {
           invite_id?: string | null
           languages?: string | null
           last_name?: string
+          marital_status?: string | null
           national_id?: string | null
           nationality?: string | null
           note?: string | null
+          pension_type?: string | null
           phone?: string | null
           postal_code?: string | null
           shoe_size?: string | null
