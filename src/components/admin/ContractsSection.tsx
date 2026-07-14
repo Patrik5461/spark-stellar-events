@@ -7,9 +7,52 @@ import {
   generateContract,
   listGeneratedContracts,
   getGeneratedContractUrl,
+  getGeneratedContractBase64,
   deleteGeneratedContract,
 } from "@/lib/contracts.functions";
 import { CONTRACT_KINDS, contractKindLabel, type ContractKind } from "@/lib/hostess-data";
+
+async function docxBase64ToHtml(b64: string): Promise<string> {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  const mammoth: any = await import("mammoth/mammoth.browser.js");
+  const conv = await (mammoth.convertToHtml || mammoth.default?.convertToHtml)(
+    { arrayBuffer: bytes.buffer },
+  );
+  return conv?.value || "";
+}
+
+async function htmlToPdf(html: string, filename: string) {
+  const container = document.createElement("div");
+  container.className = "contract-preview";
+  container.style.padding = "24px";
+  container.style.background = "white";
+  container.style.color = "#1c1c1c";
+  container.style.fontFamily = "Arial, sans-serif";
+  container.style.fontSize = "12pt";
+  container.style.width = "794px";
+  container.innerHTML = html;
+  document.body.appendChild(container);
+  try {
+    const mod: any = await import("html2pdf.js");
+    const html2pdf = mod.default || mod;
+    await html2pdf()
+      .set({
+        margin: [10, 12, 12, 12],
+        filename,
+        image: { type: "jpeg", quality: 0.95 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      })
+      .from(container)
+      .save();
+  } finally {
+    document.body.removeChild(container);
+  }
+}
+
 
 type EventFields = {
   miesto_vykonu: string;
