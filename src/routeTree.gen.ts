@@ -20,6 +20,7 @@ import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
+import { Route as AdminGeneratedContractsRouteImport } from './routes/admin.generated-contracts'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminContractsRouteImport } from './routes/admin.contracts'
 import { Route as AdminClothingRouteImport } from './routes/admin.clothing'
@@ -81,6 +82,11 @@ const AdminHealthRoute = AdminHealthRouteImport.update({
   path: '/health',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminGeneratedContractsRoute = AdminGeneratedContractsRouteImport.update({
+  id: '/generated-contracts',
+  path: '/generated-contracts',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGalleryRoute = AdminGalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/admin/clothing': typeof AdminClothingRoute
   '/admin/contracts': typeof AdminContractsRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/generated-contracts': typeof AdminGeneratedContractsRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/admin/clothing'
     | '/admin/contracts'
     | '/admin/gallery'
+    | '/admin/generated-contracts'
     | '/admin/health'
     | '/admin/login'
     | '/admin/messages'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/admin/clothing'
     | '/admin/contracts'
     | '/admin/gallery'
+    | '/admin/generated-contracts'
     | '/admin/health'
     | '/admin/login'
     | '/admin/messages'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/admin/clothing'
     | '/admin/contracts'
     | '/admin/gallery'
+    | '/admin/generated-contracts'
     | '/admin/health'
     | '/admin/login'
     | '/admin/messages'
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHealthRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/generated-contracts': {
+      id: '/admin/generated-contracts'
+      path: '/generated-contracts'
+      fullPath: '/admin/generated-contracts'
+      preLoaderRoute: typeof AdminGeneratedContractsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/gallery': {
       id: '/admin/gallery'
       path: '/gallery'
@@ -346,6 +365,7 @@ interface AdminRouteChildren {
   AdminClothingRoute: typeof AdminClothingRoute
   AdminContractsRoute: typeof AdminContractsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
+  AdminGeneratedContractsRoute: typeof AdminGeneratedContractsRoute
   AdminHealthRoute: typeof AdminHealthRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
@@ -360,6 +380,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminClothingRoute: AdminClothingRoute,
   AdminContractsRoute: AdminContractsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
+  AdminGeneratedContractsRoute: AdminGeneratedContractsRoute,
   AdminHealthRoute: AdminHealthRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminMessagesRoute: AdminMessagesRoute,
