@@ -65,10 +65,12 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     setModalKind(kind);
     setEvent(seedEvent || EMPTY_EVENT);
     setPreviewB64(null);
+    setPreviewHtml(null);
   }
   function closeModal() {
     setModalKind(null);
     setPreviewB64(null);
+    setPreviewHtml(null);
     setEvent(EMPTY_EVENT);
   }
 
@@ -78,9 +80,11 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     try {
       const r = (await preview({
         data: { hostess_id: hostessId, kind: modalKind, event },
-      })) as { base64: string; filename: string };
+      })) as { base64: string; html?: string; filename: string };
       setPreviewB64(r.base64);
+      setPreviewHtml(r.html || "");
       toast.success("Náhľad pripravený — skontrolujte a potvrďte.");
+
     } catch (e: any) {
       toast.error(e?.message || "Náhľad zlyhal.");
     } finally {
