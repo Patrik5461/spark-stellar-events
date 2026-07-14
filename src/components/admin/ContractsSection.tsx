@@ -231,7 +231,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
           onClick={closeModal}
         >
           <div
-            className="bg-[#F5F1EC] rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            className="bg-[#F5F1EC] rounded-xl w-full max-w-5xl max-h-[92vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-5 border-b border-[#D9D2CC] flex items-center justify-between">
