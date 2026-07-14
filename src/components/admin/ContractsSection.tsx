@@ -45,7 +45,9 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
   const [modalKind, setModalKind] = useState<ContractKind | null>(null);
   const [event, setEvent] = useState<EventFields>(EMPTY_EVENT);
   const [previewB64, setPreviewB64] = useState<string | null>(null);
+  const [previewHtml, setPreviewHtml] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
 
   async function refresh() {
     try {
