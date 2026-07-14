@@ -561,7 +561,9 @@ export type Database = {
           contract_type: string
           created_at: string
           docx_path: string
+          event_assignment_id: string | null
           event_data: Json
+          event_id: string | null
           generated_by: string | null
           generated_by_email: string | null
           hostess_id: string
@@ -575,7 +577,9 @@ export type Database = {
           contract_type: string
           created_at?: string
           docx_path: string
+          event_assignment_id?: string | null
           event_data?: Json
+          event_id?: string | null
           generated_by?: string | null
           generated_by_email?: string | null
           hostess_id: string
@@ -589,7 +593,9 @@ export type Database = {
           contract_type?: string
           created_at?: string
           docx_path?: string
+          event_assignment_id?: string | null
           event_data?: Json
+          event_id?: string | null
           generated_by?: string | null
           generated_by_email?: string | null
           hostess_id?: string
@@ -600,6 +606,20 @@ export type Database = {
           version?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "generated_contracts_event_assignment_id_fkey"
+            columns: ["event_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "event_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_contracts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "generated_contracts_hostess_id_fkey"
             columns: ["hostess_id"]
