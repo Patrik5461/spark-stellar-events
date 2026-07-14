@@ -182,6 +182,8 @@ function EditEventPage() {
         <EventWorkersTab eventId={id} requiredWorkers={requiredWorkers} />
       )}
 
+      {tab === "dochadzka" && <EventAttendanceTab eventId={id} />}
+
       {tab === "poznamky" && <EventNotesTab eventId={id} />}
 
       {tab === "historia" && <EventHistoryTab eventId={id} />}
