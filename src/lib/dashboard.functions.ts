@@ -52,12 +52,12 @@ export const getDashboardStats = createServerFn({ method: "GET" })
     ] = await Promise.all([
       s.from("events").select("id", { count: "exact", head: true }).lte("date_from", today).gte("date_to", today),
       s.from("events").select("id", { count: "exact", head: true }).lte("date_from", in7).gte("date_to", today),
-      s.from("events").select("id", { count: "exact", head: true }).in("status", OPEN_EVENT_STATUSES),
+      s.from("events").select("id", { count: "exact", head: true }).in("status", OPEN_EVENT_STATUSES as any),
       s.from("event_assignments").select("id", { count: "exact", head: true }).in("status", ["navrhnuta", "kontaktovana"]),
       s.from("event_assignments").select("id", { count: "exact", head: true }).eq("contract_required", true).eq("contract_signed", false),
       s.from("hostess_profiles").select("id", { count: "exact", head: true }).eq("status", "nova"),
-      s.from("events").select("id, required_workers").in("status", OPEN_EVENT_STATUSES).gte("date_to", today),
-      s.from("event_assignments").select("event_id, status").in("status", ACTIVE_ASSIGNMENT),
+      s.from("events").select("id, required_workers").in("status", OPEN_EVENT_STATUSES as any).gte("date_to", today),
+      s.from("event_assignments").select("event_id, status").in("status", ACTIVE_ASSIGNMENT as any),
       s.from("events").select("id, date_to").lt("date_to", today).neq("status", "zrusene"),
     ]);
 
@@ -257,7 +257,7 @@ export const getEventsHealthSnapshot = createServerFn({ method: "GET" })
     const today = todayISO();
     const [ev, openEv, ass, fin, assAll] = await Promise.all([
       s.from("events").select("id", { count: "exact", head: true }),
-      s.from("events").select("id", { count: "exact", head: true }).in("status", OPEN_EVENT_STATUSES),
+      s.from("events").select("id", { count: "exact", head: true }).in("status", OPEN_EVENT_STATUSES as any),
       s.from("event_assignments").select("id", { count: "exact", head: true }).eq("contract_required", true).is("generated_contract_id", null),
       s.from("events").select("id").lt("date_to", today).neq("status", "zrusene"),
       s.from("event_assignments").select("event_id, attendance_status"),
