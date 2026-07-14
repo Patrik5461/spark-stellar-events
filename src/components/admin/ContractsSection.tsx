@@ -7,52 +7,9 @@ import {
   generateContract,
   listGeneratedContracts,
   getGeneratedContractUrl,
-  getGeneratedContractBase64,
   deleteGeneratedContract,
 } from "@/lib/contracts.functions";
 import { CONTRACT_KINDS, contractKindLabel, type ContractKind } from "@/lib/hostess-data";
-
-async function docxBase64ToHtml(b64: string): Promise<string> {
-  const binary = atob(b64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  const mammoth: any = await import("mammoth/mammoth.browser.js");
-  const conv = await (mammoth.convertToHtml || mammoth.default?.convertToHtml)(
-    { arrayBuffer: bytes.buffer },
-  );
-  return conv?.value || "";
-}
-
-async function htmlToPdf(html: string, filename: string) {
-  const container = document.createElement("div");
-  container.className = "contract-preview";
-  container.style.padding = "24px";
-  container.style.background = "white";
-  container.style.color = "#1c1c1c";
-  container.style.fontFamily = "Arial, sans-serif";
-  container.style.fontSize = "12pt";
-  container.style.width = "794px";
-  container.innerHTML = html;
-  document.body.appendChild(container);
-  try {
-    const mod: any = await import("html2pdf.js");
-    const html2pdf = mod.default || mod;
-    await html2pdf()
-      .set({
-        margin: [10, 12, 12, 12],
-        filename,
-        image: { type: "jpeg", quality: 0.95 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-      })
-      .from(container)
-      .save();
-  } finally {
-    document.body.removeChild(container);
-  }
-}
-
 
 type EventFields = {
   miesto_vykonu: string;
@@ -82,17 +39,13 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
   const preview = useServerFn(previewContract);
   const generate = useServerFn(generateContract);
   const getUrl = useServerFn(getGeneratedContractUrl);
-  const getB64 = useServerFn(getGeneratedContractBase64);
   const del = useServerFn(deleteGeneratedContract);
-
 
   const [rows, setRows] = useState<any[]>([]);
   const [modalKind, setModalKind] = useState<ContractKind | null>(null);
   const [event, setEvent] = useState<EventFields>(EMPTY_EVENT);
   const [previewB64, setPreviewB64] = useState<string | null>(null);
-  const [previewHtml, setPreviewHtml] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-
 
   async function refresh() {
     try {
@@ -110,12 +63,10 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     setModalKind(kind);
     setEvent(seedEvent || EMPTY_EVENT);
     setPreviewB64(null);
-    setPreviewHtml(null);
   }
   function closeModal() {
     setModalKind(null);
     setPreviewB64(null);
-    setPreviewHtml(null);
     setEvent(EMPTY_EVENT);
   }
 
@@ -127,14 +78,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
         data: { hostess_id: hostessId, kind: modalKind, event },
       })) as { base64: string; filename: string };
       setPreviewB64(r.base64);
-      try {
-        const html = await docxBase64ToHtml(r.base64);
-        setPreviewHtml(html);
-      } catch (err: any) {
-        setPreviewHtml("");
-        toast.error("Náhľad HTML zlyhal: " + (err?.message || err));
-      }
-      toast.success("Náhľad pripravený — skontrolujte a potvrďte.");
+      toast.success("Náhľad DOCX pripravený — stiahnite a skontrolujte pred uložením.");
     } catch (e: any) {
       toast.error(e?.message || "Náhľad zlyhal.");
     } finally {
@@ -150,16 +94,6 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     );
   }
-
-  async function downloadPreviewPdf() {
-    if (!previewHtml || !modalKind) return;
-    try {
-      await htmlToPdf(previewHtml, `${modalKind}-nahlad.pdf`);
-    } catch (e: any) {
-      toast.error("PDF export zlyhal: " + (e?.message || e));
-    }
-  }
-
 
   async function doGenerate() {
     if (!modalKind) return;
@@ -211,22 +145,6 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     });
   }
 
-  async function downloadRowPdf(row: any) {
-    try {
-      toast.message("Pripravujem PDF…");
-      const r = (await getB64({ data: { id: row.id } })) as {
-        base64: string;
-        filename: string;
-      };
-      const html = await docxBase64ToHtml(r.base64);
-      const name = `${row.contract_type}-v${row.version}.pdf`;
-      await htmlToPdf(html, name);
-    } catch (e: any) {
-      toast.error("PDF export zlyhal: " + (e?.message || e));
-    }
-  }
-
-
   return (
     <div className="rounded-xl border border-[#D9D2CC] bg-[#F5F1EC] p-5">
       <div className="flex items-center gap-2 mb-4">
@@ -246,6 +164,14 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
             {k.label}
           </button>
         ))}
+      </div>
+
+      <div className="mb-4 rounded-lg border border-[#D9D2CC] bg-white/60 p-3 text-xs text-[#726D6A]">
+        PDF export je dočasne vypnutý. Zmluvy sa generujú vo formáte DOCX so
+        zachovaným formátovaním šablóny (tabuľky, okraje, fonty, hlavičky,
+        pätičky, zalomenia strán). Kvalitný PDF export vyžaduje pripojenie
+        externého konvertora (napr. CloudConvert, ConvertAPI, Gotenberg alebo
+        LibreOffice service) — poviete a zapojíme ho.
       </div>
 
       {rows.length === 0 ? (
@@ -277,13 +203,6 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                   <Download className="h-3.5 w-3.5" /> DOCX
                 </button>
                 <button
-                  onClick={() => downloadRowPdf(r)}
-                  className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
-                >
-                  <Download className="h-3.5 w-3.5" /> PDF
-                </button>
-
-                <button
                   onClick={() => regenerate(r)}
                   className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
                 >
@@ -307,7 +226,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
           onClick={closeModal}
         >
           <div
-            className="bg-[#F5F1EC] rounded-xl w-full max-w-5xl max-h-[92vh] overflow-y-auto"
+            className="bg-[#F5F1EC] rounded-xl w-full max-w-2xl max-h-[92vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-5 border-b border-[#D9D2CC] flex items-center justify-between">
@@ -335,20 +254,11 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                 <Field label="Poznámka" value={event.poznamka} onChange={(v) => setEvent({ ...event, poznamka: v })} full textarea />
               </div>
 
-              {previewHtml !== null && (
-                <div className="mt-4">
-                  <div className="text-xs uppercase tracking-wider text-[#726D6A] mb-2">
-                    Náhľad zmluvy
-                  </div>
-                  <div className="rounded-lg border border-[#D9D2CC] bg-white p-6 max-h-[55vh] overflow-y-auto text-sm text-[#1c1c1c] contract-preview">
-                    {previewHtml ? (
-                      <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
-                    ) : (
-                      <div className="text-xs text-[#726D6A]">
-                        Náhľad HTML sa nepodarilo vygenerovať. Stiahnite DOCX náhľad nižšie.
-                      </div>
-                    )}
-                  </div>
+              {previewB64 && (
+                <div className="mt-4 rounded-lg border border-[#D9D2CC] bg-white p-4 text-sm text-[#383B3A]">
+                  Náhľad DOCX je pripravený. Stiahnite ho a otvorte vo Worde
+                  na kontrolu — formátovanie je 1:1 zo šablóny. Po kontrole
+                  potvrďte a uložte.
                 </div>
               )}
             </div>
@@ -359,24 +269,15 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                   onClick={downloadPreview}
                   className="inline-flex items-center gap-1.5 rounded-full border border-[#D9D2CC] px-4 py-2 text-xs"
                 >
-                  <Download className="h-3.5 w-3.5" /> DOCX
+                  <Download className="h-3.5 w-3.5" /> Stiahnuť náhľad DOCX
                 </button>
               )}
-              {previewHtml && (
-                <button
-                  onClick={downloadPreviewPdf}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#D9D2CC] px-4 py-2 text-xs"
-                >
-                  <Download className="h-3.5 w-3.5" /> PDF
-                </button>
-              )}
-
               <button
                 onClick={doPreview}
                 disabled={busy}
                 className="inline-flex items-center gap-1.5 rounded-full border border-[#383B3A] text-[#383B3A] px-4 py-2 text-xs disabled:opacity-60"
               >
-                {busy ? "Pripravujem…" : previewB64 ? "Aktualizovať náhľad" : "Náhľad"}
+                {busy ? "Pripravujem…" : previewB64 ? "Aktualizovať náhľad" : "Náhľad DOCX"}
               </button>
               <button
                 onClick={doGenerate}
