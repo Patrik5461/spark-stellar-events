@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, Shirt, Users, FileText, Calendar, LayoutDashboard } from "lucide-react";
+import { LogOut, Image as ImageIcon, Settings, Wrench, MessageSquare, Activity, AlertTriangle, Shirt, Users, FileText, Calendar, LayoutDashboard } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useAdminAuth, signOut } from "@/lib/admin-auth";
 
