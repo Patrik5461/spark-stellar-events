@@ -258,7 +258,25 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                 <Field label="Rozsah práce" value={event.rozsah_prace} onChange={(v) => setEvent({ ...event, rozsah_prace: v })} full textarea />
                 <Field label="Poznámka" value={event.poznamka} onChange={(v) => setEvent({ ...event, poznamka: v })} full textarea />
               </div>
+
+              {previewHtml !== null && (
+                <div className="mt-4">
+                  <div className="text-xs uppercase tracking-wider text-[#726D6A] mb-2">
+                    Náhľad zmluvy
+                  </div>
+                  <div className="rounded-lg border border-[#D9D2CC] bg-white p-6 max-h-[55vh] overflow-y-auto text-sm text-[#1c1c1c] contract-preview">
+                    {previewHtml ? (
+                      <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
+                    ) : (
+                      <div className="text-xs text-[#726D6A]">
+                        Náhľad HTML sa nepodarilo vygenerovať. Stiahnite DOCX náhľad nižšie.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
+
             <div className="p-5 border-t border-[#D9D2CC] flex flex-wrap gap-2 justify-end sticky bottom-0 bg-[#F5F1EC]">
               {previewB64 && (
                 <button
