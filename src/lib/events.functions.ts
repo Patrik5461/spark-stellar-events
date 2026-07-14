@@ -564,7 +564,7 @@ export const updateAssignmentAttendance = createServerFn({ method: "POST" })
 
     const { data: row, error } = await context.supabase
       .from("event_assignments")
-      .update(patch)
+      .update(patch as any)
       .eq("id", data.id)
       .select()
       .single();
