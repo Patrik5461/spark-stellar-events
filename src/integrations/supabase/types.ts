@@ -155,6 +155,365 @@ export type Database = {
         }
         Relationships: []
       }
+      event_assignments: {
+        Row: {
+          admin_note: string | null
+          agreed_payment: number | null
+          arrival_time: string | null
+          attendance_status: Database["public"]["Enums"]["event_attendance_status"]
+          break_minutes: number
+          contract_required: boolean
+          contract_signed: boolean
+          created_at: string
+          departure_time: string | null
+          event_id: string
+          generated_contract_id: string | null
+          hostess_profile_id: string
+          id: string
+          paid: boolean
+          payment_type: Database["public"]["Enums"]["event_payment_type"] | null
+          status: Database["public"]["Enums"]["event_assignment_status"]
+          updated_at: string
+          worked_hours: number | null
+          worker_note: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          agreed_payment?: number | null
+          arrival_time?: string | null
+          attendance_status?: Database["public"]["Enums"]["event_attendance_status"]
+          break_minutes?: number
+          contract_required?: boolean
+          contract_signed?: boolean
+          created_at?: string
+          departure_time?: string | null
+          event_id: string
+          generated_contract_id?: string | null
+          hostess_profile_id: string
+          id?: string
+          paid?: boolean
+          payment_type?:
+            | Database["public"]["Enums"]["event_payment_type"]
+            | null
+          status?: Database["public"]["Enums"]["event_assignment_status"]
+          updated_at?: string
+          worked_hours?: number | null
+          worker_note?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          agreed_payment?: number | null
+          arrival_time?: string | null
+          attendance_status?: Database["public"]["Enums"]["event_attendance_status"]
+          break_minutes?: number
+          contract_required?: boolean
+          contract_signed?: boolean
+          created_at?: string
+          departure_time?: string | null
+          event_id?: string
+          generated_contract_id?: string | null
+          hostess_profile_id?: string
+          id?: string
+          paid?: boolean
+          payment_type?:
+            | Database["public"]["Enums"]["event_payment_type"]
+            | null
+          status?: Database["public"]["Enums"]["event_assignment_status"]
+          updated_at?: string
+          worked_hours?: number | null
+          worker_note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_assignments_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_assignments_generated_contract_id_fkey"
+            columns: ["generated_contract_id"]
+            isOneToOne: false
+            referencedRelation: "generated_contracts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_assignments_hostess_profile_id_fkey"
+            columns: ["hostess_profile_id"]
+            isOneToOne: false
+            referencedRelation: "hostess_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          details: Json | null
+          event_id: string
+          id: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          event_id: string
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          event_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_audit_log_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_clients: {
+        Row: {
+          contact_name: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          name: string
+          note: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          contact_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          note?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          contact_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          note?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_documents: {
+        Row: {
+          created_at: string
+          document_type: string
+          event_id: string
+          file_name: string
+          file_size: number | null
+          generated_contract_id: string | null
+          id: string
+          mime_type: string | null
+          storage_path: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_type?: string
+          event_id: string
+          file_name: string
+          file_size?: number | null
+          generated_contract_id?: string | null
+          id?: string
+          mime_type?: string | null
+          storage_path: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_type?: string
+          event_id?: string
+          file_name?: string
+          file_size?: number | null
+          generated_contract_id?: string | null
+          id?: string
+          mime_type?: string | null
+          storage_path?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_documents_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_documents_generated_contract_id_fkey"
+            columns: ["generated_contract_id"]
+            isOneToOne: false
+            referencedRelation: "generated_contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_notes: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          created_by_email: string | null
+          event_id: string
+          id: string
+          note: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          created_by_email?: string | null
+          event_id: string
+          id?: string
+          note: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          created_by_email?: string | null
+          event_id?: string
+          id?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_notes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          client_contact_name: string | null
+          client_email: string | null
+          client_id: string | null
+          client_phone: string | null
+          clothing_instructions: string | null
+          created_at: string
+          created_by: string | null
+          date_from: string
+          date_to: string
+          dress_code: string | null
+          id: string
+          internal_note: string | null
+          job_description: string | null
+          location: string
+          name: string
+          payment_amount: number | null
+          payment_type: Database["public"]["Enums"]["event_payment_type"]
+          public_note: string | null
+          required_languages: string | null
+          required_workers: number
+          requirements: string | null
+          requires_car: boolean
+          requires_driver_license: boolean
+          requires_food_certificate: boolean
+          status: Database["public"]["Enums"]["event_status"]
+          time_from: string | null
+          time_to: string | null
+          updated_at: string
+          worker_type: Database["public"]["Enums"]["event_worker_type"]
+        }
+        Insert: {
+          client_contact_name?: string | null
+          client_email?: string | null
+          client_id?: string | null
+          client_phone?: string | null
+          clothing_instructions?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_from: string
+          date_to: string
+          dress_code?: string | null
+          id?: string
+          internal_note?: string | null
+          job_description?: string | null
+          location: string
+          name: string
+          payment_amount?: number | null
+          payment_type?: Database["public"]["Enums"]["event_payment_type"]
+          public_note?: string | null
+          required_languages?: string | null
+          required_workers?: number
+          requirements?: string | null
+          requires_car?: boolean
+          requires_driver_license?: boolean
+          requires_food_certificate?: boolean
+          status?: Database["public"]["Enums"]["event_status"]
+          time_from?: string | null
+          time_to?: string | null
+          updated_at?: string
+          worker_type?: Database["public"]["Enums"]["event_worker_type"]
+        }
+        Update: {
+          client_contact_name?: string | null
+          client_email?: string | null
+          client_id?: string | null
+          client_phone?: string | null
+          clothing_instructions?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_from?: string
+          date_to?: string
+          dress_code?: string | null
+          id?: string
+          internal_note?: string | null
+          job_description?: string | null
+          location?: string
+          name?: string
+          payment_amount?: number | null
+          payment_type?: Database["public"]["Enums"]["event_payment_type"]
+          public_note?: string | null
+          required_languages?: string | null
+          required_workers?: number
+          requirements?: string | null
+          requires_car?: boolean
+          requires_driver_license?: boolean
+          requires_food_certificate?: boolean
+          status?: Database["public"]["Enums"]["event_status"]
+          time_from?: string | null
+          time_to?: string | null
+          updated_at?: string
+          worker_type?: Database["public"]["Enums"]["event_worker_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "event_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gallery_images: {
         Row: {
           alt: string
@@ -669,6 +1028,39 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "editor" | "user"
+      event_assignment_status:
+        | "navrhnuta"
+        | "kontaktovana"
+        | "potvrdena"
+        | "odmietnutna"
+        | "nahradnicka"
+        | "zucastnila_sa"
+        | "neprisla"
+        | "zrusena"
+      event_attendance_status:
+        | "nevyplnene"
+        | "ok"
+        | "meskala"
+        | "odisla_skor"
+        | "neprisla"
+      event_payment_type:
+        | "za_hodinu"
+        | "za_den"
+        | "jednorazova"
+        | "na_vyziadanie"
+      event_status:
+        | "koncept"
+        | "otvoreny_nabor"
+        | "obsadene"
+        | "prebieha"
+        | "dokoncene"
+        | "zrusene"
+      event_worker_type:
+        | "hosteska"
+        | "promoter"
+        | "helper"
+        | "produkcia"
+        | "ine"
       hostess_consent_type:
         | "osobne_udaje"
         | "pravdivost"
@@ -817,6 +1209,38 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "user"],
+      event_assignment_status: [
+        "navrhnuta",
+        "kontaktovana",
+        "potvrdena",
+        "odmietnutna",
+        "nahradnicka",
+        "zucastnila_sa",
+        "neprisla",
+        "zrusena",
+      ],
+      event_attendance_status: [
+        "nevyplnene",
+        "ok",
+        "meskala",
+        "odisla_skor",
+        "neprisla",
+      ],
+      event_payment_type: [
+        "za_hodinu",
+        "za_den",
+        "jednorazova",
+        "na_vyziadanie",
+      ],
+      event_status: [
+        "koncept",
+        "otvoreny_nabor",
+        "obsadene",
+        "prebieha",
+        "dokoncene",
+        "zrusene",
+      ],
+      event_worker_type: ["hosteska", "promoter", "helper", "produkcia", "ine"],
       hostess_consent_type: [
         "osobne_udaje",
         "pravdivost",
