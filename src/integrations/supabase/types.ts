@@ -330,8 +330,11 @@ export type Database = {
           file_size: number | null
           generated_contract_id: string | null
           id: string
+          internal_note: string | null
           mime_type: string | null
           storage_path: string
+          title: string | null
+          updated_at: string
           uploaded_by: string | null
         }
         Insert: {
@@ -342,8 +345,11 @@ export type Database = {
           file_size?: number | null
           generated_contract_id?: string | null
           id?: string
+          internal_note?: string | null
           mime_type?: string | null
           storage_path: string
+          title?: string | null
+          updated_at?: string
           uploaded_by?: string | null
         }
         Update: {
@@ -354,8 +360,11 @@ export type Database = {
           file_size?: number | null
           generated_contract_id?: string | null
           id?: string
+          internal_note?: string | null
           mime_type?: string | null
           storage_path?: string
+          title?: string | null
+          updated_at?: string
           uploaded_by?: string | null
         }
         Relationships: [
