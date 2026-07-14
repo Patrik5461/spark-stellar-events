@@ -1063,6 +1063,7 @@ export type Database = {
         | "meskala"
         | "odisla_skor"
         | "neprisla"
+        | "ospravedlnena"
       event_payment_type:
         | "za_hodinu"
         | "za_den"
@@ -1245,6 +1246,7 @@ export const Constants = {
         "meskala",
         "odisla_skor",
         "neprisla",
+        "ospravedlnena",
       ],
       event_payment_type: [
         "za_hodinu",
