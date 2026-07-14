@@ -203,45 +203,85 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
           Zatiaľ neboli pre túto hostesku vygenerované žiadne zmluvy.
         </div>
       ) : (
-        <ul className="space-y-2">
-          {rows.map((r) => (
-            <li
-              key={r.id}
-              className="rounded-lg bg-white border border-[#D9D2CC] px-4 py-3 flex items-center justify-between gap-3 flex-wrap"
-            >
-              <div className="text-sm">
-                <div className="font-medium text-[#383B3A]">
-                  {contractKindLabel(r.contract_type)}{" "}
-                  <span className="text-xs text-[#726D6A]">v{r.version}</span>
+        <div className="space-y-4">
+          {Object.entries(
+            rows.reduce<Record<string, any[]>>((acc, r) => {
+              const k = r.contract_type || "ostatne";
+              (acc[k] ||= []).push(r);
+              return acc;
+            }, {}),
+          )
+            .sort(([a], [b]) => contractKindLabel(a).localeCompare(contractKindLabel(b), "sk"))
+            .map(([kind, items]) => {
+              const open = openGroups[kind] ?? true;
+              return (
+                <div key={kind} className="rounded-lg border border-[#D9D2CC] bg-white/60">
+                  <button
+                    onClick={() =>
+                      setOpenGroups((s) => ({ ...s, [kind]: !open }))
+                    }
+                    className="w-full flex items-center justify-between px-4 py-2.5 text-left"
+                  >
+                    <div className="text-sm font-medium text-[#383B3A]">
+                      {contractKindLabel(kind)}{" "}
+                      <span className="text-xs text-[#726D6A]">({items.length})</span>
+                    </div>
+                    <span className="text-xs text-[#726D6A]">{open ? "–" : "+"}</span>
+                  </button>
+                  {open && (
+                    <ul className="px-2 pb-2 space-y-2">
+                      {items
+                        .slice()
+                        .sort(
+                          (a, b) =>
+                            new Date(b.created_at).getTime() -
+                            new Date(a.created_at).getTime(),
+                        )
+                        .map((r) => (
+                          <li
+                            key={r.id}
+                            className="rounded-lg bg-white border border-[#D9D2CC] px-4 py-3 flex items-center justify-between gap-3 flex-wrap"
+                          >
+                            <div className="text-sm">
+                              <div className="font-medium text-[#383B3A]">
+                                v{r.version}{" "}
+                                <span className="text-xs text-[#726D6A]">
+                                  {r.event_data?.nazov_klienta || ""}
+                                </span>
+                              </div>
+                              <div className="text-xs text-[#726D6A]">
+                                {new Date(r.created_at).toLocaleString("sk-SK")} ·{" "}
+                                {r.generated_by_email || "admin"}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => download(r.id)}
+                                className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
+                              >
+                                <Download className="h-3.5 w-3.5" /> DOCX
+                              </button>
+                              <button
+                                onClick={() => regenerate(r)}
+                                className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
+                              >
+                                <RefreshCw className="h-3.5 w-3.5" /> Regenerovať
+                              </button>
+                              <button
+                                onClick={() => remove(r.id)}
+                                className="inline-flex items-center gap-1 rounded-full border border-red-300 text-red-700 px-3 py-1.5 text-xs"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" /> Zmazať
+                              </button>
+                            </div>
+                          </li>
+                        ))}
+                    </ul>
+                  )}
                 </div>
-                <div className="text-xs text-[#726D6A]">
-                  {new Date(r.created_at).toLocaleString("sk-SK")} ·{" "}
-                  {r.generated_by_email || "admin"}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => download(r.id)}
-                  className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
-                >
-                  <Download className="h-3.5 w-3.5" /> DOCX
-                </button>
-                <button
-                  onClick={() => regenerate(r)}
-                  className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-3 py-1.5 text-xs"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" /> Regenerovať
-                </button>
-                <button
-                  onClick={() => remove(r.id)}
-                  className="inline-flex items-center gap-1 rounded-full border border-red-300 text-red-700 px-3 py-1.5 text-xs"
-                >
-                  <Trash2 className="h-3.5 w-3.5" /> Zmazať
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+              );
+            })}
+        </div>
       )}
 
       {modalKind && (
