@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { RefreshCw, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
 import { APP_VERSION } from "@/lib/admin-auth";
+import { getEventsHealthSnapshot } from "@/lib/dashboard.functions";
 
 type Status = "healthy" | "warning" | "error";
 type Check = { label: string; status: Status; detail?: string };
