@@ -187,7 +187,7 @@ export const createEvent = createServerFn({ method: "POST" })
     const payload = { ...normalizeEventInput(data), created_by: context.userId };
     const { data: row, error } = await context.supabase
       .from("events")
-      .insert(payload)
+      .insert(payload as any)
       .select()
       .single();
     if (error) throw new Error(error.message);
@@ -209,7 +209,7 @@ export const updateEvent = createServerFn({ method: "POST" })
     const patch = normalizeEventInput(rest);
     const { data: row, error } = await context.supabase
       .from("events")
-      .update(patch)
+      .update(patch as any)
       .eq("id", id)
       .select()
       .single();
