@@ -407,6 +407,16 @@ export function EventWorkersTab({
           </div>
         )}
       </section>
+
+      {contractFor && (
+        <EventContractDialog
+          assignment={contractFor as any}
+          onClose={() => setContractFor(null)}
+          onChanged={() => {
+            refresh();
+          }}
+        />
+      )}
     </div>
   );
 }
