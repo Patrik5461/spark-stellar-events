@@ -15,6 +15,7 @@ type EventFields = {
   miesto_vykonu: string;
   datum_od: string;
   datum_do: string;
+  datum_podpisu: string;
   hodinova_sadzba: string;
   jednorazova_odmena: string;
   rozsah_prace: string;
@@ -25,6 +26,7 @@ const EMPTY_EVENT: EventFields = {
   miesto_vykonu: "",
   datum_od: "",
   datum_do: "",
+  datum_podpisu: "",
   hodinova_sadzba: "",
   jednorazova_odmena: "",
   rozsah_prace: "",
@@ -134,6 +136,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
       miesto_vykonu: row.event_data?.miesto_vykonu || "",
       datum_od: row.event_data?.datum_od || "",
       datum_do: row.event_data?.datum_do || "",
+      datum_podpisu: row.event_data?.datum_podpisu || "",
       hodinova_sadzba: row.event_data?.hodinova_sadzba || "",
       jednorazova_odmena: row.event_data?.jednorazova_odmena || "",
       rozsah_prace: row.event_data?.rozsah_prace || "",
@@ -243,6 +246,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                 <Field label="Názov klienta" value={event.nazov_klienta} onChange={(v) => setEvent({ ...event, nazov_klienta: v })} />
                 <Field label="Dátum od" value={event.datum_od} onChange={(v) => setEvent({ ...event, datum_od: v })} type="date" />
                 <Field label="Dátum do" value={event.datum_do} onChange={(v) => setEvent({ ...event, datum_do: v })} type="date" />
+                <Field label="Dátum podpisu" value={event.datum_podpisu} onChange={(v) => setEvent({ ...event, datum_podpisu: v })} type="date" />
                 <Field label="Hodinová sadzba" value={event.hodinova_sadzba} onChange={(v) => setEvent({ ...event, hodinova_sadzba: v })} placeholder="napr. 8,00 €" />
                 <Field label="Jednorázová odmena" value={event.jednorazova_odmena} onChange={(v) => setEvent({ ...event, jednorazova_odmena: v })} placeholder="napr. 120,00 €" />
                 <Field label="Rozsah práce" value={event.rozsah_prace} onChange={(v) => setEvent({ ...event, rozsah_prace: v })} full textarea />
