@@ -7,6 +7,7 @@ import {
   generateContract,
   listGeneratedContracts,
   getGeneratedContractUrl,
+  getGeneratedContractBase64,
   deleteGeneratedContract,
 } from "@/lib/contracts.functions";
 import { CONTRACT_KINDS, contractKindLabel, type ContractKind } from "@/lib/hostess-data";
