@@ -17,6 +17,7 @@ import {
   type EventFormValues,
 } from "@/components/admin/EventForm";
 import { EventWorkersTab } from "@/components/admin/EventWorkersTab";
+import { EventAttendanceTab } from "@/components/admin/EventAttendanceTab";
 import { EventNotesTab } from "@/components/admin/EventNotesTab";
 import { EventHistoryTab } from "@/components/admin/EventHistoryTab";
 
