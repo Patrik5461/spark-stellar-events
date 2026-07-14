@@ -31,7 +31,7 @@ export const Route = createFileRoute("/admin/events/$id")({
   component: EditEventPage,
 });
 
-type Tab = "prehlad" | "pracovnici" | "poznamky" | "historia";
+type Tab = "prehlad" | "pracovnici" | "dochadzka" | "poznamky" | "historia";
 
 function EditEventPage() {
   const { id } = Route.useParams();
