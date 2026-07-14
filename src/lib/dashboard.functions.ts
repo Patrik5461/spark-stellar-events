@@ -127,7 +127,7 @@ export const getUpcomingEvents = createServerFn({ method: "GET" })
     ]);
     const counts: Record<string, number> = {};
     for (const a of (assigns.data as any[]) || []) {
-      if (ACTIVE_ASSIGNMENT.includes(a.status))
+      if ((ACTIVE_ASSIGNMENT as readonly string[]).includes(a.status))
         counts[a.event_id] = (counts[a.event_id] || 0) + 1;
     }
     const cmap: Record<string, any> = Object.fromEntries(
@@ -176,7 +176,7 @@ export const getDashboardAlerts = createServerFn({ method: "GET" })
     }
     for (const e of (soon as any[]) || []) {
       const list = assignsBy[e.id] || [];
-      const active = list.filter((a) => ACTIVE_ASSIGNMENT.includes(a.status));
+      const active = list.filter((a) => (ACTIVE_ASSIGNMENT as readonly string[]).includes(a.status));
       if (active.length < (e.required_workers || 0)) {
         alerts.push({
           kind: "understaffed",
