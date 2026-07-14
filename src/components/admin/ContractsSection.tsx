@@ -82,7 +82,9 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
   const preview = useServerFn(previewContract);
   const generate = useServerFn(generateContract);
   const getUrl = useServerFn(getGeneratedContractUrl);
+  const getB64 = useServerFn(getGeneratedContractBase64);
   const del = useServerFn(deleteGeneratedContract);
+
 
   const [rows, setRows] = useState<any[]>([]);
   const [modalKind, setModalKind] = useState<ContractKind | null>(null);
