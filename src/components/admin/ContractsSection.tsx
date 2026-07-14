@@ -211,6 +211,22 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     });
   }
 
+  async function downloadRowPdf(row: any) {
+    try {
+      toast.message("Pripravujem PDF…");
+      const r = (await getB64({ data: { id: row.id } })) as {
+        base64: string;
+        filename: string;
+      };
+      const html = await docxBase64ToHtml(r.base64);
+      const name = `${row.contract_type}-v${row.version}.pdf`;
+      await htmlToPdf(html, name);
+    } catch (e: any) {
+      toast.error("PDF export zlyhal: " + (e?.message || e));
+    }
+  }
+
+
   return (
     <div className="rounded-xl border border-[#D9D2CC] bg-[#F5F1EC] p-5">
       <div className="flex items-center gap-2 mb-4">
