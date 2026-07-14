@@ -121,7 +121,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
         filename: string;
       };
       if (!r?.base64) throw new Error("Prázdna odpoveď zo servera.");
-      downloadBase64(r.base64, r.filename, DOCX_MIME);
+      downloadBase64(r.base64, r.filename, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     } catch (e: any) {
       const msg = e?.message || "Stiahnutie zlyhalo.";
       console.error("[download DOCX] failed:", e);
