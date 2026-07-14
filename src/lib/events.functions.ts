@@ -276,7 +276,7 @@ const ACTIVE_ASSIGNMENT_STATUSES = [
   "potvrdena",
   "nahradnicka",
   "zucastnila_sa",
-];
+] as const;
 
 export const listAssignableHostesses = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
