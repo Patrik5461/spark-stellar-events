@@ -116,11 +116,33 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
 
   async function download(id: string) {
     try {
-      const r = (await getUrl({ data: { id } })) as { url: string | null };
-      if (r?.url) window.open(r.url, "_blank");
-      else toast.error("Odkaz sa nepodarilo vytvoriť.");
+      const r = (await getB64({ data: { id } })) as {
+        base64: string;
+        filename: string;
+      };
+      if (!r?.base64) throw new Error("Prázdna odpoveď zo servera.");
+      downloadBase64(r.base64, r.filename, DOCX_MIME);
     } catch (e: any) {
-      toast.error(e?.message);
+      const msg = e?.message || "Stiahnutie zlyhalo.";
+      console.error("[download DOCX] failed:", e);
+      toast.error(msg, {
+        duration: 10000,
+        action: {
+          label: "Skúsiť znova",
+          onClick: () => download(id),
+        },
+      });
+      // Fallback: try signed URL, log it, open only if valid.
+      try {
+        const s = (await getUrl({ data: { id } })) as {
+          url: string | null;
+          path?: string;
+        };
+        console.log("[download DOCX] fallback signed URL:", s?.url, "path:", s?.path);
+        if (s?.url) window.open(s.url, "_blank", "noopener");
+      } catch (e2: any) {
+        console.error("[download DOCX] signed URL fallback failed:", e2);
+      }
     }
   }
   async function remove(id: string) {
