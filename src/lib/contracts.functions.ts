@@ -374,16 +374,59 @@ export const getGeneratedContractUrl = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
-    const { data: r } = await supabaseAdmin
+    const { data: r, error: rErr } = await supabaseAdmin
       .from("generated_contracts")
-      .select("docx_path")
+      .select("docx_path, contract_type, version")
       .eq("id", data.id)
       .maybeSingle();
+    if (rErr) {
+      console.error("[getGeneratedContractUrl] DB error:", rErr);
+      throw new Error("DB chyba: " + rErr.message);
+    }
     if (!r) throw new Error("Zmluva neexistuje.");
-    const { data: s } = await supabaseAdmin.storage
+    if (!r.docx_path) {
+      console.error("[getGeneratedContractUrl] missing docx_path on row", data.id);
+      throw new Error("Zmluva nemá uložený súbor (chýba storage_path).");
+    }
+
+    // Verify file exists in bucket before signing.
+    const slash = r.docx_path.lastIndexOf("/");
+    const dir = slash >= 0 ? r.docx_path.slice(0, slash) : "";
+    const name = slash >= 0 ? r.docx_path.slice(slash + 1) : r.docx_path;
+    const { data: listing, error: lErr } = await supabaseAdmin.storage
       .from(CONTRACTS_BUCKET)
-      .createSignedUrl(r.docx_path, 600);
-    return { url: s?.signedUrl || null };
+      .list(dir, { search: name, limit: 1 });
+    if (lErr) {
+      console.error("[getGeneratedContractUrl] list error:", lErr);
+      throw new Error("Storage chyba: " + lErr.message);
+    }
+    const exists = (listing || []).some((f: any) => f.name === name);
+    if (!exists) {
+      console.error(
+        "[getGeneratedContractUrl] file missing in bucket:",
+        CONTRACTS_BUCKET,
+        r.docx_path,
+      );
+      throw new Error(
+        `Súbor v úložisku neexistuje: ${CONTRACTS_BUCKET}/${r.docx_path}`,
+      );
+    }
+
+    const { data: s, error: sErr } = await supabaseAdmin.storage
+      .from(CONTRACTS_BUCKET)
+      .createSignedUrl(r.docx_path, 900); // 15 minutes
+    if (sErr || !s?.signedUrl) {
+      console.error("[getGeneratedContractUrl] sign error:", sErr);
+      throw new Error(
+        "Nepodarilo sa vytvoriť odkaz: " + (sErr?.message || "unknown"),
+      );
+    }
+    console.log("[getGeneratedContractUrl] signed URL:", s.signedUrl);
+    return {
+      url: s.signedUrl,
+      filename: `${r.contract_type}-v${r.version}.docx`,
+      path: r.docx_path,
+    };
   });
 
 export const getGeneratedContractBase64 = createServerFn({ method: "POST" })
