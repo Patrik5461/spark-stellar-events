@@ -45,7 +45,9 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
   const [modalKind, setModalKind] = useState<ContractKind | null>(null);
   const [event, setEvent] = useState<EventFields>(EMPTY_EVENT);
   const [previewB64, setPreviewB64] = useState<string | null>(null);
+  const [previewHtml, setPreviewHtml] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
 
   async function refresh() {
     try {
@@ -63,10 +65,12 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     setModalKind(kind);
     setEvent(seedEvent || EMPTY_EVENT);
     setPreviewB64(null);
+    setPreviewHtml(null);
   }
   function closeModal() {
     setModalKind(null);
     setPreviewB64(null);
+    setPreviewHtml(null);
     setEvent(EMPTY_EVENT);
   }
 
@@ -76,9 +80,11 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
     try {
       const r = (await preview({
         data: { hostess_id: hostessId, kind: modalKind, event },
-      })) as { base64: string; filename: string };
+      })) as { base64: string; html?: string; filename: string };
       setPreviewB64(r.base64);
+      setPreviewHtml(r.html || "");
       toast.success("Náhľad pripravený — skontrolujte a potvrďte.");
+
     } catch (e: any) {
       toast.error(e?.message || "Náhľad zlyhal.");
     } finally {
@@ -225,7 +231,7 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
           onClick={closeModal}
         >
           <div
-            className="bg-[#F5F1EC] rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            className="bg-[#F5F1EC] rounded-xl w-full max-w-5xl max-h-[92vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-5 border-b border-[#D9D2CC] flex items-center justify-between">
@@ -252,7 +258,25 @@ export function ContractsSection({ hostessId }: { hostessId: string }) {
                 <Field label="Rozsah práce" value={event.rozsah_prace} onChange={(v) => setEvent({ ...event, rozsah_prace: v })} full textarea />
                 <Field label="Poznámka" value={event.poznamka} onChange={(v) => setEvent({ ...event, poznamka: v })} full textarea />
               </div>
+
+              {previewHtml !== null && (
+                <div className="mt-4">
+                  <div className="text-xs uppercase tracking-wider text-[#726D6A] mb-2">
+                    Náhľad zmluvy
+                  </div>
+                  <div className="rounded-lg border border-[#D9D2CC] bg-white p-6 max-h-[55vh] overflow-y-auto text-sm text-[#1c1c1c] contract-preview">
+                    {previewHtml ? (
+                      <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
+                    ) : (
+                      <div className="text-xs text-[#726D6A]">
+                        Náhľad HTML sa nepodarilo vygenerovať. Stiahnite DOCX náhľad nižšie.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
+
             <div className="p-5 border-t border-[#D9D2CC] flex flex-wrap gap-2 justify-end sticky bottom-0 bg-[#F5F1EC]">
               {previewB64 && (
                 <button
