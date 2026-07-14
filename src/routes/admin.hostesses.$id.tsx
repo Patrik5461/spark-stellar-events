@@ -139,12 +139,17 @@ function HostessDetail() {
 
           <Fieldset title="Osobné údaje" form={form} setForm={setForm} fields={[
             ["first_name","Meno"],["last_name","Priezvisko"],
-            ["birth_date","Dátum narodenia","date"],["phone","Telefón"],
+            ["birth_date","Dátum narodenia","date"],["birth_place","Miesto narodenia"],
+            ["phone","Telefón"],
             ["email","Email"],["nationality","Štátna príslušnosť"],
+            ["marital_status","Rodinný stav"],
             ["address","Adresa",undefined,true],
             ["city","Mesto"],["postal_code","PSČ"],
             ["national_id","Rodné číslo"],["identity_card_number","Číslo OP"],
             ["iban","IBAN",undefined,true],
+            ["health_insurance","Zdravotná poisťovňa"],
+            ["pension_type","Poberateľ dôchodku / druh dôchodku"],
+            ["health_restrictions","Zdravotné obmedzenia / ZŤP",undefined,true,true],
           ]} />
           <Fieldset title="Pracovné informácie" form={form} setForm={setForm} fields={[
             ["height","Výška"],["clothing_size","Konfekčná veľkosť"],
