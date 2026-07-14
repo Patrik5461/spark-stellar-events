@@ -41,6 +41,7 @@ async function copyFormLink() {
 
 function HostessesPage() {
   const list = useServerFn(listHostesses);
+  const navigate = useNavigate();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
