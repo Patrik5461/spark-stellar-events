@@ -15,6 +15,7 @@ type EventFields = {
   miesto_vykonu: string;
   datum_od: string;
   datum_do: string;
+  datum_podpisu: string;
   hodinova_sadzba: string;
   jednorazova_odmena: string;
   rozsah_prace: string;
@@ -25,6 +26,7 @@ const EMPTY_EVENT: EventFields = {
   miesto_vykonu: "",
   datum_od: "",
   datum_do: "",
+  datum_podpisu: "",
   hodinova_sadzba: "",
   jednorazova_odmena: "",
   rozsah_prace: "",
