@@ -8,6 +8,8 @@ import {
   Trash2,
   AlertTriangle,
   ExternalLink,
+  FileText,
+  CheckCircle2,
 } from "lucide-react";
 import {
   listAssignableHostesses,
@@ -22,6 +24,7 @@ import {
   ASSIGNMENT_STATUS_LABEL,
   type AssignmentStatus,
 } from "@/lib/event-constants";
+import { EventContractDialog } from "./EventContractDialog";
 
 type Hostess = {
   id: string;
@@ -41,6 +44,11 @@ type Assignment = {
   status: AssignmentStatus;
   hostess: Hostess | null;
   created_at: string;
+  generated_contract_id: string | null;
+  contract_signed: boolean;
+  contract_required: boolean;
+  agreed_payment: number | null;
+  payment_type: string | null;
 };
 
 const badge: Record<AssignmentStatus, string> = {
@@ -76,6 +84,7 @@ export function EventWorkersTab({
   const [asSubstitute, setAsSubstitute] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [conflicts, setConflicts] = useState<Record<string, any[]>>({});
+  const [contractFor, setContractFor] = useState<Assignment | null>(null);
 
   async function refresh() {
     setLoading(true);
@@ -238,6 +247,7 @@ export function EventWorkersTab({
                   <th className="py-2 pr-3">Kontakt</th>
                   <th className="py-2 pr-3">Stav</th>
                   <th className="py-2 pr-3">Konflikt</th>
+                  <th className="py-2 pr-3">Zmluva</th>
                   <th className="py-2 text-right">Akcie</th>
                 </tr>
               </thead>
@@ -297,6 +307,18 @@ export function EventWorkersTab({
                         ) : (
                           <span className="text-xs text-[#726D6A]">—</span>
                         )}
+                      </td>
+                      <td className="py-2 pr-3">
+                        <button
+                          onClick={() => setContractFor(a)}
+                          className="inline-flex items-center gap-1 text-xs rounded-lg border border-[#D9D2CC] px-2 py-1 hover:bg-white"
+                        >
+                          <FileText className="h-3.5 w-3.5" />
+                          {a.generated_contract_id ? "Zmluva" : "Generovať"}
+                          {a.contract_signed && (
+                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
+                          )}
+                        </button>
                       </td>
                       <td className="py-2 text-right">
                         <button
@@ -385,6 +407,16 @@ export function EventWorkersTab({
           </div>
         )}
       </section>
+
+      {contractFor && (
+        <EventContractDialog
+          assignment={contractFor as any}
+          onClose={() => setContractFor(null)}
+          onChanged={() => {
+            refresh();
+          }}
+        />
+      )}
     </div>
   );
 }

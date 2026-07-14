@@ -87,13 +87,24 @@ export const ATTENDANCE_STATUSES = [
   "meskala",
   "odisla_skor",
   "neprisla",
+  "ospravedlnena",
 ] as const;
 export type AttendanceStatus = (typeof ATTENDANCE_STATUSES)[number];
 
 export const ATTENDANCE_STATUS_LABEL: Record<AttendanceStatus, string> = {
   nevyplnene: "Nevyplnené",
-  ok: "OK",
+  ok: "Zúčastnila sa",
   meskala: "Meškala",
   odisla_skor: "Odišla skôr",
   neprisla: "Neprišla",
+  ospravedlnena: "Ospravedlnená",
+};
+
+export const ATTENDANCE_STATUS_COLOR: Record<AttendanceStatus, string> = {
+  nevyplnene: "bg-[#EBE6E2] text-[#726D6A]",
+  ok: "bg-emerald-100 text-emerald-800",
+  meskala: "bg-amber-100 text-amber-800",
+  odisla_skor: "bg-amber-100 text-amber-800",
+  neprisla: "bg-red-100 text-red-800",
+  ospravedlnena: "bg-blue-100 text-blue-800",
 };

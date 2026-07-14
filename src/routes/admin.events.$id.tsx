@@ -17,6 +17,7 @@ import {
   type EventFormValues,
 } from "@/components/admin/EventForm";
 import { EventWorkersTab } from "@/components/admin/EventWorkersTab";
+import { EventAttendanceTab } from "@/components/admin/EventAttendanceTab";
 import { EventNotesTab } from "@/components/admin/EventNotesTab";
 import { EventHistoryTab } from "@/components/admin/EventHistoryTab";
 
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/admin/events/$id")({
   component: EditEventPage,
 });
 
-type Tab = "prehlad" | "pracovnici" | "poznamky" | "historia";
+type Tab = "prehlad" | "pracovnici" | "dochadzka" | "poznamky" | "historia";
 
 function EditEventPage() {
   const { id } = Route.useParams();
@@ -89,6 +90,7 @@ function EditEventPage() {
   const tabs: { id: Tab; label: string }[] = [
     { id: "prehlad", label: "Prehľad" },
     { id: "pracovnici", label: "Pracovníci" },
+    { id: "dochadzka", label: "Dochádzka" },
     { id: "poznamky", label: "Poznámky" },
     { id: "historia", label: "História" },
   ];
@@ -179,6 +181,8 @@ function EditEventPage() {
       {tab === "pracovnici" && (
         <EventWorkersTab eventId={id} requiredWorkers={requiredWorkers} />
       )}
+
+      {tab === "dochadzka" && <EventAttendanceTab eventId={id} />}
 
       {tab === "poznamky" && <EventNotesTab eventId={id} />}
 

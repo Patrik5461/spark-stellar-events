@@ -1,0 +1,1 @@
+ALTER TYPE public.event_attendance_status ADD VALUE IF NOT EXISTS 'ospravedlnena';
