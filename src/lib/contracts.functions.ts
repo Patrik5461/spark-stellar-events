@@ -231,8 +231,21 @@ export const previewContract = createServerFn({ method: "POST" })
       .getZip()
       .generate({ type: "uint8array" }) as Uint8Array;
     const b64 = Buffer.from(out).toString("base64");
-    return { base64: b64, filename: `${data.kind}-preview.docx` };
+
+    let html = "";
+    try {
+      const mammoth: any = await import("mammoth");
+      const conv = await (mammoth.convertToHtml || mammoth.default?.convertToHtml)(
+        { buffer: Buffer.from(out) },
+      );
+      html = conv?.value || "";
+    } catch (e) {
+      html = "";
+    }
+
+    return { base64: b64, html, filename: `${data.kind}-preview.docx` };
   });
+
 
 // Confirm: same rendering, uploads to storage and stores history row.
 export const generateContract = createServerFn({ method: "POST" })
