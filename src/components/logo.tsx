@@ -12,10 +12,13 @@ export function Logo({ className, title = "NU-U" }: LogoProps) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 800 800"
+      width="100%"
+      height="100%"
       role="img"
       aria-label={title}
       className={className}
       preserveAspectRatio="xMidYMid meet"
+      style={{ display: "block" }}
     >
       <title>{title}</title>
       <g stroke="currentColor" strokeWidth={3} strokeLinecap="round" opacity={0.7}>
