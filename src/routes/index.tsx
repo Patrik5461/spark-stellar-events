@@ -90,6 +90,7 @@ function Hero({ settings }: { settings: SiteSettings | null }) {
   const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   const headline = pick(settings, "hero_headline", "Ľudia, ktorí robia rozdiel na každom evente.");
   const subtitle = pick(settings, "hero_subtitle", "Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku aj v zahraničí.");
+  const heroImage = pick(settings, "hero_image_url", hero);
   const ctaPrimary = pick(settings, "cta_primary", "Kontaktujte nás");
   const ctaSecondary = pick(settings, "cta_secondary", "Naše služby");
   return (
@@ -153,7 +154,7 @@ function Hero({ settings }: { settings: SiteSettings | null }) {
         >
           <div className="relative aspect-[16/8] w-full overflow-hidden">
             <motion.img
-              src={hero}
+              src={heroImage}
               alt="Elegantná hosteska na luxusnom evente"
               style={{ y: imgY, scale: imgScale }}
               className="h-full w-full object-cover will-change-transform"
@@ -303,7 +304,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
         <motion.div {...fadeUp} className="relative">
           <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden soft-shadow-lg border border-[#D9D2CC]">
-            <img src={g4} alt="Profesionálna hosteska" loading="lazy" width={1024} height={1280} className="h-full w-full object-cover" />
+            <img src={pick(settings, "about_image_url", g4)} alt="Profesionálna hosteska" loading="lazy" width={1024} height={1280} className="h-full w-full object-cover" />
           </div>
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.96 }}

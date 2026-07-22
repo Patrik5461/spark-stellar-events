@@ -10,6 +10,16 @@ let cached: SiteSettings | null = null;
 let inflight: Promise<SiteSettings | null> | null = null;
 const listeners = new Set<(s: SiteSettings | null) => void>();
 
+export function invalidateSiteSettings(next?: SiteSettings | null) {
+  if (next !== undefined) {
+    cached = next;
+    listeners.forEach((l) => l(cached));
+  } else {
+    cached = null;
+  }
+  inflight = null;
+}
+
 async function fetchSettings(): Promise<SiteSettings | null> {
   if (inflight) return inflight;
   inflight = (async () => {

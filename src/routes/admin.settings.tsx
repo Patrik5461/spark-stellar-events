@@ -2,7 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Save, KeyRound } from "lucide-react";
+import { invalidateSiteSettings } from "@/lib/use-site-settings";
+import { Save, KeyRound, Upload, Trash2 } from "lucide-react";
+
+const SIGN_TTL = 60 * 60 * 24 * 365 * 5; // 5 years
 
 type Row = Database["public"]["Tables"]["site_settings"]["Row"];
 
@@ -41,6 +44,66 @@ function SettingsAdmin() {
   const [pwd, setPwd] = useState("");
   const [pwdBusy, setPwdBusy] = useState(false);
   const [pwdMsg, setPwdMsg] = useState<string | null>(null);
+  const [imgBusy, setImgBusy] = useState<"hero" | "about" | null>(null);
+  const [imgErr, setImgErr] = useState<string | null>(null);
+
+  const uploadImage = async (kind: "hero" | "about", file: File) => {
+    if (!row) return;
+    setImgBusy(kind);
+    setImgErr(null);
+    try {
+      const path = `${kind}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name}`;
+      const { error: upErr } = await supabase.storage.from("site-images").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (upErr) throw upErr;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("site-images")
+        .createSignedUrl(path, SIGN_TTL);
+      if (signErr) throw signErr;
+      const patch: Partial<Row> =
+        kind === "hero"
+          ? { hero_image_url: signed.signedUrl, hero_image_path: path }
+          : { about_image_url: signed.signedUrl, about_image_path: path };
+      // Delete previous file if any
+      const prevPath = kind === "hero" ? row.hero_image_path : row.about_image_path;
+      if (prevPath) {
+        await supabase.storage.from("site-images").remove([prevPath]);
+      }
+      const { error: updErr } = await supabase.from("site_settings").update(patch).eq("id", 1);
+      if (updErr) throw updErr;
+      setRow({ ...row, ...patch });
+      invalidateSiteSettings({ ...row, ...patch });
+    } catch (e) {
+      setImgErr((e as Error).message);
+    } finally {
+      setImgBusy(null);
+    }
+  };
+
+  const removeImage = async (kind: "hero" | "about") => {
+    if (!row) return;
+    if (!confirm("Odstrániť fotografiu?")) return;
+    setImgBusy(kind);
+    setImgErr(null);
+    try {
+      const prevPath = kind === "hero" ? row.hero_image_path : row.about_image_path;
+      if (prevPath) await supabase.storage.from("site-images").remove([prevPath]);
+      const patch: Partial<Row> =
+        kind === "hero"
+          ? { hero_image_url: null, hero_image_path: null }
+          : { about_image_url: null, about_image_path: null };
+      const { error } = await supabase.from("site_settings").update(patch).eq("id", 1);
+      if (error) throw error;
+      setRow({ ...row, ...patch });
+      invalidateSiteSettings({ ...row, ...patch });
+    } catch (e) {
+      setImgErr((e as Error).message);
+    } finally {
+      setImgBusy(null);
+    }
+  };
 
   useEffect(() => {
     supabase.from("site_settings").select("*").eq("id", 1).maybeSingle().then(({ data }: { data: Row | null }) => setRow(data));
@@ -52,6 +115,7 @@ function SettingsAdmin() {
     setMsg(null);
     const { error } = await supabase.from("site_settings").update(row).eq("id", 1);
     setBusy(false);
+    if (!error) invalidateSiteSettings({ ...row });
     setMsg(error ? error.message : "Uložené ✓");
   };
 
@@ -114,6 +178,55 @@ function SettingsAdmin() {
             </div>
           </div>
         ))}
+
+        <div className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-6">
+          <h2 className="font-display text-2xl mb-4">Fotografie webu</h2>
+          {imgErr && <div className="mb-4 rounded-lg bg-red-100 text-red-800 px-4 py-3 text-sm">{imgErr}</div>}
+          <div className="grid md:grid-cols-2 gap-6">
+            {([
+              { kind: "hero" as const, label: "Titulná fotografia (Hero)", url: row.hero_image_url },
+              { kind: "about" as const, label: "Fotografia v sekcii O nás", url: row.about_image_url },
+            ]).map(({ kind, label, url }) => (
+              <div key={kind} className="space-y-3">
+                <div className="text-xs uppercase tracking-[0.2em] text-[#726D6A]">{label}</div>
+                <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#D9D2CC] bg-white/60 flex items-center justify-center">
+                  {url ? (
+                    <img src={url} alt={label} className="h-full w-full object-cover" />
+                  ) : (
+                    <span className="text-sm text-[#726D6A]">Používa sa predvolená fotka</span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <label className="inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-4 py-2 text-sm cursor-pointer hover:opacity-90">
+                    <Upload className="h-4 w-4" />
+                    {imgBusy === kind ? "Nahrávam…" : url ? "Zmeniť fotku" : "Nahrať fotku"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      disabled={imgBusy === kind}
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) uploadImage(kind, f);
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                  {url && (
+                    <button
+                      onClick={() => removeImage(kind)}
+                      disabled={imgBusy === kind}
+                      className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-4 py-2 text-sm text-red-700 hover:bg-white/60"
+                    >
+                      <Trash2 className="h-4 w-4" /> Odstrániť
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
 
         <div className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-6">
           <h2 className="font-display text-2xl mb-4 flex items-center gap-2"><KeyRound className="h-5 w-5" /> Zmena hesla</h2>
