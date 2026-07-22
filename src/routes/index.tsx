@@ -304,7 +304,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
         <motion.div {...fadeUp} className="relative">
           <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden soft-shadow-lg border border-[#D9D2CC]">
-            <img src={g4} alt="Profesionálna hosteska" loading="lazy" width={1024} height={1280} className="h-full w-full object-cover" />
+            <img src={pick(settings, "about_image_url", g4)} alt="Profesionálna hosteska" loading="lazy" width={1024} height={1280} className="h-full w-full object-cover" />
           </div>
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.96 }}
