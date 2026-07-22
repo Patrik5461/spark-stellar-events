@@ -695,6 +695,8 @@ function ContactForm() {
       const { supabase } = await import("@/integrations/supabase/client");
       const { error } = await supabase.from("contact_messages").insert(payload);
       if (error) throw error;
+      const { sendContactForm } = await import("@/lib/contact.functions");
+      await sendContactForm({ data: payload });
       setSent(true);
     } catch (e2) {
       setErr((e2 as Error).message || "Odoslanie zlyhalo. Skúste to prosím znova.");
