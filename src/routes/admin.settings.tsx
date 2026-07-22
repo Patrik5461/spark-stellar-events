@@ -74,6 +74,7 @@ function SettingsAdmin() {
       const { error: updErr } = await supabase.from("site_settings").update(patch).eq("id", 1);
       if (updErr) throw updErr;
       setRow({ ...row, ...patch });
+      invalidateSiteSettings({ ...row, ...patch });
     } catch (e) {
       setImgErr((e as Error).message);
     } finally {
@@ -96,6 +97,7 @@ function SettingsAdmin() {
       const { error } = await supabase.from("site_settings").update(patch).eq("id", 1);
       if (error) throw error;
       setRow({ ...row, ...patch });
+      invalidateSiteSettings({ ...row, ...patch });
     } catch (e) {
       setImgErr((e as Error).message);
     } finally {
@@ -113,6 +115,7 @@ function SettingsAdmin() {
     setMsg(null);
     const { error } = await supabase.from("site_settings").update(row).eq("id", 1);
     setBusy(false);
+    if (!error) invalidateSiteSettings({ ...row });
     setMsg(error ? error.message : "Uložené ✓");
   };
 
