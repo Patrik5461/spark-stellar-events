@@ -90,6 +90,7 @@ function Hero({ settings }: { settings: SiteSettings | null }) {
   const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   const headline = pick(settings, "hero_headline", "Ľudia, ktorí robia rozdiel na každom evente.");
   const subtitle = pick(settings, "hero_subtitle", "Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku aj v zahraničí.");
+  const heroImage = pick(settings, "hero_image_url", hero);
   const ctaPrimary = pick(settings, "cta_primary", "Kontaktujte nás");
   const ctaSecondary = pick(settings, "cta_secondary", "Naše služby");
   return (
