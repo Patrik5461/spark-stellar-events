@@ -111,7 +111,7 @@ export function Navbar() {
           aria-label={open ? "Zavrieť menu" : "Otvoriť menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="md:hidden h-11 w-11 -mr-2 grid place-items-center rounded-full text-[#383B3A] hover:bg-[#D4C7BD]/40 transition-colors"
+          className="md:hidden col-start-3 justify-self-end h-11 w-11 -mr-2 grid place-items-center rounded-full text-[#383B3A] hover:bg-[#D4C7BD]/40 transition-colors"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
