@@ -605,27 +605,28 @@ function Contact({ settings }: { settings: SiteSettings | null }) {
             })}
           </div>
 
-          <div className="mt-10 rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow">
-            <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
-            <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
-              <p className="font-medium">{billingName}</p>
-              <p>{billingAddress}</p>
-              <p>IČO: {ico}</p>
-              <p>DIČ: {dic}</p>
-              <p>IČ DPH: {icDph}</p>
-              <p>IBAN: {iban}</p>
+          <div className="mt-10 grid md:grid-cols-2 gap-6 items-stretch">
+            <div className="rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow">
+              <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
+              <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
+                <p className="font-medium">{billingName}</p>
+                <p>{billingAddress}</p>
+                <p>IČO: {ico}</p>
+                <p>DIČ: {dic}</p>
+                <p>IČ DPH: {icDph}</p>
+                <p>IBAN: {iban}</p>
+              </div>
             </div>
-          </div>
 
-
-          <div className="mt-6 aspect-[2/1] rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow">
-            <iframe
-              title="Mapa"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=17.15%2C48.15%2C17.22%2C48.18&layer=mapnik"
-              className="w-full h-full"
-              style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
-              loading="lazy"
-            />
+            <div className="min-h-[260px] md:min-h-0 rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow">
+              <iframe
+                title={`Mapa — ${billingAddress}`}
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=17.1900%2C48.1260%2C17.2040%2C48.1320&layer=mapnik&marker=48.1289%2C17.1970`}
+                className="w-full h-full min-h-[260px]"
+                style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
+                loading="lazy"
+              />
+            </div>
           </div>
         </motion.div>
 
