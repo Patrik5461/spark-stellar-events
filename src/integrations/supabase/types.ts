@@ -957,6 +957,8 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          about_image_path: string | null
+          about_image_url: string | null
           about_text: string | null
           address: string
           billing_address: string | null
@@ -974,6 +976,8 @@ export type Database = {
           footer_text: string | null
           gallery_intro: string | null
           hero_headline: string | null
+          hero_image_path: string | null
+          hero_image_url: string | null
           hero_subtitle: string | null
           id: number
           instagram_url: string | null
@@ -982,6 +986,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          about_image_path?: string | null
+          about_image_url?: string | null
           about_text?: string | null
           address?: string
           billing_address?: string | null
@@ -999,6 +1005,8 @@ export type Database = {
           footer_text?: string | null
           gallery_intro?: string | null
           hero_headline?: string | null
+          hero_image_path?: string | null
+          hero_image_url?: string | null
           hero_subtitle?: string | null
           id?: number
           instagram_url?: string | null
@@ -1007,6 +1015,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          about_image_path?: string | null
+          about_image_url?: string | null
           about_text?: string | null
           address?: string
           billing_address?: string | null
@@ -1024,6 +1034,8 @@ export type Database = {
           footer_text?: string | null
           gallery_intro?: string | null
           hero_headline?: string | null
+          hero_image_path?: string | null
+          hero_image_url?: string | null
           hero_subtitle?: string | null
           id?: number
           instagram_url?: string | null
