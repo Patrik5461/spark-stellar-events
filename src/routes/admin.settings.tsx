@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import { invalidateSiteSettings } from "@/lib/use-site-settings";
 import { Save, KeyRound, Upload, Trash2 } from "lucide-react";
 
 const SIGN_TTL = 60 * 60 * 24 * 365 * 5; // 5 years
