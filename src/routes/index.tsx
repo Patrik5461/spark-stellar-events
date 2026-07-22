@@ -154,7 +154,7 @@ function Hero({ settings }: { settings: SiteSettings | null }) {
         >
           <div className="relative aspect-[16/8] w-full overflow-hidden">
             <motion.img
-              src={hero}
+              src={heroImage}
               alt="Elegantná hosteska na luxusnom evente"
               style={{ y: imgY, scale: imgScale }}
               className="h-full w-full object-cover will-change-transform"
