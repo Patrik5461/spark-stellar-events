@@ -176,6 +176,55 @@ function SettingsAdmin() {
         ))}
 
         <div className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-6">
+          <h2 className="font-display text-2xl mb-4">Fotografie webu</h2>
+          {imgErr && <div className="mb-4 rounded-lg bg-red-100 text-red-800 px-4 py-3 text-sm">{imgErr}</div>}
+          <div className="grid md:grid-cols-2 gap-6">
+            {([
+              { kind: "hero" as const, label: "Titulná fotografia (Hero)", url: row.hero_image_url },
+              { kind: "about" as const, label: "Fotografia v sekcii O nás", url: row.about_image_url },
+            ]).map(({ kind, label, url }) => (
+              <div key={kind} className="space-y-3">
+                <div className="text-xs uppercase tracking-[0.2em] text-[#726D6A]">{label}</div>
+                <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border border-[#D9D2CC] bg-white/60 flex items-center justify-center">
+                  {url ? (
+                    <img src={url} alt={label} className="h-full w-full object-cover" />
+                  ) : (
+                    <span className="text-sm text-[#726D6A]">Používa sa predvolená fotka</span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <label className="inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-4 py-2 text-sm cursor-pointer hover:opacity-90">
+                    <Upload className="h-4 w-4" />
+                    {imgBusy === kind ? "Nahrávam…" : url ? "Zmeniť fotku" : "Nahrať fotku"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      disabled={imgBusy === kind}
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) uploadImage(kind, f);
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                  {url && (
+                    <button
+                      onClick={() => removeImage(kind)}
+                      disabled={imgBusy === kind}
+                      className="inline-flex items-center gap-1 rounded-full border border-[#D9D2CC] px-4 py-2 text-sm text-red-700 hover:bg-white/60"
+                    >
+                      <Trash2 className="h-4 w-4" /> Odstrániť
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+
+        <div className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-6">
           <h2 className="font-display text-2xl mb-4 flex items-center gap-2"><KeyRound className="h-5 w-5" /> Zmena hesla</h2>
           <div className="flex flex-col md:flex-row gap-3 max-w-xl">
             <input
