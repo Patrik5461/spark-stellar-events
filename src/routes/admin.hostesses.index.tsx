@@ -124,8 +124,8 @@ function HostessesPage() {
             </select>
           </div>
 
-          <div className="rounded-xl border border-[#D9D2CC] bg-[#F5F1EC] overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="rounded-xl border border-[#D9D2CC] bg-[#F5F1EC] overflow-x-auto">
+            <table className="w-full text-sm min-w-[720px]">
               <thead className="bg-[#EBE6E2] text-[#726D6A] text-xs uppercase tracking-wider">
                 <tr>
                   <th className="text-left px-4 py-3">ID</th>
