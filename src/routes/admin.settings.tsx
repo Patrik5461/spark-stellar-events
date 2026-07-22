@@ -43,6 +43,64 @@ function SettingsAdmin() {
   const [pwd, setPwd] = useState("");
   const [pwdBusy, setPwdBusy] = useState(false);
   const [pwdMsg, setPwdMsg] = useState<string | null>(null);
+  const [imgBusy, setImgBusy] = useState<"hero" | "about" | null>(null);
+  const [imgErr, setImgErr] = useState<string | null>(null);
+
+  const uploadImage = async (kind: "hero" | "about", file: File) => {
+    if (!row) return;
+    setImgBusy(kind);
+    setImgErr(null);
+    try {
+      const path = `${kind}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name}`;
+      const { error: upErr } = await supabase.storage.from("site-images").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (upErr) throw upErr;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("site-images")
+        .createSignedUrl(path, SIGN_TTL);
+      if (signErr) throw signErr;
+      const patch: Partial<Row> =
+        kind === "hero"
+          ? { hero_image_url: signed.signedUrl, hero_image_path: path }
+          : { about_image_url: signed.signedUrl, about_image_path: path };
+      // Delete previous file if any
+      const prevPath = kind === "hero" ? row.hero_image_path : row.about_image_path;
+      if (prevPath) {
+        await supabase.storage.from("site-images").remove([prevPath]);
+      }
+      const { error: updErr } = await supabase.from("site_settings").update(patch).eq("id", 1);
+      if (updErr) throw updErr;
+      setRow({ ...row, ...patch });
+    } catch (e) {
+      setImgErr((e as Error).message);
+    } finally {
+      setImgBusy(null);
+    }
+  };
+
+  const removeImage = async (kind: "hero" | "about") => {
+    if (!row) return;
+    if (!confirm("Odstrániť fotografiu?")) return;
+    setImgBusy(kind);
+    setImgErr(null);
+    try {
+      const prevPath = kind === "hero" ? row.hero_image_path : row.about_image_path;
+      if (prevPath) await supabase.storage.from("site-images").remove([prevPath]);
+      const patch: Partial<Row> =
+        kind === "hero"
+          ? { hero_image_url: null, hero_image_path: null }
+          : { about_image_url: null, about_image_path: null };
+      const { error } = await supabase.from("site_settings").update(patch).eq("id", 1);
+      if (error) throw error;
+      setRow({ ...row, ...patch });
+    } catch (e) {
+      setImgErr((e as Error).message);
+    } finally {
+      setImgBusy(null);
+    }
+  };
 
   useEffect(() => {
     supabase.from("site_settings").select("*").eq("id", 1).maybeSingle().then(({ data }: { data: Row | null }) => setRow(data));
