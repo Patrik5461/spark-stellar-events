@@ -474,25 +474,29 @@ function ItemModal({
               Cena na vyžiadanie
             </label>
 
-            <Field label="Veľkosť">
+            <Field label="Veľkosť (môžete vybrať viac)">
               <div className="flex flex-wrap gap-1 mb-2">
-                {SIZE_PRESETS.map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => set("size", s)}
-                    className={`rounded-full px-3 py-1 text-xs border ${form.size === s ? "bg-[#383B3A] text-[#F5F1EC] border-[#383B3A]" : "border-[#D9D2CC] hover:bg-[#EBE6E2]"}`}
-                  >
-                    {s}
-                  </button>
-                ))}
+                {SIZE_PRESETS.map((s) => {
+                  const active = sizesSelected.includes(s);
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => toggleSize(s)}
+                      className={`rounded-full px-3 py-1 text-xs border ${active ? "bg-[#383B3A] text-[#F5F1EC] border-[#383B3A]" : "border-[#D9D2CC] hover:bg-[#EBE6E2]"}`}
+                    >
+                      {s}
+                    </button>
+                  );
+                })}
               </div>
               <input
                 className="w-full rounded-lg border border-[#D9D2CC] bg-white/70 px-3 py-2"
                 value={form.size}
                 onChange={(e) => set("size", e.target.value)}
-                placeholder="napr. S/M alebo univerzálna"
+                placeholder="napr. S, M, L alebo univerzálna"
               />
+              <div className="mt-1 text-xs text-[#726D6A]">Viac veľkostí oddeľte čiarkou.</div>
             </Field>
 
             <Field label="Farba">
