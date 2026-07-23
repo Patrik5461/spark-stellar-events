@@ -224,15 +224,24 @@ function SectionEyebrow({ n, label }: { n: string; label: string }) {
   );
 }
 
+const SERVICE_ICONS: Record<string, typeof Sparkles> = {
+  Sparkles, Megaphone, HardHat, Clapperboard, Shirt, Users2,
+};
+const FALLBACK_IMGS = [g1, g3, g5, g2, g6, g4];
+
 function Services() {
-  const items = [
-    { icon: Sparkles, title: "Hostessing", desc: "Profesionálne hostesky pre konferencie, výstavy, firemné akcie a spoločenské podujatia.", img: g1, span: "md:col-span-2 lg:row-span-2 min-h-[360px] lg:min-h-[520px]", href: "#contact" },
-    { icon: Megaphone, title: "Promotion", desc: "Promotéri pre sampling, promo kampane a prezentáciu značiek.", img: g3, span: "min-h-[280px] lg:min-h-[250px]", href: "#contact" },
-    { icon: HardHat, title: "Helperi", desc: "Spoľahlivý personál pre montáže, logistiku a realizáciu eventov.", img: g5, span: "min-h-[280px] lg:min-h-[250px]", href: "#contact" },
-    { icon: Clapperboard, title: "Produkcia", desc: "Kompletná organizačná podpora a produkcia eventov.", img: g2, span: "min-h-[280px] lg:min-h-[250px] lg:col-span-1", href: "#contact" },
-    { icon: Shirt, title: "Prenájom oblečenia", desc: "Prenájom profesionálneho oblečenia pre hostesky a event staff.", img: g6, span: "min-h-[280px] lg:min-h-[250px]", href: "/prenajom-oblecenia" },
-    { icon: Users2, title: "Ostatné", desc: "Individuálne personálne riešenia podľa požiadaviek klienta.", img: g4, span: "min-h-[280px] lg:min-h-[250px]", href: "#contact" },
-  ];
+  const [items, setItems] = useState<Array<{ id: string; title: string; description: string; icon: string }>>([]);
+  useEffect(() => {
+    import("@/integrations/supabase/client").then(({ supabase }) =>
+      supabase
+        .from("services")
+        .select("id,title,description,icon,sort_order,is_active")
+        .eq("is_active", true)
+        .order("sort_order")
+        .then(({ data }) => setItems((data as any) ?? []))
+    );
+  }, []);
+  if (items.length === 0) return null;
   return (
     <section id="services" className="relative py-40 px-6">
       <div className="mx-auto max-w-7xl">
@@ -250,10 +259,17 @@ function Services() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
-          {items.map(({ icon: Icon, title, desc, img, span, href }, i) => (
+          {items.map((s, i) => {
+            const Icon = SERVICE_ICONS[s.icon] || Sparkles;
+            const img = FALLBACK_IMGS[i % FALLBACK_IMGS.length];
+            const href = s.title.toLowerCase().includes("oblečen") ? "/prenajom-oblecenia" : "#contact";
+            const span = i === 0
+              ? "md:col-span-2 lg:row-span-2 min-h-[360px] lg:min-h-[520px]"
+              : "min-h-[280px] lg:min-h-[250px]";
+            return (
             <motion.a
               href={href}
-              key={title}
+              key={s.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -277,8 +293,8 @@ function Services() {
                 <span className="font-display text-sm text-[#726D6A]/80 tracking-widest">0{i + 1}</span>
               </div>
               <div className="relative mt-10">
-                <h3 className="font-display text-2xl md:text-3xl mb-3 text-[#383B3A]">{title}</h3>
-                <p className="text-sm md:text-base text-[#5A5552] leading-relaxed max-w-[46ch]">{desc}</p>
+                <h3 className="font-display text-2xl md:text-3xl mb-3 text-[#383B3A]">{s.title}</h3>
+                <p className="text-sm md:text-base text-[#5A5552] leading-relaxed max-w-[46ch]">{s.description}</p>
                 <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#383B3A]">
                   <span className="opacity-90 group-hover:opacity-100 transition-opacity">Viac informácií</span>
                   <span className="inline-block transition-transform duration-500 ease-out group-hover:translate-x-1">
@@ -287,12 +303,14 @@ function Services() {
                 </div>
               </div>
             </motion.a>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
+
 
 function WhyUs({ settings }: { settings: SiteSettings | null }) {
   const stats = [
