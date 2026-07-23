@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Upload, ImageOff } from "lucide-react";
 
 type Row = Database["public"]["Tables"]["services"]["Row"];
 
 const ICONS = ["Sparkles", "Megaphone", "HardHat", "Clapperboard", "Shirt", "Users2"];
+const SIGN_TTL = 60 * 60 * 24 * 365 * 5; // 5 years
 
 export const Route = createFileRoute("/admin/services")({
   component: ServicesAdmin,
