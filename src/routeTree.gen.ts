@@ -15,6 +15,7 @@ import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as SluzbySlugRouteImport } from './routes/sluzby.$slug'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
@@ -61,6 +62,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const SluzbySlugRoute = SluzbySlugRouteImport.update({
+  id: '/sluzby/$slug',
+  path: '/sluzby/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/sluzby/$slug': typeof SluzbySlugRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/events/$id': typeof AdminEventsIdRoute
   '/admin/events/new': typeof AdminEventsNewRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/sluzby/$slug': typeof SluzbySlugRoute
   '/admin': typeof AdminIndexRoute
   '/admin/events/$id': typeof AdminEventsIdRoute
   '/admin/events/new': typeof AdminEventsNewRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/sluzby/$slug': typeof SluzbySlugRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/events/$id': typeof AdminEventsIdRoute
   '/admin/events/new': typeof AdminEventsNewRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
+    | '/sluzby/$slug'
     | '/admin/'
     | '/admin/events/$id'
     | '/admin/events/new'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
+    | '/sluzby/$slug'
     | '/admin'
     | '/admin/events/$id'
     | '/admin/events/new'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/services'
     | '/admin/settings'
+    | '/sluzby/$slug'
     | '/admin/'
     | '/admin/events/$id'
     | '/admin/events/new'
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   GaleriaRoute: typeof GaleriaRoute
   HostessFormRoute: typeof HostessFormRoute
   PrenajomObleceniaRoute: typeof PrenajomObleceniaRoute
+  SluzbySlugRoute: typeof SluzbySlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/sluzby/$slug': {
+      id: '/sluzby/$slug'
+      path: '/sluzby/$slug'
+      fullPath: '/sluzby/$slug'
+      preLoaderRoute: typeof SluzbySlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/settings': {
       id: '/admin/settings'
@@ -512,6 +532,7 @@ const rootRouteChildren: RootRouteChildren = {
   GaleriaRoute: GaleriaRoute,
   HostessFormRoute: HostessFormRoute,
   PrenajomObleceniaRoute: PrenajomObleceniaRoute,
+  SluzbySlugRoute: SluzbySlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
