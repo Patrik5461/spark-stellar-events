@@ -270,7 +270,7 @@ function Services() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
           {items.map((s, i) => {
             const Icon = SERVICE_ICONS[s.icon] || Sparkles;
-            const img = FALLBACK_IMGS[i % FALLBACK_IMGS.length];
+            const img = s.image_url || FALLBACK_IMGS[i % FALLBACK_IMGS.length];
             const href = s.slug === "prenajom-oblecenia" ? "/prenajom-oblecenia" : `/sluzby/${s.slug}`;
             const span = i === 0
               ? "md:col-span-2 lg:row-span-2 min-h-[360px] lg:min-h-[520px]"
