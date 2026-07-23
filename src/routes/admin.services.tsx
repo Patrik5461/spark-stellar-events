@@ -68,42 +68,73 @@ function ServicesAdmin() {
       {loading ? <div>Načítavam…</div> : (
         <div className="space-y-3">
           {rows.map((row) => (
-            <div key={row.id} className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-5 grid md:grid-cols-[1fr_1fr_auto_auto_auto] gap-3 items-start">
-              <input
-                className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 font-medium"
-                value={row.title}
-                onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, title: e.target.value } : r))}
-                onBlur={(e) => update(row.id, { title: e.target.value })}
-              />
-              <textarea
-                rows={2}
-                className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
-                value={row.description}
-                onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, description: e.target.value } : r))}
-                onBlur={(e) => update(row.id, { description: e.target.value })}
-              />
-              <select
-                className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
-                value={row.icon}
-                onChange={(e) => update(row.id, { icon: e.target.value })}
-              >
-                {ICONS.map((i) => <option key={i} value={i}>{i}</option>)}
-              </select>
-              <input
-                type="number" title="Poradie"
-                className="w-20 rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
-                value={row.sort_order}
-                onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, sort_order: Number(e.target.value) } : r))}
-                onBlur={(e) => update(row.id, { sort_order: Number(e.target.value) })}
-              />
-              <div className="flex flex-col gap-2 text-sm">
-                <label className="inline-flex items-center gap-1.5">
-                  <input type="checkbox" checked={row.is_active} onChange={(e) => update(row.id, { is_active: e.target.checked })} />
-                  Aktívna
-                </label>
-                <button onClick={() => del(row.id)} className="text-red-700 hover:underline inline-flex items-center gap-1">
-                  <Trash2 className="h-4 w-4" /> Vymazať
-                </button>
+            <div key={row.id} className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-5 space-y-3">
+              <div className="grid md:grid-cols-[1fr_1fr_auto_auto_auto] gap-3 items-start">
+                <input
+                  className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 font-medium"
+                  placeholder="Názov"
+                  value={row.title}
+                  onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, title: e.target.value } : r))}
+                  onBlur={(e) => update(row.id, { title: e.target.value })}
+                />
+                <textarea
+                  rows={2}
+                  className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
+                  placeholder="Krátky popis (karta na úvode)"
+                  value={row.description}
+                  onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, description: e.target.value } : r))}
+                  onBlur={(e) => update(row.id, { description: e.target.value })}
+                />
+                <select
+                  className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
+                  value={row.icon}
+                  onChange={(e) => update(row.id, { icon: e.target.value })}
+                >
+                  {ICONS.map((i) => <option key={i} value={i}>{i}</option>)}
+                </select>
+                <input
+                  type="number" title="Poradie"
+                  className="w-20 rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm"
+                  value={row.sort_order}
+                  onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, sort_order: Number(e.target.value) } : r))}
+                  onBlur={(e) => update(row.id, { sort_order: Number(e.target.value) })}
+                />
+                <div className="flex flex-col gap-2 text-sm">
+                  <label className="inline-flex items-center gap-1.5">
+                    <input type="checkbox" checked={row.is_active} onChange={(e) => update(row.id, { is_active: e.target.checked })} />
+                    Aktívna
+                  </label>
+                  <button onClick={() => del(row.id)} className="text-red-700 hover:underline inline-flex items-center gap-1">
+                    <Trash2 className="h-4 w-4" /> Vymazať
+                  </button>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-[240px_1fr] gap-3 items-start">
+                <label className="text-xs uppercase tracking-widest text-[#726D6A] pt-2">URL (slug)</label>
+                <input
+                  className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm font-mono"
+                  placeholder="napr. hostessing"
+                  value={row.slug}
+                  onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, slug: e.target.value } : r))}
+                  onBlur={(e) => update(row.id, { slug: e.target.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "") })}
+                />
+                <label className="text-xs uppercase tracking-widest text-[#726D6A] pt-2">Text podstránky</label>
+                <textarea
+                  rows={8}
+                  className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm leading-relaxed"
+                  placeholder="Podrobný popis služby, ktorý sa zobrazí na podstránke /sluzby/<slug>."
+                  value={row.detail_content ?? ""}
+                  onChange={(e) => setRows((p) => p.map((r) => r.id === row.id ? { ...r, detail_content: e.target.value } : r))}
+                  onBlur={(e) => update(row.id, { detail_content: e.target.value })}
+                />
+                <div />
+                <a
+                  href={row.slug === "prenajom-oblecenia" ? "/prenajom-oblecenia" : `/sluzby/${row.slug}`}
+                  target="_blank" rel="noreferrer"
+                  className="text-xs text-[#383B3A] underline w-fit"
+                >
+                  Otvoriť podstránku ↗
+                </a>
               </div>
             </div>
           ))}
