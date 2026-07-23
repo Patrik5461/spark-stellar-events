@@ -211,7 +211,7 @@ function Marquee() {
   return (
     <section className="border-y border-[#D9D2CC] py-12 overflow-hidden bg-[#EBE6E2]">
       <div className="text-center text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-8">
-        NÁŠ TÍM TVORIA AJ NAŠI DODÁVATELIA
+        NÁŠ TÍM TVORIA AJ NAŠI PARTNERI
       </div>
       <div className="flex gap-16 animate-marquee whitespace-nowrap mb-6">
         {row.map((c, i) => renderItem(c, i, itemClass))}
@@ -262,8 +262,7 @@ function Services() {
             </h2>
           </div>
           <p className="max-w-sm text-[#726D6A]">
-            Šesť disciplín, jeden tím. Nemusíte koordinovať desať
-            dodávateľov — my to máme pod jednou strechou.
+            Mnoho disciplín, jeden tím. Nemusíte koordinovať desať dodávateľov, my to máme pod jednou strechou.
           </p>
         </motion.div>
 
@@ -334,7 +333,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
         <motion.div {...fadeUp}>
           <SectionEyebrow n="02" label="Prečo NU-U" />
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A] text-balance">
-            Nie agentúra. <em className="italic text-[#726D6A]">Partner</em> pre vašu značku.
+            Nie sme len agentúra. <em className="italic text-[#726D6A]">Sme partner</em> pre vašu značku. &nbsp; &nbsp;
           </h2>
           <p className="mt-8 text-[#726D6A] leading-relaxed max-w-lg">
             {pick(settings, "about_text", "Vyberáme ľudí, ktorých by sme s pokojom poslali aj na vlastnú svadbu. Trénujeme ich, oblečieme a postavíme za nimi celý backoffice — vy len dostanete výsledok.")}
@@ -342,7 +341,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
 
 
           <ul className="mt-8 space-y-3">
-            {["Osobný projektový manažér 24/7", "Vlastné premium uniformy", "Záložný tím pre každý event", "Reporting a foto z miesta"].map((t) => (
+            {["Sme tu pre vás 24/7", "Nie, v našom slovníku nepoznáme", "Hľadáme spôsoby a riešenia", "\n"].map((t) => (
               <li key={t} className="flex items-center gap-3 text-[#383B3A]">
                 <Check className="h-4 w-4 text-[#383B3A] shrink-0" />
                 <span>{t}</span>
@@ -465,7 +464,7 @@ function Process() {
             <span className="h-px w-10 bg-[#726D6A]" /> 04 — Proces
           </div>
           <h2 className="font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02] tracking-tight text-[#383B3A] text-balance">
-            Štyri kroky, <em className="italic text-[#726D6A]">nula stresu.</em>
+            Dôležité štyri kroky, <em className="italic text-[#726D6A]">nula stresu.</em>
           </h2>
         </motion.div>
 
@@ -495,9 +494,9 @@ function Process() {
 
 function Testimonials() {
   const t = [
-    { q: "NU-U je jediná agentúra, s ktorou už neriešim, či to dopadne. Tím je vždy pripravený, milý a profesionálny.", n: "Lucia K.", r: "Brand Manager, FMCG" },
-    { q: "Spravili nám produkciu launchu na poslednú chvíľu a vyzeralo to ako rok plánovania. Klobúk dole.", n: "Martin P.", r: "Marketing Director" },
-    { q: "Hostesky, ktoré naozaj predávajú. Zdvojnásobili sme leady oproti minulému roku na rovnakom veľtrhu.", n: "Eva S.", r: "Event Lead, Automotive" },
+    { q: "Ďakujeme za úžasné hostesky. Boli naozaj proaktívne a veľmi nápomocné.Tešíme sa na ďalšiu spoluprácu.\n\n", n: "Alexandra P.", r: "Brand Manager, FMCG" },
+    { q: "Chalani to zvládli na jednotku, bolo to náročné aj vzhľadom na počasie,ale boli šikovní a spoločne sme to stihli vďaka tomu skôr,ako sme predpokladali.\n\n", n: "Martin P.", r: "Marketing Director" },
+    { q: "Baby boli perfektné, aj klient ich veľmi chválil.\n\u00a0A tie šaty len dotvorili celkový dojem.Ďakujeme", n: "Alexandra P.", r: "Event Lead, Automotive" },
   ];
   return (
     <section className="py-40 px-6">
@@ -551,7 +550,7 @@ function CTABanner() {
             Váš úspech je <em className="italic text-[#C9BAAE]">naša vizitka.</em>
           </h2>
           <p className="mt-6 text-[#F5F1EC]/70 max-w-xl mx-auto">
-            Pošlite nám zadanie. Do 24 hodín dostanete návrh tímu, ceny a plán.
+            Pošlite nám zadanie a obratom vám pošleme cenovú ponuku .
           </p>
           <a
             href="#contact"
