@@ -609,31 +609,33 @@ function Contact({ settings }: { settings: SiteSettings | null }) {
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-6 items-stretch">
-          <motion.div {...fadeUp} className="rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow h-full flex flex-col">
-            <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
-            <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
-              <p className="font-medium">{billingName}</p>
-              <p>{billingAddress}</p>
-              <p>IČO: {ico}</p>
-              <p>DIČ: {dic}</p>
-              <p>IČ DPH: {icDph}</p>
-              <p>IBAN: {iban}</p>
-            </div>
-          </motion.div>
+        <div className="grid lg:grid-cols-2 gap-6 items-stretch">
+          <div className="flex flex-col gap-6">
+            <motion.div {...fadeUp} className="rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow">
+              <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
+              <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
+                <p className="font-medium">{billingName}</p>
+                <p>{billingAddress}</p>
+                <p>IČO: {ico}</p>
+                <p>DIČ: {dic}</p>
+                <p>IČ DPH: {icDph}</p>
+                <p>IBAN: {iban}</p>
+              </div>
+            </motion.div>
 
-          <motion.div {...fadeUp} className="rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow flex flex-col h-full min-h-[320px] lg:min-h-0">
-            <iframe
-              title={`Mapa — ${billingAddress}`}
-              src={`https://www.openstreetmap.org/export/embed.html?bbox=17.2375%2C48.0933%2C17.2405%2C48.0953&layer=mapnik&marker=48.0943%2C17.2390`}
-              className="w-full flex-1 min-h-[260px]"
-              style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
-              loading="lazy"
-            />
-            <div className="bg-[#F5F1EC] px-4 py-2 text-xs text-[#726D6A] text-center border-t border-[#D9D2CC]">
-              {billingAddress}
-            </div>
-          </motion.div>
+            <motion.div {...fadeUp} className="rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow flex flex-col flex-1 min-h-[320px]">
+              <iframe
+                title={`Mapa — ${billingAddress}`}
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=17.2375%2C48.0933%2C17.2405%2C48.0953&layer=mapnik&marker=48.0943%2C17.2390`}
+                className="w-full flex-1 min-h-[260px]"
+                style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
+                loading="lazy"
+              />
+              <div className="bg-[#F5F1EC] px-4 py-2 text-xs text-[#726D6A] text-center border-t border-[#D9D2CC]">
+                {billingAddress}
+              </div>
+            </motion.div>
+          </div>
 
           <ContactForm />
         </div>
