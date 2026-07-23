@@ -259,6 +259,17 @@ export function Footer() {
             </Link>
           </div>
         </div>
+        <div className="mt-6 text-center text-[11px] text-[#726D6A]/80">
+          Správca webu a web vytvorilo{" "}
+          <a
+            href="https://digosta.sk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#726D6A] hover:text-[#383B3A] transition-colors underline underline-offset-2"
+          >
+            Digosta.sk
+          </a>
+        </div>
       </motion.div>
     </footer>
   );
