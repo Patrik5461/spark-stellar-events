@@ -52,6 +52,28 @@ function ServicesAdmin() {
     else setRows((p) => p.filter((r) => r.id !== id));
   };
 
+  const uploadImage = async (row: Row, file: File) => {
+    setErr(null);
+    try {
+      const path = `services/${row.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const { error: upErr } = await supabase.storage.from("site-images").upload(path, file, {
+        cacheControl: "3600", upsert: false,
+      });
+      if (upErr) throw upErr;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("site-images").createSignedUrl(path, SIGN_TTL);
+      if (signErr) throw signErr;
+      await update(row.id, { image_url: signed.signedUrl });
+    } catch (e) {
+      setErr((e as Error).message);
+    }
+  };
+
+  const removeImage = async (row: Row) => {
+    if (!confirm("Odstrániť fotografiu?")) return;
+    await update(row.id, { image_url: null });
+  };
+
   return (
     <section>
       <header className="mb-8 flex items-end justify-between gap-4 flex-wrap">
