@@ -580,8 +580,8 @@ function Contact({ settings }: { settings: SiteSettings | null }) {
   const contactText = pick(settings, "contact_text", "Odpovedáme do 24 hodín. Bez šablón, bez auto-mailov — odpíše vám konkrétny človek.");
   return (
     <section id="contact" className="py-40 px-6">
-      <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16">
-        <motion.div {...fadeUp}>
+      <div className="mx-auto max-w-7xl">
+        <motion.div {...fadeUp} className="mb-16">
           <SectionEyebrow n="06" label="Kontakt" />
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A] text-balance">
             Povedzte nám o vašom <em className="italic text-[#726D6A]">evente.</em>
@@ -590,7 +590,7 @@ function Contact({ settings }: { settings: SiteSettings | null }) {
             {contactText}
           </p>
 
-          <div className="mt-12 space-y-5">
+          <div className="mt-10 flex flex-wrap gap-5">
             {[
               [Mail, email, `mailto:${email}`],
               [Phone, phone, `tel:${phone.replace(/\s+/g, "")}`],
@@ -607,37 +607,36 @@ function Contact({ settings }: { settings: SiteSettings | null }) {
               );
             })}
           </div>
-
-          <div className="mt-10 grid md:grid-cols-2 gap-6 items-stretch">
-            <div className="rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow">
-              <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
-              <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
-                <p className="font-medium">{billingName}</p>
-                <p>{billingAddress}</p>
-                <p>IČO: {ico}</p>
-                <p>DIČ: {dic}</p>
-                <p>IČ DPH: {icDph}</p>
-                <p>IBAN: {iban}</p>
-              </div>
-            </div>
-
-            <div className="min-h-[260px] md:min-h-0 rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow flex flex-col">
-              <iframe
-                title={`Mapa — ${billingAddress}`}
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=17.2375%2C48.0933%2C17.2405%2C48.0953&layer=mapnik&marker=48.0943%2C17.2390`}
-                className="w-full h-full min-h-[260px]"
-                style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
-                loading="lazy"
-              />
-              <div className="bg-[#F5F1EC] px-4 py-2 text-xs text-[#726D6A] text-center border-t border-[#D9D2CC]">
-                {billingAddress}
-              </div>
-            </div>
-          </div>
         </motion.div>
 
-        <ContactForm />
+        <div className="grid lg:grid-cols-3 gap-6 items-stretch">
+          <motion.div {...fadeUp} className="rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC]/60 p-6 md:p-8 soft-shadow h-full flex flex-col">
+            <div className="text-xs uppercase tracking-[0.25em] text-[#726D6A] mb-4">Fakturačné údaje</div>
+            <div className="text-sm text-[#383B3A] leading-relaxed space-y-1">
+              <p className="font-medium">{billingName}</p>
+              <p>{billingAddress}</p>
+              <p>IČO: {ico}</p>
+              <p>DIČ: {dic}</p>
+              <p>IČ DPH: {icDph}</p>
+              <p>IBAN: {iban}</p>
+            </div>
+          </motion.div>
 
+          <motion.div {...fadeUp} className="rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow flex flex-col h-full min-h-[320px] lg:min-h-0">
+            <iframe
+              title={`Mapa — ${billingAddress}`}
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=17.2375%2C48.0933%2C17.2405%2C48.0953&layer=mapnik&marker=48.0943%2C17.2390`}
+              className="w-full flex-1 min-h-[260px]"
+              style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
+              loading="lazy"
+            />
+            <div className="bg-[#F5F1EC] px-4 py-2 text-xs text-[#726D6A] text-center border-t border-[#D9D2CC]">
+              {billingAddress}
+            </div>
+          </motion.div>
+
+          <ContactForm />
+        </div>
       </div>
     </section>
   );
