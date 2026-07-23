@@ -618,14 +618,17 @@ function Contact({ settings }: { settings: SiteSettings | null }) {
               </div>
             </div>
 
-            <div className="min-h-[260px] md:min-h-0 rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow">
+            <div className="min-h-[260px] md:min-h-0 rounded-[24px] overflow-hidden border border-[#D9D2CC] soft-shadow flex flex-col">
               <iframe
                 title={`Mapa — ${billingAddress}`}
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=17.1900%2C48.1260%2C17.2040%2C48.1320&layer=mapnik&marker=48.1289%2C17.1970`}
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=17.2375%2C48.0933%2C17.2405%2C48.0953&layer=mapnik&marker=48.0943%2C17.2390`}
                 className="w-full h-full min-h-[260px]"
                 style={{ filter: "grayscale(1) contrast(0.95) sepia(0.15)" }}
                 loading="lazy"
               />
+              <div className="bg-[#F5F1EC] px-4 py-2 text-xs text-[#726D6A] text-center border-t border-[#D9D2CC]">
+                {billingAddress}
+              </div>
             </div>
           </div>
         </motion.div>
