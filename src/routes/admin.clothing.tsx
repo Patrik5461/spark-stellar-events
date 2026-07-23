@@ -358,17 +358,27 @@ function ItemModal({
     }
   };
 
+  const sizesSelected = form.size
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const toggleSize = (s: string) => {
+    const has = sizesSelected.includes(s);
+    const next = has ? sizesSelected.filter((x) => x !== s) : [...sizesSelected, s];
+    set("size", next.join(", "));
+  };
+
   return (
     <div
-      className="fixed inset-0 z-[100] bg-[#383B3A]/70 backdrop-blur-sm p-4 md:p-8 flex items-start md:items-center justify-center overflow-y-auto"
+      className="fixed inset-0 z-[100] bg-[#383B3A]/70 backdrop-blur-sm p-2 sm:p-4 md:p-8 flex items-stretch sm:items-center justify-center"
       onClick={onClose}
     >
       <div
-        className="bg-[#F5F1EC] rounded-2xl w-full max-w-3xl my-8 border border-[#D9D2CC] shadow-xl"
+        className="bg-[#F5F1EC] rounded-2xl w-full max-w-3xl border border-[#D9D2CC] shadow-xl flex flex-col max-h-[100dvh] sm:max-h-[calc(100dvh-2rem)] md:max-h-[calc(100dvh-4rem)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex items-center justify-between p-5 border-b border-[#D9D2CC]">
-          <h2 className="font-display text-2xl text-[#383B3A]">
+        <header className="flex items-center justify-between p-4 md:p-5 border-b border-[#D9D2CC] shrink-0">
+          <h2 className="font-display text-xl md:text-2xl text-[#383B3A]">
             {editingId ? "Upraviť položku" : "Pridať položku"}
           </h2>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-[#EBE6E2]" aria-label="Zavrieť">
@@ -376,7 +386,7 @@ function ItemModal({
           </button>
         </header>
 
-        <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="p-4 md:p-5 grid grid-cols-1 md:grid-cols-2 gap-5 overflow-y-auto flex-1 min-h-0">
           {/* Image column */}
           <div>
             <Label required>Fotografia</Label>
