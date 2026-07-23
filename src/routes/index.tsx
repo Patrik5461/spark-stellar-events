@@ -176,7 +176,7 @@ function Hero({ settings }: { settings: SiteSettings | null }) {
             Scroll
           </div>
           <div className="hidden md:block max-w-xs text-sm text-[#726D6A] text-right">
-            10+ rokov na trhu · 500+ eventov · Slovensko & zahraničie
+            Sme s vami na trhu už viac ako 20 rokov.
           </div>
         </div>
       </div>
