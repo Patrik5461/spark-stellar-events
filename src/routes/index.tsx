@@ -230,7 +230,7 @@ const SERVICE_ICONS: Record<string, typeof Sparkles> = {
 const FALLBACK_IMGS = [g1, g3, g5, g2, g6, g4];
 
 function Services() {
-  const [items, setItems] = useState<Array<{ id: string; title: string; description: string; icon: string }>>([]);
+  const [items, setItems] = useState<Array<{ id: string; title: string; description: string; icon: string; slug: string }>>([]);
   useEffect(() => {
     import("@/integrations/supabase/client").then(({ supabase }) =>
       supabase
