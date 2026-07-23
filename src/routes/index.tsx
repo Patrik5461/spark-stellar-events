@@ -443,10 +443,10 @@ function GalleryPreview({ settings }: { settings: SiteSettings | null }) {
 
 function Process() {
   const steps = [
-    ["01", "Brief", "Zistíme cieľ, publikum a tonalitu. Žiadne formuláre, len rozhovor."],
-    ["02", "Výber tímu", "Castingujeme ľudí presne na váš event a značku."],
+    ["01", "Zadanie", "Pošlete nám zadanie a my sa pustíme do práce."],
+    ["02", "Výber tímu", "Zvolíme pre váš event vhodný tím\u00a0"],
     ["03", "Realizácia", "Sme na mieste, koordinujeme a riešime všetko za vás."],
-    ["04", "Vyhodnotenie", "Report, fotky, feedback. A plán pre ďalší event."],
+    ["04", "Vyhodnotenie", "\u00a0Spolu vyhodnotíme, čo sa dá ešte vylepšiť."],
   ];
   return (
     <section id="process" className="relative py-40 px-6 bg-[#D4C7BD]/40">
