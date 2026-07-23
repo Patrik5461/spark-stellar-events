@@ -261,24 +261,24 @@ function Services() {
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[900ms] ease-out"
+                className="pointer-events-none absolute inset-0 opacity-100 transition-opacity duration-[900ms] ease-out"
                 style={{
-                  backgroundImage: `linear-gradient(180deg, rgba(245,241,236,0.86) 0%, rgba(245,241,236,0.72) 60%, rgba(245,241,236,0.9) 100%), url(${img})`,
+                  backgroundImage: `linear-gradient(180deg, rgba(245,241,236,0.92) 0%, rgba(245,241,236,0.78) 55%, rgba(245,241,236,0.95) 100%), url(${img})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               />
               <div className="relative flex items-start justify-between">
-                <div className="h-12 w-12 rounded-2xl border border-[#D9D2CC] bg-[#EBE6E2]/70 grid place-items-center group-hover:bg-[#F5F1EC] group-hover:border-[#C9BAAE] transition-colors duration-500">
+                <div className="h-12 w-12 rounded-2xl border border-[#D9D2CC] bg-[#F5F1EC]/90 grid place-items-center group-hover:bg-[#F5F1EC] group-hover:border-[#C9BAAE] transition-colors duration-500">
                   <Icon className="h-5 w-5 text-[#383B3A]" strokeWidth={1.25} />
                 </div>
-                <span className="font-display text-sm text-[#726D6A]/70 tracking-widest">0{i + 1}</span>
+                <span className="font-display text-sm text-[#726D6A]/80 tracking-widest">0{i + 1}</span>
               </div>
               <div className="relative mt-10">
                 <h3 className="font-display text-2xl md:text-3xl mb-3 text-[#383B3A]">{title}</h3>
-                <p className="text-sm md:text-base text-[#726D6A] leading-relaxed max-w-[46ch]">{desc}</p>
+                <p className="text-sm md:text-base text-[#5A5552] leading-relaxed max-w-[46ch]">{desc}</p>
                 <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#383B3A]">
-                  <span className="opacity-70 group-hover:opacity-100 transition-opacity">Viac informácií</span>
+                  <span className="opacity-90 group-hover:opacity-100 transition-opacity">Viac informácií</span>
                   <span className="inline-block transition-transform duration-500 ease-out group-hover:translate-x-1">
                     <ArrowUpRight className="h-4 w-4" />
                   </span>
