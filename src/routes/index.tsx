@@ -299,7 +299,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
     ["10+", "rokov skúseností"],
     ["500+", "úspešných eventov"],
     ["1000+", "personálnych obsadení"],
-    ["SK & EU", "Slovensko & zahraničie"],
+    ["\u00a0 \u00a0 \u00a0 \u00a0SK\u00a0", "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0SLOVENSKO\u00a0"],
   ];
   return (
     <section id="why" className="relative py-40 px-6 bg-[#D4C7BD]/40">
