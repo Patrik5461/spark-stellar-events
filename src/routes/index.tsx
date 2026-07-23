@@ -301,8 +301,8 @@ function Services() {
                 <span className="font-display text-sm text-[#726D6A]/80 tracking-widest">0{i + 1}</span>
               </div>
               <div className="relative mt-10">
-                <h3 className="font-display text-2xl md:text-3xl mb-3 text-[#383B3A]">{s.title}</h3>
-                <p className="text-sm md:text-base text-[#5A5552] leading-relaxed max-w-[46ch]">{s.description}</p>
+                <h3 className="font-display text-xl md:text-2xl mb-3 text-[#383B3A] min-h-[3.5rem] md:min-h-[4rem] leading-tight">{s.title}</h3>
+                <p className="text-sm text-[#5A5552] leading-relaxed max-w-[46ch] min-h-[3.75rem] line-clamp-3">{s.description}</p>
                 <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#383B3A]">
                   <span className="opacity-90 group-hover:opacity-100 transition-opacity">Viac informácií</span>
                   <span className="inline-block transition-transform duration-500 ease-out group-hover:translate-x-1">
@@ -310,6 +310,7 @@ function Services() {
                   </span>
                 </div>
               </div>
+
             </motion.a>
             );
           })}
