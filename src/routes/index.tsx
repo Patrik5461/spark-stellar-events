@@ -320,16 +320,6 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
           <div className="relative aspect-[4/5] rounded-[28px] overflow-hidden soft-shadow-lg border border-[#D9D2CC]">
             <img src={pick(settings, "about_image_url", g4)} alt="Profesionálna hosteska" loading="lazy" width={1024} height={1280} className="h-full w-full object-cover" />
           </div>
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.96 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
-            className="absolute -bottom-8 -right-4 card-surface rounded-2xl p-6 max-w-[240px] hidden md:block"
-          >
-            <div className="font-display text-4xl text-[#383B3A]"><AnimatedNumber value="98%" /></div>
-            <div className="text-xs text-[#726D6A] mt-2">klientov sa k nám vracia</div>
-          </motion.div>
         </motion.div>
 
         <motion.div {...fadeUp}>
