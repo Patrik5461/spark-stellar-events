@@ -313,12 +313,6 @@ function Services() {
 
 
 function WhyUs({ settings }: { settings: SiteSettings | null }) {
-  const stats = [
-    ["10+", "rokov skúseností"],
-    ["500+", "úspešných eventov"],
-    ["1000+", "personálnych obsadení"],
-    ["\u00a0 \u00a0 \u00a0 \u00a0SK\u00a0", "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0SLOVENSKO\u00a0"],
-  ];
   return (
     <section id="why" className="relative py-40 px-6 bg-[#D4C7BD]/40">
       <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
@@ -356,17 +350,6 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
               </li>
             ))}
           </ul>
-
-          <div className="mt-12 grid grid-cols-2 gap-4">
-            {stats.map(([n, l]) => (
-              <div key={l} className="card-surface rounded-2xl p-6 md:p-8">
-                <div className="font-display text-4xl md:text-5xl text-[#383B3A]">
-                  {/^\d+/.test(n) ? <AnimatedNumber value={n} /> : n}
-                </div>
-                <div className="text-xs text-[#726D6A] mt-2 uppercase tracking-wider">{l}</div>
-              </div>
-            ))}
-          </div>
         </motion.div>
       </div>
     </section>
