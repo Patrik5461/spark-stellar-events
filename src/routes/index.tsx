@@ -299,7 +299,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
     ["10+", "rokov skúseností"],
     ["500+", "úspešných eventov"],
     ["1000+", "personálnych obsadení"],
-    ["SK & EU", "Slovensko & zahraničie"],
+    ["\u00a0 \u00a0 \u00a0 \u00a0SK\u00a0", "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0SLOVENSKO\u00a0"],
   ];
   return (
     <section id="why" className="relative py-40 px-6 bg-[#D4C7BD]/40">
@@ -452,7 +452,7 @@ function GalleryPreview({ settings }: { settings: SiteSettings | null }) {
 
 function Process() {
   const steps = [
-    ["01", "Brief", "Zistíme cieľ, publikum a tonalitu. Žiadne formuláre — len rozhovor."],
+    ["01", "Brief", "Zistíme cieľ, publikum a tonalitu. Žiadne formuláre, len rozhovor."],
     ["02", "Výber tímu", "Castingujeme ľudí presne na váš event a značku."],
     ["03", "Realizácia", "Sme na mieste, koordinujeme a riešime všetko za vás."],
     ["04", "Vyhodnotenie", "Report, fotky, feedback. A plán pre ďalší event."],
