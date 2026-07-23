@@ -186,11 +186,13 @@ function Hero({ settings }: { settings: SiteSettings | null }) {
 
 
 function Marquee() {
-  const clients = [
-    "RED BULL", "SAMSUNG", "L'ORÉAL", "BMW", "HEINEKEN", "ORANGE",
-    "ZARA", "TATRA BANKA", "PEPSI", "MERCEDES", "VOLKSWAGEN", "ESET",
-  ];
-  const row = [...clients, ...clients, ...clients];
+  const settings = useSiteSettings();
+  const raw = (settings?.partners as string | null) ?? "ESET,Tobify,Faktero,ticketio";
+  const clients = raw.split(",").map((s) => s.trim()).filter(Boolean);
+  if (clients.length === 0) return null;
+  // Repeat enough times to fill the marquee smoothly regardless of item count.
+  const repeats = Math.max(3, Math.ceil(24 / clients.length));
+  const row = Array.from({ length: repeats }).flatMap(() => clients);
   return (
     <section className="border-y border-[#D9D2CC] py-12 overflow-hidden bg-[#EBE6E2]">
       <div className="text-center text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-8">
