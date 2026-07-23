@@ -496,9 +496,9 @@ function Process() {
 
 function Testimonials() {
   const t = [
-    { q: "Ďakujeme za úžasné hostesky. Boli naozaj proaktívne a veľmi nápomocné.Tešíme sa na ďalšiu spoluprácu.\n\n", n: "Alexandra P.", r: "Brand Manager, FMCG" },
+    { q: "Ďakujeme za úžasné hostesky. Boli naozaj proaktívne a veľmi nápomocné.Tešíme sa na ďalšiu spoluprácu.\n\n", n: "Lucia K.", r: "Brand Manager, FMCG" },
     { q: "Chalani to zvládli na jednotku, bolo to náročné aj vzhľadom na počasie,ale boli šikovní a spoločne sme to stihli vďaka tomu skôr,ako sme predpokladali.\n\n", n: "Martin P.", r: "Marketing Director" },
-    { q: "Baby boli perfektné, aj klient ich veľmi chválil.\n\u00a0A tie šaty len dotvorili celkový dojem.Ďakujeme", n: "Alexandra P.", r: "Event Lead, Automotive" },
+    { q: "Baby boli perfektné, aj klient ich veľmi chválil.\n\u00a0A tie šaty len dotvorili celkový dojem.Ďakujeme", n: "Lucia K.", r: "Event Lead, Automotive" },
   ];
   return (
     <section className="py-40 px-6">
