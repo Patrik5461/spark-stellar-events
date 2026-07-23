@@ -335,7 +335,7 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
         <motion.div {...fadeUp}>
           <SectionEyebrow n="02" label="Prečo NU-U" />
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-tight text-[#383B3A] text-balance">
-            Nie sme len agentúra. <em className="italic text-[#726D6A]">Sme partner</em> pre vašu značku. &nbsp; &nbsp;
+            Nie sme len agentúra. <em className="not-italic text-[#383B3A]">Sme partner</em> pre vašu značku. &nbsp; &nbsp;
           </h2>
           <p className="mt-8 text-[#726D6A] leading-relaxed max-w-lg">
             {pick(settings, "about_text", "Vyberáme ľudí, ktorých by sme s pokojom poslali aj na vlastnú svadbu. Trénujeme ich, oblečieme a postavíme za nimi celý backoffice — vy len dostanete výsledok.")}
