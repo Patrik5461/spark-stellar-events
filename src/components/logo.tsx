@@ -16,7 +16,6 @@ export function Logo({ className, title = "NU-U" }: LogoProps) {
       aria-label={title}
       className={className}
       preserveAspectRatio="xMidYMid meet"
-      style={{ display: "block", width: "100%", height: "100%" }}
     >
 
       <title>{title}</title>
