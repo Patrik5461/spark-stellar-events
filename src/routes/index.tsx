@@ -345,7 +345,6 @@ function WhyUs({ settings }: { settings: SiteSettings | null }) {
           <ul className="mt-8 space-y-3">
             {["Sme tu pre vás 24/7", "Nie, v našom slovníku nepoznáme", "Hľadáme spôsoby a riešenia", "\n"].map((t) => (
               <li key={t} className="flex items-center gap-3 text-[#383B3A]">
-                <Check className="h-4 w-4 text-[#383B3A] shrink-0" />
                 <span>{t}</span>
               </li>
             ))}
