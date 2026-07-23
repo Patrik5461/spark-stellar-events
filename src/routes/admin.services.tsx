@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Upload, ImageOff } from "lucide-react";
 
 type Row = Database["public"]["Tables"]["services"]["Row"];
 
 const ICONS = ["Sparkles", "Megaphone", "HardHat", "Clapperboard", "Shirt", "Users2"];
+const SIGN_TTL = 60 * 60 * 24 * 365 * 5; // 5 years
 
 export const Route = createFileRoute("/admin/services")({
   component: ServicesAdmin,
@@ -49,6 +50,28 @@ function ServicesAdmin() {
     const { error } = await supabase.from("services").delete().eq("id", id);
     if (error) setErr(error.message);
     else setRows((p) => p.filter((r) => r.id !== id));
+  };
+
+  const uploadImage = async (row: Row, file: File) => {
+    setErr(null);
+    try {
+      const path = `services/${row.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const { error: upErr } = await supabase.storage.from("site-images").upload(path, file, {
+        cacheControl: "3600", upsert: false,
+      });
+      if (upErr) throw upErr;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("site-images").createSignedUrl(path, SIGN_TTL);
+      if (signErr) throw signErr;
+      await update(row.id, { image_url: signed.signedUrl });
+    } catch (e) {
+      setErr((e as Error).message);
+    }
+  };
+
+  const removeImage = async (row: Row) => {
+    if (!confirm("Odstrániť fotografiu?")) return;
+    await update(row.id, { image_url: null });
   };
 
   return (
@@ -110,6 +133,8 @@ function ServicesAdmin() {
                 </div>
               </div>
               <div className="grid md:grid-cols-[240px_1fr] gap-3 items-start">
+                <label className="text-xs uppercase tracking-widest text-[#726D6A] pt-2">Fotografia</label>
+                <ImageField row={row} onUpload={(f) => uploadImage(row, f)} onRemove={() => removeImage(row)} />
                 <label className="text-xs uppercase tracking-widest text-[#726D6A] pt-2">URL (slug)</label>
                 <input
                   className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm font-mono"
@@ -141,5 +166,57 @@ function ServicesAdmin() {
         </div>
       )}
     </section>
+  );
+}
+
+function ImageField({
+  row, onUpload, onRemove,
+}: {
+  row: Row;
+  onUpload: (file: File) => Promise<void>;
+  onRemove: () => Promise<void>;
+}) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [busy, setBusy] = useState(false);
+  const handle = async (file: File) => {
+    setBusy(true);
+    try { await onUpload(file); } finally { setBusy(false); }
+  };
+  return (
+    <div className="flex items-center gap-4">
+      <div className="h-20 w-32 rounded-lg overflow-hidden border border-[#D9D2CC] bg-white grid place-items-center">
+        {row.image_url ? (
+          <img src={row.image_url} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <ImageOff className="h-5 w-5 text-[#B4ACA6]" />
+        )}
+      </div>
+      <div className="flex flex-col gap-2 text-sm">
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handle(f);
+            e.target.value = "";
+          }}
+        />
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => inputRef.current?.click()}
+          className="inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-4 py-2 text-xs disabled:opacity-60"
+        >
+          <Upload className="h-3.5 w-3.5" /> {busy ? "Nahrávam…" : row.image_url ? "Nahradiť fotografiu" : "Nahrať fotografiu"}
+        </button>
+        {row.image_url && (
+          <button type="button" onClick={onRemove} className="text-red-700 hover:underline text-xs w-fit">
+            Odstrániť
+          </button>
+        )}
+      </div>
+    </div>
   );
 }

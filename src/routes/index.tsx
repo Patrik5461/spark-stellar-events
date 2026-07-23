@@ -239,12 +239,12 @@ const SERVICE_ICONS: Record<string, typeof Sparkles> = {
 const FALLBACK_IMGS = [g1, g3, g5, g2, g6, g4];
 
 function Services() {
-  const [items, setItems] = useState<Array<{ id: string; title: string; description: string; icon: string; slug: string }>>([]);
+  const [items, setItems] = useState<Array<{ id: string; title: string; description: string; icon: string; slug: string; image_url: string | null }>>([]);
   useEffect(() => {
     import("@/integrations/supabase/client").then(({ supabase }) =>
       supabase
         .from("services")
-        .select("id,title,description,icon,slug,sort_order,is_active")
+        .select("id,title,description,icon,slug,image_url,sort_order,is_active")
         .eq("is_active", true)
         .order("sort_order")
         .then(({ data }) => setItems((data as any) ?? []))
@@ -270,7 +270,7 @@ function Services() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
           {items.map((s, i) => {
             const Icon = SERVICE_ICONS[s.icon] || Sparkles;
-            const img = FALLBACK_IMGS[i % FALLBACK_IMGS.length];
+            const img = s.image_url || FALLBACK_IMGS[i % FALLBACK_IMGS.length];
             const href = s.slug === "prenajom-oblecenia" ? "/prenajom-oblecenia" : `/sluzby/${s.slug}`;
             const span = i === 0
               ? "md:col-span-2 lg:row-span-2 min-h-[360px] lg:min-h-[520px]"
