@@ -1,0 +1,2 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS partners text DEFAULT 'ESET,Tobify,Faktero,ticketio';
+UPDATE public.site_settings SET partners = 'ESET,Tobify,Faktero,ticketio' WHERE partners IS NULL OR partners = '';

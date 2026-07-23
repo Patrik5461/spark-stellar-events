@@ -982,6 +982,7 @@ export type Database = {
           id: number
           instagram_url: string | null
           linkedin_url: string | null
+          partners: string | null
           phone: string
           updated_at: string
         }
@@ -1011,6 +1012,7 @@ export type Database = {
           id?: number
           instagram_url?: string | null
           linkedin_url?: string | null
+          partners?: string | null
           phone?: string
           updated_at?: string
         }
@@ -1040,6 +1042,7 @@ export type Database = {
           id?: number
           instagram_url?: string | null
           linkedin_url?: string | null
+          partners?: string | null
           phone?: string
           updated_at?: string
         }
