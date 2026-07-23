@@ -187,30 +187,39 @@ function Hero({ settings }: { settings: SiteSettings | null }) {
 
 function Marquee() {
   const settings = useSiteSettings();
-  const raw = (settings?.partners as string | null) ?? "ESET,Tobify,Faktero,ticketio";
-  const clients = raw.split(",").map((s) => s.trim()).filter(Boolean);
+  const raw = (settings?.partners as string | null) ?? "Tobify,Faktero,ticketio";
+  const clients = raw
+    .split(",")
+    .map((s) => {
+      const [name, url] = s.split("|").map((p) => p.trim());
+      return { name: (name ?? "").trim(), url: (url ?? "").trim() };
+    })
+    .filter((c) => c.name);
   if (clients.length === 0) return null;
-  // Repeat enough times to fill the marquee smoothly regardless of item count.
   const repeats = Math.max(3, Math.ceil(24 / clients.length));
   const row = Array.from({ length: repeats }).flatMap(() => clients);
+  const itemClass =
+    "font-display text-2xl md:text-3xl text-[#726D6A]/50 hover:text-[#383B3A] transition-colors tracking-wider select-none";
+  const renderItem = (c: { name: string; url: string }, i: number, cls: string) =>
+    c.url ? (
+      <a key={i} href={c.url} target="_blank" rel="noreferrer noopener" className={cls}>
+        {c.name}
+      </a>
+    ) : (
+      <span key={i} className={cls}>{c.name}</span>
+    );
   return (
     <section className="border-y border-[#D9D2CC] py-12 overflow-hidden bg-[#EBE6E2]">
       <div className="text-center text-xs tracking-[0.3em] uppercase text-[#726D6A] mb-8">
         NÁŠ TÍM TVORIA AJ NAŠI DODÁVATELIA
       </div>
       <div className="flex gap-16 animate-marquee whitespace-nowrap mb-6">
-        {row.map((c, i) => (
-          <span key={i} className="font-display text-2xl md:text-3xl text-[#726D6A]/50 hover:text-[#383B3A] transition-colors tracking-wider select-none">
-            {c}
-          </span>
-        ))}
+        {row.map((c, i) => renderItem(c, i, itemClass))}
       </div>
       <div className="flex gap-16 animate-marquee-reverse whitespace-nowrap">
-        {[...row].reverse().map((c, i) => (
-          <span key={i} className="font-display text-2xl md:text-3xl text-[#726D6A]/35 hover:text-[#383B3A] transition-colors tracking-wider select-none">
-            {c}
-          </span>
-        ))}
+        {[...row].reverse().map((c, i) =>
+          renderItem(c, i, itemClass.replace("/50", "/35")),
+        )}
       </div>
     </section>
   );
