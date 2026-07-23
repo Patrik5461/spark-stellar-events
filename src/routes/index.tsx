@@ -452,7 +452,7 @@ function GalleryPreview({ settings }: { settings: SiteSettings | null }) {
 
 function Process() {
   const steps = [
-    ["01", "Brief", "Zistíme cieľ, publikum a tonalitu. Žiadne formuláre — len rozhovor."],
+    ["01", "Brief", "Zistíme cieľ, publikum a tonalitu. Žiadne formuláre, len rozhovor."],
     ["02", "Výber tímu", "Castingujeme ľudí presne na váš event a značku."],
     ["03", "Realizácia", "Sme na mieste, koordinujeme a riešime všetko za vás."],
     ["04", "Vyhodnotenie", "Report, fotky, feedback. A plán pre ďalší event."],

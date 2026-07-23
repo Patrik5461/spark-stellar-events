@@ -246,7 +246,7 @@ export function Footer() {
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-[#726D6A]">
           <div>© {new Date().getFullYear()} {billingName} · nu-u.sk · IČO {ico}</div>
           <div className="flex items-center gap-3">
-            <span>Handcrafted in Rovinka</span>
+            <span>{"\n"}</span>
             <Link
               to="/admin/login"
               className="group relative inline-flex opacity-60 hover:opacity-100 hover:-translate-y-0.5 transition-all duration-200 text-[#726D6A]"
