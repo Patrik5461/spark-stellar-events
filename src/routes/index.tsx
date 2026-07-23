@@ -235,7 +235,7 @@ function Services() {
     import("@/integrations/supabase/client").then(({ supabase }) =>
       supabase
         .from("services")
-        .select("id,title,description,icon,sort_order,is_active")
+        .select("id,title,description,icon,slug,sort_order,is_active")
         .eq("is_active", true)
         .order("sort_order")
         .then(({ data }) => setItems((data as any) ?? []))
