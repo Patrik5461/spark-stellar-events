@@ -174,6 +174,7 @@ function SettingsAdmin() {
                       onChange={(e) => setRow({ ...row, [f.key]: e.target.value })}
                     />
                   )}
+                  {f.help && <span className="mt-1 block text-xs text-[#726D6A]">{f.help}</span>}
                 </label>
               ))}
             </div>
