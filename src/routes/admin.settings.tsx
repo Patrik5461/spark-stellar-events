@@ -13,7 +13,7 @@ export const Route = createFileRoute("/admin/settings")({
   component: SettingsAdmin,
 });
 
-const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean }[] = [
+const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean; help?: string }[] = [
   { key: "contact_person", label: "Kontaktná osoba", group: "Kontakt" },
   { key: "phone", label: "Telefón", group: "Kontakt" },
   { key: "email", label: "Email", group: "Kontakt" },
