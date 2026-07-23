@@ -35,6 +35,7 @@ const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean
   { key: "gallery_intro", label: "Úvod galérie", group: "Texty webu", textarea: true },
   { key: "contact_text", label: "Kontakt – text", group: "Texty webu", textarea: true },
   { key: "footer_text", label: "Footer text", group: "Texty webu", textarea: true },
+  { key: "partners", label: "Partneri / dodávatelia (oddelené čiarkou)", group: "Texty webu", textarea: true },
 ];
 
 function SettingsAdmin() {
