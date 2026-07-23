@@ -133,6 +133,8 @@ function ServicesAdmin() {
                 </div>
               </div>
               <div className="grid md:grid-cols-[240px_1fr] gap-3 items-start">
+                <label className="text-xs uppercase tracking-widest text-[#726D6A] pt-2">Fotografia</label>
+                <ImageField row={row} onUpload={(f) => uploadImage(row, f)} onRemove={() => removeImage(row)} />
                 <label className="text-xs uppercase tracking-widest text-[#726D6A] pt-2">URL (slug)</label>
                 <input
                   className="rounded-lg border border-[#D9D2CC] bg-white/60 px-3 py-2 text-sm font-mono"
