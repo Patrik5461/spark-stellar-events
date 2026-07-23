@@ -168,3 +168,55 @@ function ServicesAdmin() {
     </section>
   );
 }
+
+function ImageField({
+  row, onUpload, onRemove,
+}: {
+  row: Row;
+  onUpload: (file: File) => Promise<void>;
+  onRemove: () => Promise<void>;
+}) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [busy, setBusy] = useState(false);
+  const handle = async (file: File) => {
+    setBusy(true);
+    try { await onUpload(file); } finally { setBusy(false); }
+  };
+  return (
+    <div className="flex items-center gap-4">
+      <div className="h-20 w-32 rounded-lg overflow-hidden border border-[#D9D2CC] bg-white grid place-items-center">
+        {row.image_url ? (
+          <img src={row.image_url} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <ImageOff className="h-5 w-5 text-[#B4ACA6]" />
+        )}
+      </div>
+      <div className="flex flex-col gap-2 text-sm">
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handle(f);
+            e.target.value = "";
+          }}
+        />
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => inputRef.current?.click()}
+          className="inline-flex items-center gap-2 rounded-full bg-[#383B3A] text-[#F5F1EC] px-4 py-2 text-xs disabled:opacity-60"
+        >
+          <Upload className="h-3.5 w-3.5" /> {busy ? "Nahrávam…" : row.image_url ? "Nahradiť fotografiu" : "Nahrať fotografiu"}
+        </button>
+        {row.image_url && (
+          <button type="button" onClick={onRemove} className="text-red-700 hover:underline text-xs w-fit">
+            Odstrániť
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
