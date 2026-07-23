@@ -577,7 +577,7 @@ function Contact({ settings }: { settings: SiteSettings | null }) {
   const dic = pick(settings, "billing_dic", "2121851754");
   const icDph = pick(settings, "billing_ic_dph", "SK2121851754");
   const iban = pick(settings, "billing_iban", "SK39 8330 0000 0020 0248 9216");
-  const contactText = pick(settings, "contact_text", "Odpovedáme do 24 hodín. Bez šablón, bez auto-mailov — odpíše vám konkrétny človek.");
+  const contactText = pick(settings, "contact_text", "\n");
   return (
     <section id="contact" className="py-40 px-6">
       <div className="mx-auto max-w-7xl">
