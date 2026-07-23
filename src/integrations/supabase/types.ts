@@ -929,6 +929,7 @@ export type Database = {
           detail_content: string
           icon: string
           id: string
+          image_url: string | null
           is_active: boolean
           slug: string
           sort_order: number
@@ -941,6 +942,7 @@ export type Database = {
           detail_content?: string
           icon?: string
           id?: string
+          image_url?: string | null
           is_active?: boolean
           slug: string
           sort_order?: number
@@ -953,6 +955,7 @@ export type Database = {
           detail_content?: string
           icon?: string
           id?: string
+          image_url?: string | null
           is_active?: boolean
           slug?: string
           sort_order?: number
