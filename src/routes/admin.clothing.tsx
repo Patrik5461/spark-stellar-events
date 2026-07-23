@@ -573,7 +573,7 @@ function ItemModal({
           </div>
         </div>
 
-        <footer className="p-5 border-t border-[#D9D2CC] flex items-center justify-end gap-2">
+        <footer className="p-4 md:p-5 border-t border-[#D9D2CC] flex items-center justify-end gap-2 shrink-0 bg-[#F5F1EC] rounded-b-2xl">
           <button
             onClick={onClose}
             disabled={submitting}
