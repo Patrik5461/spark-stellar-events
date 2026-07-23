@@ -300,7 +300,7 @@ function Services() {
                 </div>
                 <span className="font-display text-sm text-[#726D6A]/80 tracking-widest">0{i + 1}</span>
               </div>
-              <div className="relative mt-auto flex flex-1 flex-col justify-end">
+              <div className="relative mt-auto flex flex-col justify-end">
                 <h3 className="font-display text-xl md:text-2xl font-bold mb-3 text-[#383B3A] min-h-[3.5rem] md:min-h-[4rem] leading-tight">{s.title}</h3>
                 <p className="text-sm text-[#5A5552] leading-relaxed max-w-[46ch] min-h-[3.75rem] line-clamp-3">{s.description}</p>
                 <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#383B3A]">
