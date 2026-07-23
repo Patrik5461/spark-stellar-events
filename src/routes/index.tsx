@@ -718,7 +718,7 @@ function ContactForm() {
     <motion.form
       {...fadeUp}
       onSubmit={onSubmit}
-      className="relative card-surface rounded-[28px] p-8 md:p-10 h-fit overflow-hidden"
+      className="relative card-surface rounded-[28px] p-8 md:p-10 h-full flex flex-col overflow-hidden"
     >
       <AnimatePresence mode="wait">
         {sent ? (
