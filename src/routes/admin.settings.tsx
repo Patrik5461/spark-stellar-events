@@ -13,7 +13,7 @@ export const Route = createFileRoute("/admin/settings")({
   component: SettingsAdmin,
 });
 
-const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean }[] = [
+const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean; help?: string }[] = [
   { key: "contact_person", label: "Kontaktná osoba", group: "Kontakt" },
   { key: "phone", label: "Telefón", group: "Kontakt" },
   { key: "email", label: "Email", group: "Kontakt" },
@@ -35,7 +35,7 @@ const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean
   { key: "gallery_intro", label: "Úvod galérie", group: "Texty webu", textarea: true },
   { key: "contact_text", label: "Kontakt – text", group: "Texty webu", textarea: true },
   { key: "footer_text", label: "Footer text", group: "Texty webu", textarea: true },
-  { key: "partners", label: "Partneri / dodávatelia (oddelené čiarkou)", group: "Texty webu", textarea: true },
+  { key: "partners", label: "Partneri / dodávatelia", group: "Texty webu", textarea: true, help: "Oddeľ čiarkou. Pre odkaz použi formát: Meno|https://web.sk (napr. Tobify|https://tobify.sk, Faktero|https://faktero.sk). Bez odkazu stačí len meno." },
 ];
 
 function SettingsAdmin() {
@@ -174,6 +174,7 @@ function SettingsAdmin() {
                       onChange={(e) => setRow({ ...row, [f.key]: e.target.value })}
                     />
                   )}
+                  {f.help && <span className="mt-1 block text-xs text-[#726D6A]">{f.help}</span>}
                 </label>
               ))}
             </div>
