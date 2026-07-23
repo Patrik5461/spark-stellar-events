@@ -283,7 +283,7 @@ function Services() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.7, delay: i * 0.06, ease: EASE }}
               whileHover={{ y: -6 }}
-              className={`group relative card-surface rounded-[24px] p-10 flex flex-col justify-between overflow-hidden transition-shadow duration-500 hover:shadow-[0_30px_60px_-20px_rgba(56,59,58,0.22)] ${span}`}
+              className={`group relative card-surface rounded-[24px] p-10 flex flex-col overflow-hidden transition-shadow duration-500 hover:shadow-[0_30px_60px_-20px_rgba(56,59,58,0.22)] ${span}`}
             >
               <div
                 aria-hidden
