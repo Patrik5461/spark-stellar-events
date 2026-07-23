@@ -34,8 +34,10 @@ function ServicesAdmin() {
   };
 
   const add = async () => {
+    const slug = `sluzba-${Math.random().toString(36).slice(2, 8)}`;
     const { error } = await supabase.from("services").insert({
       title: "Nová služba", description: "", icon: "Sparkles",
+      slug, detail_content: "",
       sort_order: rows.length + 1, is_active: true,
     });
     if (error) setErr(error.message);
