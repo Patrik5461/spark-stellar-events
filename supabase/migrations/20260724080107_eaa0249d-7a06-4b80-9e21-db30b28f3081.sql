@@ -1,0 +1,1 @@
+UPDATE public.site_settings SET contact_text = 'Odpovedáme do 24 hodín.' WHERE id = 1;
