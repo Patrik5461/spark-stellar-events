@@ -191,6 +191,7 @@ function ClothingAdmin() {
           <table className="w-full text-sm">
             <thead className="text-left text-xs uppercase tracking-[0.15em] text-[#726D6A]">
               <tr className="border-b border-[#D9D2CC]">
+                <th className="p-3">Poradie</th>
                 <th className="p-3">Foto</th>
                 <th className="p-3">Názov</th>
                 <th className="p-3">Kategória</th>
@@ -202,8 +203,28 @@ function ClothingAdmin() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {rows.map((r, i) => (
                 <tr key={r.id} className="border-b border-[#D9D2CC] last:border-0 align-middle">
+                  <td className="p-3">
+                    <div className="flex flex-col gap-1">
+                      <button
+                        onClick={() => move(i, -1)}
+                        disabled={i === 0}
+                        className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                        title="Posunúť vyššie"
+                      >
+                        <ArrowUp className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => move(i, 1)}
+                        disabled={i === rows.length - 1}
+                        className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                        title="Posunúť nižšie"
+                      >
+                        <ArrowDown className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
                   <td className="p-3">
                     <img
                       src={r.url}
