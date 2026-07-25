@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Trash2, Save, Upload, Plus } from "lucide-react";
+import { Trash2, Save, Upload, Plus, ArrowUp, ArrowDown } from "lucide-react";
 
 type Row = Database["public"]["Tables"]["gallery_images"]["Row"];
 
