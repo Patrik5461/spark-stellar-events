@@ -133,8 +133,26 @@ function GalleryAdmin() {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {rows.map((row) => (
+          {rows.map((row, i) => (
             <div key={row.id} className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-4 flex gap-4">
+              <div className="flex flex-col gap-1 justify-center">
+                <button
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                  title="Posunúť vyššie"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => move(i, 1)}
+                  disabled={i === rows.length - 1}
+                  className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                  title="Posunúť nižšie"
+                >
+                  <ArrowDown className="h-4 w-4" />
+                </button>
+              </div>
               <img src={row.url} alt={row.alt} className="w-40 h-40 object-cover rounded-xl border border-[#D9D2CC] shrink-0" />
               <div className="flex-1 space-y-2 text-sm">
                 <input
