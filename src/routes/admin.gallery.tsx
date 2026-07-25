@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Trash2, Save, Upload, Plus } from "lucide-react";
+import { Trash2, Save, Upload, Plus, ArrowUp, ArrowDown } from "lucide-react";
 
 type Row = Database["public"]["Tables"]["gallery_images"]["Row"];
 
@@ -80,6 +80,21 @@ function GalleryAdmin() {
     if (error) setErr(error.message);
   };
 
+  const move = async (index: number, dir: -1 | 1) => {
+    const j = index + dir;
+    if (j < 0 || j >= rows.length) return;
+    const next = [...rows];
+    [next[index], next[j]] = [next[j], next[index]];
+    const withOrder = next.map((r, i) => ({ ...r, sort_order: i + 1 }));
+    setRows(withOrder);
+    const changes = withOrder.filter((u, i) => u.id !== rows[i]?.id || u.sort_order !== rows[i]?.sort_order);
+    const results = await Promise.all(
+      changes.map((u) => supabase.from("gallery_images").update({ sort_order: u.sort_order }).eq("id", u.id)),
+    );
+    const failed = results.find((r) => r.error);
+    if (failed?.error) setErr(failed.error.message);
+  };
+
   const deleteRow = async (row: Row) => {
     if (!confirm(`Vymazať "${row.alt || row.caption || row.id}"?`)) return;
     if (row.storage_path) {
@@ -118,8 +133,26 @@ function GalleryAdmin() {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {rows.map((row) => (
+          {rows.map((row, i) => (
             <div key={row.id} className="rounded-2xl bg-[#F5F1EC] border border-[#D9D2CC] p-4 flex gap-4">
+              <div className="flex flex-col gap-1 justify-center">
+                <button
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                  title="Posunúť vyššie"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => move(i, 1)}
+                  disabled={i === rows.length - 1}
+                  className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                  title="Posunúť nižšie"
+                >
+                  <ArrowDown className="h-4 w-4" />
+                </button>
+              </div>
               <img src={row.url} alt={row.alt} className="w-40 h-40 object-cover rounded-xl border border-[#D9D2CC] shrink-0" />
               <div className="flex-1 space-y-2 text-sm">
                 <input

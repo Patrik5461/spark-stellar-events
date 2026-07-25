@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Trash2, Plus, Pencil, Copy, X, Check } from "lucide-react";
+import { Trash2, Plus, Pencil, Copy, X, Check, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import {
   AVAILABILITY_LABEL,
@@ -109,7 +109,6 @@ function ClothingAdmin() {
     const { data, error } = await supabase
       .from("clothing_images")
       .select("*")
-      .order("category", { ascending: true })
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });
     if (error) setErr(error.message);
@@ -120,6 +119,21 @@ function ClothingAdmin() {
   useEffect(() => {
     load();
   }, []);
+
+  const move = async (index: number, dir: -1 | 1) => {
+    const j = index + dir;
+    if (j < 0 || j >= rows.length) return;
+    const next = [...rows];
+    [next[index], next[j]] = [next[j], next[index]];
+    const withOrder = next.map((r, i) => ({ ...r, sort_order: i + 1 }));
+    setRows(withOrder);
+    const changes = withOrder.filter((u, i) => u.id !== rows[i]?.id || u.sort_order !== rows[i]?.sort_order);
+    const results = await Promise.all(
+      changes.map((u) => supabase.from("clothing_images").update({ sort_order: u.sort_order }).eq("id", u.id)),
+    );
+    const failed = results.find((r) => r.error);
+    if (failed?.error) toast.error(failed.error.message);
+  };
 
   const openNew = () => {
     setEditingId(null);
@@ -177,6 +191,7 @@ function ClothingAdmin() {
           <table className="w-full text-sm">
             <thead className="text-left text-xs uppercase tracking-[0.15em] text-[#726D6A]">
               <tr className="border-b border-[#D9D2CC]">
+                <th className="p-3">Poradie</th>
                 <th className="p-3">Foto</th>
                 <th className="p-3">Názov</th>
                 <th className="p-3">Kategória</th>
@@ -188,8 +203,28 @@ function ClothingAdmin() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {rows.map((r, i) => (
                 <tr key={r.id} className="border-b border-[#D9D2CC] last:border-0 align-middle">
+                  <td className="p-3">
+                    <div className="flex flex-col gap-1">
+                      <button
+                        onClick={() => move(i, -1)}
+                        disabled={i === 0}
+                        className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                        title="Posunúť vyššie"
+                      >
+                        <ArrowUp className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => move(i, 1)}
+                        disabled={i === rows.length - 1}
+                        className="p-1 rounded hover:bg-[#EBE6E2] disabled:opacity-30"
+                        title="Posunúť nižšie"
+                      >
+                        <ArrowDown className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
                   <td className="p-3">
                     <img
                       src={r.url}
