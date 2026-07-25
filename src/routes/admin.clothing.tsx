@@ -109,7 +109,6 @@ function ClothingAdmin() {
     const { data, error } = await supabase
       .from("clothing_images")
       .select("*")
-      .order("category", { ascending: true })
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });
     if (error) setErr(error.message);
@@ -120,6 +119,21 @@ function ClothingAdmin() {
   useEffect(() => {
     load();
   }, []);
+
+  const move = async (index: number, dir: -1 | 1) => {
+    const j = index + dir;
+    if (j < 0 || j >= rows.length) return;
+    const next = [...rows];
+    [next[index], next[j]] = [next[j], next[index]];
+    const withOrder = next.map((r, i) => ({ ...r, sort_order: i + 1 }));
+    setRows(withOrder);
+    const changes = withOrder.filter((u, i) => u.id !== rows[i]?.id || u.sort_order !== rows[i]?.sort_order);
+    const results = await Promise.all(
+      changes.map((u) => supabase.from("clothing_images").update({ sort_order: u.sort_order }).eq("id", u.id)),
+    );
+    const failed = results.find((r) => r.error);
+    if (failed?.error) toast.error(failed.error.message);
+  };
 
   const openNew = () => {
     setEditingId(null);
