@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Trash2, Plus, Pencil, Copy, X, Check, ArrowUp, ArrowDown } from "lucide-react";
+import { Trash2, Plus, Pencil, Copy, X, Check, ArrowUp, ArrowDown, Crop } from "lucide-react";
 import { toast } from "sonner";
 import {
   AVAILABILITY_LABEL,
@@ -12,6 +12,7 @@ import {
   availabilityFromQuantity,
   type Availability,
 } from "@/lib/clothing-data";
+import { autoCropBlackBars } from "@/lib/image-crop";
 
 type Row = Database["public"]["Tables"]["clothing_images"]["Row"];
 
