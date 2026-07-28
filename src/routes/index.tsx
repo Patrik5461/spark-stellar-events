@@ -16,6 +16,7 @@ import g6 from "@/assets/g6.jpg";
 import { Navbar, Footer, BackToTop } from "@/components/site-chrome";
 import { useGalleryImages } from "@/lib/use-gallery";
 import { useSiteSettings, pick, type SiteSettings } from "@/lib/use-site-settings";
+import { SeoHead } from "@/components/seo-head";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -783,6 +784,7 @@ function Home() {
   const settings = useSiteSettings();
   return (
     <main className="bg-[#EBE6E2] text-[#383B3A] overflow-x-hidden">
+      <SeoHead />
       <Navbar />
       <Hero settings={settings} />
       <Marquee />
