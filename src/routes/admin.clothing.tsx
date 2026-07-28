@@ -316,10 +316,16 @@ function ItemModal({
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  const onFile = (f: File | null) => {
+  const onFile = async (f: File | null) => {
     if (!f) return;
-    const url = URL.createObjectURL(f);
-    setForm((prev) => ({ ...prev, file: f, previewUrl: url }));
+    try {
+      const cropped = await autoCropBlackBars(f);
+      const url = URL.createObjectURL(cropped);
+      setForm((prev) => ({ ...prev, file: cropped, previewUrl: url }));
+    } catch {
+      const url = URL.createObjectURL(f);
+      setForm((prev) => ({ ...prev, file: f, previewUrl: url }));
+    }
   };
 
   const validate = () => {
