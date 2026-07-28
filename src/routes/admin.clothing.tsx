@@ -164,6 +164,41 @@ function ClothingAdmin() {
     }
   };
 
+  const trimBlackBars = async (row: Row) => {
+    if (!row.storage_path) {
+      toast.error("Položka nemá uložený súbor.");
+      return;
+    }
+    try {
+      const { data: blob, error: downErr } = await supabase.storage.from("gallery").download(row.storage_path);
+      if (downErr) throw downErr;
+      const originalName = row.storage_path.split("/").pop() || "image.jpg";
+      const file = new File([blob], originalName, { type: blob.type || "image/jpeg" });
+      const cropped = await autoCropBlackBars(file);
+      if (cropped === file) {
+        toast.info("Žiadne čierne pruhy na odstránenie.");
+        return;
+      }
+      const path = `clothing/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${cropped.name}`;
+      const { error: upErr } = await supabase.storage
+        .from("gallery")
+        .upload(path, cropped, { cacheControl: "3600", upsert: false });
+      if (upErr) throw upErr;
+      const { data: signed } = await supabase.storage.from("gallery").createSignedUrl(path, SIGN_TTL);
+      if (!signed) throw new Error("Nepodarilo sa vytvoriť URL pre nový súbor.");
+      const { error: updErr } = await supabase
+        .from("clothing_images")
+        .update({ storage_path: path, url: signed.signedUrl })
+        .eq("id", row.id);
+      if (updErr) throw updErr;
+      await supabase.storage.from("gallery").remove([row.storage_path]);
+      toast.success("Čierne pruhy odstránené");
+      await load();
+    } catch (ex) {
+      toast.error((ex as Error).message || "Orežanie zlyhalo");
+    }
+  };
+
   return (
     <section>
       <header className="mb-6 flex items-end justify-between gap-4 flex-wrap">
