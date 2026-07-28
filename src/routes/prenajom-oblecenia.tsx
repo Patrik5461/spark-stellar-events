@@ -223,9 +223,16 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
               type="button"
               onClick={() => setOpen(i)}
               key={im.id}
-              className="group relative block w-full aspect-[3/4] overflow-hidden rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC] soft-shadow cursor-zoom-in text-left"
+              className="group relative block w-full aspect-[3/4] overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow cursor-zoom-in text-left"
               aria-label={`Otvoriť ${im.title || "fotografiu"}`}
             >
+              <img
+                src={im.src}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full scale-110 object-cover blur-lg opacity-50"
+              />
               <img
                 src={im.src}
                 alt={im.title || "Prenájom oblečenia"}
