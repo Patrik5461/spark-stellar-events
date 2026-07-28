@@ -216,14 +216,14 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.35, ease: EASE }}
-          className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {items.map((im, i) => (
             <button
               type="button"
               onClick={() => setOpen(i)}
               key={im.id}
-              className="group relative block w-full mb-6 break-inside-avoid overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow cursor-zoom-in text-left"
+              className="group relative block w-full aspect-[3/4] overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow cursor-zoom-in text-left"
               aria-label={`Otvoriť ${im.title || "fotografiu"}`}
             >
               <img
@@ -231,7 +231,7 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
                 alt={im.title || "Prenájom oblečenia"}
                 loading="lazy"
                 decoding="async"
-                className="h-auto w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
               />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#383B3A]/85 via-[#383B3A]/40 to-transparent p-5 pt-16 text-[#F5F1EC]">
                 <div className="flex items-start justify-between gap-3">
