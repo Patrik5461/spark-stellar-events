@@ -304,6 +304,9 @@ function ClothingAdmin() {
                       <button onClick={() => openDuplicate(r)} className="p-2 rounded-lg hover:bg-[#EBE6E2]" title="Duplikovať">
                         <Copy className="h-4 w-4" />
                       </button>
+                      <button onClick={() => trimBlackBars(r)} className="p-2 rounded-lg hover:bg-[#EBE6E2]" title="Odstrániť čierne pruhy">
+                        <Crop className="h-4 w-4" />
+                      </button>
                       <button onClick={() => deleteRow(r)} className="p-2 rounded-lg hover:bg-red-50 text-red-700" title="Vymazať">
                         <Trash2 className="h-4 w-4" />
                       </button>
