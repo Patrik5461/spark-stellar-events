@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { Trash2, Plus, Pencil, Copy, X, Check, ArrowUp, ArrowDown } from "lucide-react";
+import { Trash2, Plus, Pencil, Copy, X, Check, ArrowUp, ArrowDown, Crop } from "lucide-react";
 import { toast } from "sonner";
 import {
   AVAILABILITY_LABEL,
@@ -12,6 +12,7 @@ import {
   availabilityFromQuantity,
   type Availability,
 } from "@/lib/clothing-data";
+import { autoCropBlackBars } from "@/lib/image-crop";
 
 type Row = Database["public"]["Tables"]["clothing_images"]["Row"];
 
@@ -163,6 +164,41 @@ function ClothingAdmin() {
     }
   };
 
+  const trimBlackBars = async (row: Row) => {
+    if (!row.storage_path) {
+      toast.error("Položka nemá uložený súbor.");
+      return;
+    }
+    try {
+      const { data: blob, error: downErr } = await supabase.storage.from("gallery").download(row.storage_path);
+      if (downErr) throw downErr;
+      const originalName = row.storage_path.split("/").pop() || "image.jpg";
+      const file = new File([blob], originalName, { type: blob.type || "image/jpeg" });
+      const cropped = await autoCropBlackBars(file);
+      if (cropped === file) {
+        toast.info("Žiadne čierne pruhy na odstránenie.");
+        return;
+      }
+      const path = `clothing/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${cropped.name}`;
+      const { error: upErr } = await supabase.storage
+        .from("gallery")
+        .upload(path, cropped, { cacheControl: "3600", upsert: false });
+      if (upErr) throw upErr;
+      const { data: signed } = await supabase.storage.from("gallery").createSignedUrl(path, SIGN_TTL);
+      if (!signed) throw new Error("Nepodarilo sa vytvoriť URL pre nový súbor.");
+      const { error: updErr } = await supabase
+        .from("clothing_images")
+        .update({ storage_path: path, url: signed.signedUrl })
+        .eq("id", row.id);
+      if (updErr) throw updErr;
+      await supabase.storage.from("gallery").remove([row.storage_path]);
+      toast.success("Čierne pruhy odstránené");
+      await load();
+    } catch (ex) {
+      toast.error((ex as Error).message || "Orežanie zlyhalo");
+    }
+  };
+
   return (
     <section>
       <header className="mb-6 flex items-end justify-between gap-4 flex-wrap">
@@ -268,6 +304,9 @@ function ClothingAdmin() {
                       <button onClick={() => openDuplicate(r)} className="p-2 rounded-lg hover:bg-[#EBE6E2]" title="Duplikovať">
                         <Copy className="h-4 w-4" />
                       </button>
+                      <button onClick={() => trimBlackBars(r)} className="p-2 rounded-lg hover:bg-[#EBE6E2]" title="Odstrániť čierne pruhy">
+                        <Crop className="h-4 w-4" />
+                      </button>
                       <button onClick={() => deleteRow(r)} className="p-2 rounded-lg hover:bg-red-50 text-red-700" title="Vymazať">
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -315,10 +354,16 @@ function ItemModal({
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  const onFile = (f: File | null) => {
+  const onFile = async (f: File | null) => {
     if (!f) return;
-    const url = URL.createObjectURL(f);
-    setForm((prev) => ({ ...prev, file: f, previewUrl: url }));
+    try {
+      const cropped = await autoCropBlackBars(f);
+      const url = URL.createObjectURL(cropped);
+      setForm((prev) => ({ ...prev, file: cropped, previewUrl: url }));
+    } catch {
+      const url = URL.createObjectURL(f);
+      setForm((prev) => ({ ...prev, file: f, previewUrl: url }));
+    }
   };
 
   const validate = () => {
