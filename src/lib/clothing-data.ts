@@ -6,7 +6,9 @@ export type ClothingCategory =
   | "mix"
   | "blue-dresses"
   | "blazers-coats"
-  | "formal-dresses";
+  | "formal-dresses"
+  | "accessories"
+  | "mens-clothing";
 
 export const CLOTHING_CATEGORIES: { value: ClothingCategory; label: string }[] = [
   { value: "white-dresses", label: "Biele šaty" },
@@ -17,6 +19,8 @@ export const CLOTHING_CATEGORIES: { value: ClothingCategory; label: string }[] =
   { value: "blue-dresses", label: "Modré šaty" },
   { value: "blazers-coats", label: "Saká a kabáty" },
   { value: "formal-dresses", label: "Spoločenské šaty" },
+  { value: "accessories", label: "Doplnky" },
+  { value: "mens-clothing", label: "Pánske oblečenie" },
 ];
 
 export const CLOTHING_CATEGORY_LABEL: Record<ClothingCategory, string> =
