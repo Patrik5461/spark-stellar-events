@@ -9,6 +9,13 @@ const SIGN_TTL = 60 * 60 * 24 * 365 * 5; // 5 years
 
 type Row = Database["public"]["Tables"]["site_settings"]["Row"];
 
+type ImgKind = "hero" | "about" | "seo";
+const IMG_KEYS: Record<ImgKind, { url: keyof Row; path: keyof Row }> = {
+  hero: { url: "hero_image_url", path: "hero_image_path" },
+  about: { url: "about_image_url", path: "about_image_path" },
+  seo: { url: "seo_og_image_url", path: "seo_og_image_path" },
+};
+
 export const Route = createFileRoute("/admin/settings")({
   component: SettingsAdmin,
 });
@@ -36,6 +43,9 @@ const FIELDS: { key: keyof Row; label: string; group: string; textarea?: boolean
   { key: "contact_text", label: "Kontakt – text", group: "Texty webu", textarea: true },
   { key: "footer_text", label: "Footer text", group: "Texty webu", textarea: true },
   { key: "partners", label: "Partneri / dodávatelia", group: "Texty webu", textarea: true, help: "Oddeľ čiarkou. Pre odkaz použi formát: Meno|https://web.sk (napr. Tobify|https://tobify.sk, Faktero|https://faktero.sk). Bez odkazu stačí len meno." },
+  { key: "seo_title", label: "SEO titulok (title)", group: "SEO", help: "Odporúčaná dĺžka do 60 znakov. Zobrazuje sa v Google a na karte prehliadača." },
+  { key: "seo_description", label: "SEO popis (meta description)", group: "SEO", textarea: true, help: "Odporúčaná dĺžka do 160 znakov." },
+  { key: "seo_keywords", label: "Kľúčové slová", group: "SEO", help: "Oddeľ čiarkou, napr. hostesky, event agentúra, promo tím." },
 ];
 
 function SettingsAdmin() {
@@ -45,10 +55,10 @@ function SettingsAdmin() {
   const [pwd, setPwd] = useState("");
   const [pwdBusy, setPwdBusy] = useState(false);
   const [pwdMsg, setPwdMsg] = useState<string | null>(null);
-  const [imgBusy, setImgBusy] = useState<"hero" | "about" | null>(null);
+  const [imgBusy, setImgBusy] = useState<ImgKind | null>(null);
   const [imgErr, setImgErr] = useState<string | null>(null);
 
-  const uploadImage = async (kind: "hero" | "about", file: File) => {
+  const uploadImage = async (kind: ImgKind, file: File) => {
     if (!row) return;
     setImgBusy(kind);
     setImgErr(null);
@@ -63,12 +73,13 @@ function SettingsAdmin() {
         .from("site-images")
         .createSignedUrl(path, SIGN_TTL);
       if (signErr) throw signErr;
-      const patch: Partial<Row> =
-        kind === "hero"
-          ? { hero_image_url: signed.signedUrl, hero_image_path: path }
-          : { about_image_url: signed.signedUrl, about_image_path: path };
+      const keys = IMG_KEYS[kind];
+      const patch: Partial<Row> = {
+        [keys.url]: signed.signedUrl,
+        [keys.path]: path,
+      } as Partial<Row>;
       // Delete previous file if any
-      const prevPath = kind === "hero" ? row.hero_image_path : row.about_image_path;
+      const prevPath = row[keys.path] as string | null;
       if (prevPath) {
         await supabase.storage.from("site-images").remove([prevPath]);
       }
@@ -83,18 +94,16 @@ function SettingsAdmin() {
     }
   };
 
-  const removeImage = async (kind: "hero" | "about") => {
+  const removeImage = async (kind: ImgKind) => {
     if (!row) return;
     if (!confirm("Odstrániť fotografiu?")) return;
     setImgBusy(kind);
     setImgErr(null);
     try {
-      const prevPath = kind === "hero" ? row.hero_image_path : row.about_image_path;
+      const keys = IMG_KEYS[kind];
+      const prevPath = row[keys.path] as string | null;
       if (prevPath) await supabase.storage.from("site-images").remove([prevPath]);
-      const patch: Partial<Row> =
-        kind === "hero"
-          ? { hero_image_url: null, hero_image_path: null }
-          : { about_image_url: null, about_image_path: null };
+      const patch: Partial<Row> = { [keys.url]: null, [keys.path]: null } as Partial<Row>;
       const { error } = await supabase.from("site_settings").update(patch).eq("id", 1);
       if (error) throw error;
       setRow({ ...row, ...patch });
@@ -188,6 +197,7 @@ function SettingsAdmin() {
             {([
               { kind: "hero" as const, label: "Titulná fotografia (Hero)", url: row.hero_image_url },
               { kind: "about" as const, label: "Fotografia v sekcii O nás", url: row.about_image_url },
+              { kind: "seo" as const, label: "Náhľadový obrázok pre zdieľanie (og:image)", url: row.seo_og_image_url },
             ]).map(({ kind, label, url }) => (
               <div key={kind} className="space-y-3">
                 <div className="text-xs uppercase tracking-[0.2em] text-[#726D6A]">{label}</div>
