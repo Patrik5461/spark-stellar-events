@@ -993,6 +993,11 @@ export type Database = {
           linkedin_url: string | null
           partners: string | null
           phone: string
+          seo_description: string | null
+          seo_keywords: string | null
+          seo_og_image_path: string | null
+          seo_og_image_url: string | null
+          seo_title: string | null
           updated_at: string
         }
         Insert: {
@@ -1023,6 +1028,11 @@ export type Database = {
           linkedin_url?: string | null
           partners?: string | null
           phone?: string
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_og_image_path?: string | null
+          seo_og_image_url?: string | null
+          seo_title?: string | null
           updated_at?: string
         }
         Update: {
@@ -1053,6 +1063,11 @@ export type Database = {
           linkedin_url?: string | null
           partners?: string | null
           phone?: string
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_og_image_path?: string | null
+          seo_og_image_url?: string | null
+          seo_title?: string | null
           updated_at?: string
         }
         Relationships: []
