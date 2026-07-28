@@ -73,7 +73,7 @@ function ClothingPage() {
             <h1 className="font-display font-semibold text-[clamp(2.5rem,8vw,6.5rem)] leading-[1] tracking-[-0.02em] text-[#383B3A] max-w-[18ch]">
               Prenájom oblečenia
             </h1>
-            <p className="mt-8 max-w-[52ch] text-lg md:text-xl text-[#726D6A] leading-[1.7]">
+            <p className="mt-8 max-w-[85ch] text-base md:text-lg text-[#726D6A] leading-snug line-clamp-2">
               Štýlové outfity pre hostesky a eventový personál. Zabezpečíme dokonalý vizuál vášho tímu na konferenciách, výstavách aj večierkoch. A ak nenájdete, čo ste hľadali, vieme Vám zabezpečiť oblečenie presne podľa vašich predstáv, alebo ho jednoducho vyrobíme.
             </p>
           </motion.div>
