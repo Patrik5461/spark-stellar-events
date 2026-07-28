@@ -223,7 +223,7 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
               type="button"
               onClick={() => setOpen(i)}
               key={im.id}
-              className="group relative block w-full aspect-[3/4] overflow-hidden rounded-[24px] border border-[#D9D2CC] soft-shadow cursor-zoom-in text-left"
+              className="group relative block w-full aspect-[3/4] overflow-hidden rounded-[24px] border border-[#D9D2CC] bg-[#F5F1EC] soft-shadow cursor-zoom-in text-left"
               aria-label={`Otvoriť ${im.title || "fotografiu"}`}
             >
               <img
@@ -231,7 +231,7 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
                 alt={im.title || "Prenájom oblečenia"}
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                className="absolute inset-0 h-full w-full object-contain transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
               />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#383B3A]/85 via-[#383B3A]/40 to-transparent p-5 pt-16 text-[#F5F1EC]">
                 <div className="flex items-start justify-between gap-3">
