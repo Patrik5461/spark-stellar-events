@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowUp, Instagram, Linkedin, Facebook, Lock, Menu, X } from "lucide-react";
+import { ArrowUp, Instagram, Linkedin, Facebook, Lock, Menu, Phone, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useSiteSettings, pick } from "@/lib/use-site-settings";
 
@@ -62,12 +62,26 @@ export function Navbar() {
     return isHome ? link.href : `/${link.href}`;
   };
 
+  const phone = pick(useSiteSettings(), "phone", "+421 905 454 498");
+
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled || open ? "py-3 bg-[#EBE6E2]/85 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-4 md:py-6 bg-transparent"
-      }`}
-    >
+    <>
+      <div className="fixed top-0 inset-x-0 z-[60] hidden md:block bg-[#383B3A] text-[#F5F1EC]">
+        <div className="mx-auto max-w-7xl px-6 py-2 flex items-center justify-end gap-6 text-sm">
+          <a
+            href={`tel:${phone.replace(/\s+/g, "")}`}
+            className="inline-flex items-center gap-2 hover:text-[#D4C7BD] transition-colors"
+          >
+            <Phone className="h-4 w-4" strokeWidth={1.5} />
+            <span>{phone}</span>
+          </a>
+        </div>
+      </div>
+      <header
+        className={`fixed md:top-10 top-0 inset-x-0 z-50 transition-all duration-500 ${
+          scrolled || open ? "py-3 bg-[#EBE6E2]/85 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-4 md:py-6 bg-transparent"
+        }`}
+      >
       <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr] items-center gap-4 md:gap-6">
         <Link
           to="/"
@@ -155,6 +169,7 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
+  </>
   );
 }
 
