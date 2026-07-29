@@ -65,24 +65,12 @@ export function Navbar() {
   const phone = pick(useSiteSettings(), "phone", "+421 905 454 498");
 
   return (
-    <>
-      <div className="fixed top-0 inset-x-0 z-[60] hidden md:block bg-[#383B3A] text-[#F5F1EC]">
-        <div className="mx-auto max-w-7xl px-6 py-2 flex items-center justify-end gap-6 text-sm">
-          <a
-            href={`tel:${phone.replace(/\s+/g, "")}`}
-            className="inline-flex items-center gap-2 hover:text-[#D4C7BD] transition-colors"
-          >
-            <Phone className="h-4 w-4" strokeWidth={1.5} />
-            <span>{phone}</span>
-          </a>
-        </div>
-      </div>
-      <header
-        className={`fixed md:top-10 top-0 inset-x-0 z-50 transition-all duration-500 ${
-          scrolled || open ? "py-3 bg-[#EBE6E2]/85 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-4 md:py-6 bg-transparent"
-        }`}
-      >
-      <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr] items-center gap-4 md:gap-6">
+    <header
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        scrolled || open ? "py-3 bg-[#EBE6E2]/85 backdrop-blur-xl border-b border-[#D9D2CC]/70" : "py-4 md:py-6 bg-transparent"
+      }`}
+    >
+      <div className="mx-auto max-w-7xl px-6 grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6">
         <Link
           to="/"
           aria-label="NU-U — domov"
@@ -120,6 +108,13 @@ export function Navbar() {
             );
           })}
         </nav>
+        <a
+          href={`tel:${phone.replace(/\s+/g, "")}`}
+          className="hidden md:inline-flex col-start-3 justify-self-end items-center gap-2 text-sm text-[#383B3A] hover:text-[#726D6A] transition-colors"
+        >
+          <Phone className="h-4 w-4" strokeWidth={1.5} />
+          <span>{phone}</span>
+        </a>
         <button
           type="button"
           aria-label={open ? "Zavrieť menu" : "Otvoriť menu"}
@@ -169,7 +164,6 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
-  </>
   );
 }
 
