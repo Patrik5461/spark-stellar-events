@@ -108,6 +108,13 @@ export function Navbar() {
             );
           })}
         </nav>
+        <a
+          href={`tel:${phone.replace(/\s+/g, "")}`}
+          className="hidden md:inline-flex col-start-3 justify-self-end items-center gap-2 text-sm text-[#383B3A] hover:text-[#726D6A] transition-colors"
+        >
+          <Phone className="h-4 w-4" strokeWidth={1.5} />
+          <span>{phone}</span>
+        </a>
         <button
           type="button"
           aria-label={open ? "Zavrieť menu" : "Otvoriť menu"}
@@ -157,7 +164,6 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
-  </>
   );
 }
 
