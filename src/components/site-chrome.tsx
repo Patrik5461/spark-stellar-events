@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowUp, Instagram, Linkedin, Facebook, Lock, Menu, X } from "lucide-react";
+import { ArrowUp, Instagram, Linkedin, Facebook, Lock, Menu, Phone, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useSiteSettings, pick } from "@/lib/use-site-settings";
 
@@ -169,6 +169,7 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
+  </>
   );
 }
 
