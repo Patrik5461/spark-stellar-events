@@ -22,9 +22,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "NU-U — Hostessing & Event Staffing Agency" },
-      { name: "description", content: "Eventy, ktoré majú drive. Ľudia, ktorí majú iskru. Premium hostessing, promo a produkcia eventov." },
-      { property: "og:title", content: "NU-U — Premium Hostessing Agency" },
-      { property: "og:description", content: "Nerobíme len komparz. Tvoríme tímy, ktoré predávajú, reprezentujú a riešia." },
+      { name: "description", content: "Ľudia,ktorí vedia,čorobia.\nProfesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku." },
+      { property: "og:title", content: "NU-U — Hostessing & Event Staffing Agency" },
+      { property: "og:description", content: "Ľudia,ktorí vedia,čorobia.\nProfesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku." },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
