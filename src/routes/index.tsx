@@ -21,10 +21,10 @@ import { SeoHead } from "@/components/seo-head";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NU-U — Hostessing & Event Staffing Agency" },
-      { name: "description", content: "Ľudia,ktorí vedia,čo robia. Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku." },
-      { property: "og:title", content: "NU-U — Hostessing & Event Staffing Agency" },
-      { property: "og:description", content: "Ľudia,ktorí vedia,čo robia. Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku." },
+      { title: "NU-U — Hostessingová a eventová agentúra" },
+      { name: "description", content: "Ľudia, ktorí vedia, čo robia. Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku." },
+      { property: "og:title", content: "NU-U — Hostessingová a eventová agentúra" },
+      { property: "og:description", content: "Ľudia, ktorí vedia, čo robia. Profesionálny hostessing, promotéri, helperi a kompletné personálne zabezpečenie eventov na Slovensku." },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
