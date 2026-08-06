@@ -74,6 +74,7 @@ export type ClothingItem = {
   material: string;
   availability: Availability;
   featuredOnHomepage: boolean;
+  quantity: number;
 };
 
 export function formatPrice(item: {
