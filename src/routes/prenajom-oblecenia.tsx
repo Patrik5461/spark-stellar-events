@@ -254,6 +254,9 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
                     <div className="mt-1 text-xs text-[#F5F1EC]/85">
                       {formatPrice(im)}
                     </div>
+                    <div className="mt-0.5 text-[11px] text-[#F5F1EC]/70">
+                      {im.quantity} {im.quantity === 1 ? "kus" : im.quantity >= 2 && im.quantity <= 4 ? "kusy" : "kusov"} k dispozícii
+                    </div>
                   </div>
                   <ArrowUpRight className="h-4 w-4 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
                 </div>
@@ -331,6 +334,7 @@ function ClothingGrid({ items, filterKey }: { items: ClothingItem[]; filterKey: 
               if (it.color) meta.push(`Farba: ${it.color}`);
               if (it.material) meta.push(`Materiál: ${it.material}`);
               if (it.availability) meta.push(AVAILABILITY_LABEL[it.availability]);
+              meta.push(`${it.quantity} ${it.quantity === 1 ? "kus" : it.quantity >= 2 && it.quantity <= 4 ? "kusy" : "kusov"} k dispozícii`);
               const price = formatPrice(it);
               return (
                 <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 w-[92vw] max-w-2xl text-center px-5 py-4 rounded-2xl bg-[#383B3A]/85 backdrop-blur-md text-[#F5F1EC] text-xs md:text-sm space-y-1 shadow-lg">
